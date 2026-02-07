@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>IF25 UIM BIO</title>
+    <title>Biodata IF25 UIM</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
@@ -54,7 +54,7 @@
         /* --- VIEW CONTROLS (TOMBOL TENGAH) --- */
         .view-controls {
             position: fixed;
-            top: 20px; /* Posisi Desktop */
+            top: 20px;
             left: 50%;
             transform: translateX(-50%);
             z-index: 9999;
@@ -106,17 +106,17 @@
             width: 100%;
         }
 
-        /* Mode Desktop */
+        /* Mode Desktop (Default) */
         #main-wrapper.desktop-view {
             width: 100%;
             margin: 0;
             padding-top: 90px;
         }
 
-        /* Mode Mobile (Simulasi) */
+        /* Mode Mobile (Simulasi - Hanya aktif jika tombol ditekan di PC) */
         #main-wrapper.mobile-view {
             width: 375px;
-            height: 80vh; /* Sedikit dikurangi agar pas di layar HP asli saat simulasi */
+            height: 80vh;
             margin: 80px auto 20px auto;
             border-radius: 35px;
             border: 10px solid #111;
@@ -200,39 +200,33 @@
         @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 
         /* ========================================= */
-        /* --- MEDIA QUERY KHUSUS LAYAR KECIL (HP) --- */
+        /* --- MEDIA QUERY KHUSUS LAYAR HP ASLI --- */
         /* ========================================= */
         @media (max-width: 600px) {
-            /* 1. Memunculkan Tombol Desktop/Mobile di HP */
+            
+            /* 1. HILANGKAN TOMBOL VIEW MODE (Desktop/Mobile) DI HP */
             .view-controls {
-                display: flex; /* Paksa muncul */
-                top: 70px; /* Turunkan ke bawah agar tidak menutupi tombol atas */
-                padding: 4px;
-                transform: translateX(-50%) scale(0.9); /* Sedikit diperkecil */
-                width: 90%; /* Agar muat di layar */
-                justify-content: center;
+                display: none; 
             }
 
-            .view-btn {
-                padding: 6px 15px;
-                font-size: 12px; /* Font tombol diperkecil */
-            }
+            /* Balikin Background Body ke Gradient (bukan warna gelap simulator) */
+            body { background: var(--bg-gradient); }
 
-            /* Agar konten website turun ke bawah karena ada tombol view di tengah */
+            /* Reset Padding */
             #main-wrapper.desktop-view {
-                padding-top: 130px; 
+                padding-top: 90px; 
             }
 
             /* 2. Credit Lebih Kecil & Ringkas */
             .pos-left {
                 font-size: 10px; /* Ukuran font kecil */
-                padding: 6px 10px; /* Padding tipis */
+                padding: 6px 10px;
                 left: 10px;
                 top: 15px;
-                max-width: 150px; /* Batasi lebar */
+                max-width: 150px;
             }
 
-            /* 3. Perbaikan Jarak Tombol Dark Mode & YouTube */
+            /* 3. Jarak Tombol Dark Mode & YouTube Aman */
             .pos-right {
                 font-size: 0; /* Sembunyikan tulisan 'Dilz Ghaaziy' */
                 padding: 8px 12px;
@@ -242,7 +236,8 @@
             .pos-right i { margin: 0; font-size: 18px; }
 
             .pos-theme {
-                right: 75px; /* JARAK DIPERLEBAR (Sebelumnya 60px) */
+                /* Memberi jarak aman 75px dari kanan agar tidak mepet Youtube */
+                right: 75px; 
                 width: 35px;
                 height: 35px;
                 font-size: 16px;
@@ -275,7 +270,7 @@
         <i class="fas fa-moon"></i>
     </button>
 
-    <a href="http://www.youtube.com/@DilzGhaaziy" target="_blank" class="fixed-element pos-right">
+    <a href="https://www.youtube.com/results?search_query=Dilz+Ghaaziy" target="_blank" class="fixed-element pos-right">
         <i class="fab fa-youtube"></i>
         <span>Dilz Ghaaziy</span>
     </a>
