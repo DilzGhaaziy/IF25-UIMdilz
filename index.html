@@ -3,14 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BIODATA IF25</title>
+    <title>BioData IF25 UIM</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
         /* --- CSS VARIABLES --- */
         :root {
-            --bg-color: #f5f7fa;
             --bg-gradient: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
             --text-color: #333;
             --card-bg: #ffffff;
@@ -24,11 +23,11 @@
             --nim-text: #2c3e50;
             --credit-bg: rgba(255, 255, 255, 0.85);
             --credit-text: #2c3e50;
+            --border-sim: #ddd; /* Border untuk simulasi mobile */
         }
 
         /* --- DARK MODE VARIABLES --- */
         body.dark-mode {
-            --bg-color: #1a1a2e;
             --bg-gradient: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
             --text-color: #e0e0e0;
             --card-bg: #0f3460;
@@ -42,6 +41,7 @@
             --nim-text: #bdc3c7;
             --credit-bg: rgba(15, 52, 96, 0.85);
             --credit-text: #e0e0e0;
+            --border-sim: #333;
         }
 
         /* --- RESET & BASIC STYLE --- */
@@ -52,27 +52,27 @@
             background: var(--bg-gradient);
             min-height: 100vh;
             color: var(--text-color);
-            padding: 100px 20px 40px 20px; /* Padding atas lebih besar untuk tombol view */
+            padding: 100px 20px 40px 20px; /* Padding atas besar untuk header tetap */
             transition: background 0.3s ease, color 0.3s ease;
         }
 
-        /* --- FIXED ELEMENTS --- */
-        .fixed-credit, .fixed-youtube, .fixed-theme, .view-toggle {
+        /* --- FIXED TOP ELEMENTS --- */
+        .fixed-element {
             position: fixed;
             top: 20px;
             z-index: 1000;
             background: var(--credit-bg);
-            border-radius: 30px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
             backdrop-filter: blur(10px);
             color: var(--credit-text);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            border-radius: 30px;
             transition: all 0.3s ease;
             display: flex;
             align-items: center;
             justify-content: center;
         }
 
-        /* Credit (Kiri) */
+        /* 1. Credit (Kiri) */
         .fixed-credit {
             left: 20px;
             padding: 10px 20px;
@@ -80,112 +80,144 @@
             font-weight: 500;
         }
 
-        /* YouTube (Kanan) */
-        .fixed-youtube {
-            right: 20px;
-            text-decoration: none;
-            padding: 10px 20px;
-            font-size: 14px;
-            font-weight: 500;
-        }
-
-        /* Theme Toggle (Sebelah YouTube) */
-        .fixed-theme {
-            right: 180px;
-            cursor: pointer;
-            width: 45px;
-            height: 45px;
-            padding: 0;
-            border: none;
-            font-size: 18px;
-        }
-
-        .fixed-youtube i { color: #ff0000; font-size: 22px; margin-right: 10px; }
-        .fixed-theme i { color: #f1c40f; }
-        body.dark-mode .fixed-theme i { color: #f39c12; }
-
-        /* --- VIEW TOGGLE BUTTONS (FITUR BARU) --- */
-        .view-toggle {
+        /* 2. View Mode Switcher (Tengah) - BARU */
+        .view-switcher {
             left: 50%;
-            transform: translateX(-50%); /* Posisi Tengah Atas */
+            transform: translateX(-50%);
             padding: 5px;
+            display: flex;
             gap: 5px;
         }
 
         .view-btn {
-            border: none;
             background: transparent;
-            color: var(--credit-text);
+            border: none;
             padding: 8px 15px;
             border-radius: 20px;
             cursor: pointer;
-            font-family: 'Poppins', sans-serif;
-            font-size: 12px;
-            font-weight: 600;
+            color: var(--credit-text);
+            font-size: 16px;
             transition: 0.3s;
         }
 
-        .view-btn.active {
-            background-color: #3498db;
-            color: white;
-            box-shadow: 0 2px 5px rgba(52, 152, 219, 0.4);
-        }
-
-        /* --- LOGIKA SEMBUNYIKAN DI PC --- */
-        /* Jika layar lebih besar dari 768px (Tablet/PC), sembunyikan tombol toggle view */
-        @media (min-width: 769px) {
-            .view-toggle {
-                display: none !important;
-            }
-        }
-
-        /* --- RESPONSIVE HEADER LAINNYA --- */
-        @media (max-width: 768px) {
-            .fixed-credit { font-size: 10px; padding: 8px 12px; top: 15px; left: 10px; max-width: 100px; }
-            .fixed-youtube { padding: 8px; font-size: 0; top: 15px; right: 10px; }
-            .fixed-youtube i { margin-right: 0; font-size: 18px; }
-            .fixed-theme { right: 50px; width: 35px; height: 35px; font-size: 14px; top: 15px; }
-            .view-toggle { top: 60px; } /* Turun sedikit di HP agar tidak nabrak credit */
-        }
-
-        /* --- CONTAINER --- */
-        .container { max-width: 1200px; margin: 0 auto; }
+        .view-btn:hover { background: rgba(0,0,0,0.05); }
         
+        .view-btn.active {
+            background: #3498db;
+            color: white;
+            box-shadow: 0 2px 10px rgba(52, 152, 219, 0.4);
+        }
+
+        /* 3. Theme & Youtube (Kanan) */
+        .fixed-youtube {
+            right: 20px;
+            padding: 10px 20px;
+            text-decoration: none;
+            font-weight: 500;
+        }
+        .fixed-youtube i { color: #ff0000; font-size: 22px; margin-right: 10px; }
+
+        .fixed-theme {
+            right: 180px; /* Sebelah kiri Youtube */
+            width: 45px;
+            height: 45px;
+            cursor: pointer;
+            border: none;
+            font-size: 18px;
+        }
+        .fixed-theme i { color: #f1c40f; }
+        body.dark-mode .fixed-theme i { color: #f39c12; }
+
+        /* Hover Effects */
+        .fixed-element:hover { transform: translateY(-3px); box-shadow: 0 6px 20px rgba(0,0,0,0.15); }
+        .view-switcher:hover { transform: translateX(-50%) translateY(-3px); } /* Khusus tengah */
+
+
+        /* --- CONTAINER (UTAMA) --- */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            transition: max-width 0.5s cubic-bezier(0.25, 0.8, 0.25, 1), border 0.3s, box-shadow 0.3s;
+        }
+
+        /* --- SIMULASI MODE MOBILE --- */
+        .container.mobile-sim {
+            max-width: 400px; /* Lebar HP rata-rata */
+            border-left: 2px solid var(--border-sim);
+            border-right: 2px solid var(--border-sim);
+            padding: 20px;
+            box-shadow: 0 0 50px rgba(0,0,0,0.1);
+            background: rgba(255,255,255,0.02); /* Sedikit tint */
+        }
+
+        /* --- HEADER --- */
         header { text-align: center; margin-bottom: 40px; margin-top: 20px; }
-        h1 { font-weight: 600; color: var(--h1-color); margin-bottom: 10px; font-size: 2.5rem; }
+        
+        h1 {
+            font-weight: 600;
+            color: var(--h1-color);
+            margin-bottom: 10px;
+            font-size: 2.5rem;
+            transition: 0.3s;
+        }
+
+        /* Kecilkan font H1 saat mode mobile simulasi */
+        .container.mobile-sim h1 { font-size: 1.8rem; }
+
         p.subtitle { color: var(--subtitle-color); margin-bottom: 30px; }
 
         /* --- SEARCH BOX --- */
         .search-box { position: relative; max-width: 500px; margin: 0 auto 40px auto; }
+        
         .search-box input {
-            width: 100%; padding: 15px 25px; border-radius: 50px;
-            border: 1px solid var(--input-border); background-color: var(--input-bg);
-            color: var(--text-color); font-size: 16px; outline: none;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.05); transition: all 0.3s ease;
+            width: 100%;
+            padding: 15px 25px;
+            border-radius: 50px;
+            border: 1px solid var(--input-border);
+            background-color: var(--input-bg);
+            color: var(--text-color);
+            font-size: 16px;
+            outline: none;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            transition: all 0.3s ease;
+            font-family: 'Poppins', sans-serif;
         }
-        .search-box input:focus { border-color: #3498db; }
+        .search-box input:focus { border-color: #3498db; box-shadow: 0 5px 20px rgba(52, 152, 219, 0.3); }
 
-        /* --- GRID CONTAINER --- */
+        /* --- GRID --- */
         .grid-container {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
             gap: 25px;
-            transition: all 0.3s ease;
         }
 
-        /* --- CARD STYLE --- */
+        /* Jika mode mobile aktif, paksa 1 kolom */
+        .container.mobile-sim .grid-container {
+            grid-template-columns: 1fr; 
+        }
+
+        /* --- CARD --- */
         .card {
-            background: var(--card-bg); border-radius: 15px; padding: 25px;
-            text-align: center; box-shadow: 0 10px 20px var(--card-shadow);
-            transition: 0.3s; border-top: 5px solid transparent; position: relative;
+            background: var(--card-bg);
+            border-radius: 15px;
+            padding: 25px;
+            text-align: center;
+            box-shadow: 0 10px 20px var(--card-shadow);
+            transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.3s;
+            border-top: 5px solid transparent;
+            position: relative;
+            overflow: hidden;
+            animation: fadeIn 0.5s ease-in-out;
         }
         .card:hover { transform: translateY(-10px); box-shadow: 0 15px 30px var(--card-hover-shadow); border-top: 5px solid #3498db; }
-        
+
         .avatar {
-            width: 70px; height: 70px; margin: 0 auto 15px auto;
+            width: 70px; height: 70px;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center;
+            color: white; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
             font-size: 24px; font-weight: bold;
+            margin: 0 auto 15px auto;
         }
 
         .card h3 {
@@ -193,58 +225,64 @@
             margin-bottom: 8px; min-height: 54px;
             display: flex; align-items: center; justify-content: center;
         }
+
         .nim-badge {
-            background-color: var(--nim-bg); color: var(--nim-text); padding: 5px 15px;
-            border-radius: 20px; font-size: 14px; font-weight: 500;
+            background-color: var(--nim-bg); color: var(--nim-text);
+            padding: 5px 15px; border-radius: 20px;
+            font-size: 14px; font-weight: 500; display: inline-block;
+            transition: 0.3s;
         }
         .card:hover .nim-badge { background-color: #3498db; color: white; }
 
-        /* --- FORCED DESKTOP MODE ON MOBILE (CSS Logic) --- */
-        .grid-container.forced-desktop {
-            grid-template-columns: 1fr 1fr; /* Paksa 2 kolom */
-            gap: 10px;
-        }
-        
-        /* Penyesuaian tampilan kartu saat mode desktop di HP */
-        .grid-container.forced-desktop .card {
-            padding: 15px 10px;
-        }
-        .grid-container.forced-desktop .avatar {
-            width: 50px; height: 50px; font-size: 16px; margin-bottom: 10px;
-        }
-        .grid-container.forced-desktop h3 {
-            font-size: 14px; min-height: 40px;
-        }
-        .grid-container.forced-desktop .nim-badge {
-            font-size: 11px; padding: 3px 10px;
-        }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 
-        @media (max-width: 600px) {
-            h1 { font-size: 1.8rem; }
-            /* Default Mobile: 1 Kolom */
-            .grid-container { grid-template-columns: 1fr; }
+        /* --- RESPONSIVE MEDIA QUERIES (ASLI) --- */
+        @media (max-width: 800px) {
+            .fixed-credit { display: none; } /* Sembunyikan nama di layar kecil asli agar tidak penuh */
+            .fixed-theme { right: 70px; }
+            .fixed-youtube span { display: none; } /* Sembunyikan teks youtube */
+            .fixed-youtube { padding: 10px; right: 10px; }
+            .fixed-youtube i { margin: 0; }
+            
+            /* Pindahkan tombol view ke bawah header agar tidak menumpuk di atas */
+            .view-switcher {
+                top: auto; bottom: 20px; 
+                background: rgba(0,0,0,0.8);
+                color: white;
+            }
+            .view-btn { color: white; }
         }
     </style>
 </head>
 <body>
 
-<div class="fixed-credit">By: Gilang Aidil P.</div>
-
-<button class="fixed-theme" id="themeToggle" onclick="toggleTheme()"><i class="fas fa-moon"></i></button>
-
-<a href="http://www.youtube.com/@DilzGhaaziy" target="_blank" class="fixed-youtube">
-    <i class="fab fa-youtube"></i><span>Dilz Ghaaziy</span>
-</a>
-
-<div class="view-toggle">
-    <button class="view-btn active" onclick="setView('mobile')" id="btnMobile">Mobile</button>
-    <button class="view-btn" onclick="setView('desktop')" id="btnDesktop">Desktop</button>
+<div class="fixed-element fixed-credit">
+    Karya: Gilang Aidil Pratama
 </div>
 
-<div class="container">
+<div class="fixed-element view-switcher">
+    <button class="view-btn active" onclick="setView('desktop')" id="btnDesktop" title="Mode Desktop">
+        <i class="fas fa-desktop"></i>
+    </button>
+    <button class="view-btn" onclick="setView('mobile')" id="btnMobile" title="Mode Mobile">
+        <i class="fas fa-mobile-alt"></i>
+    </button>
+</div>
+
+<button class="fixed-element fixed-theme" id="themeToggle" onclick="toggleTheme()">
+    <i class="fas fa-moon"></i>
+</button>
+
+<a href="http://www.youtube.com/@DilzGhaaziy" target="_blank" class="fixed-element fixed-youtube">
+    <i class="fab fa-youtube"></i>
+    <span>Dilz Ghaaziy</span>
+</a>
+
+<div class="container" id="mainContainer">
     <header>
         <h1>Daftar Mahasiswa</h1>
-        <p class="subtitle">Mahasiswa IF25 &bull; Total: <span id="total-count">29</span></p>
+        <p class="subtitle">Data Mahasiswa IF25 &bull; Total: <span id="total-count">29</span></p>
+        
         <div class="search-box">
             <input type="text" id="searchInput" onkeyup="filterNames()" placeholder="Cari nama atau NIM...">
         </div>
@@ -284,61 +322,63 @@
 </div>
 
 <script>
-    // --- DARK MODE LOGIC ---
+    // --- 1. FITUR GANTI TAMPILAN (DESKTOP/MOBILE) ---
+    function setView(mode) {
+        const container = document.getElementById('mainContainer');
+        const btnDesktop = document.getElementById('btnDesktop');
+        const btnMobile = document.getElementById('btnMobile');
+
+        if (mode === 'mobile') {
+            container.classList.add('mobile-sim');
+            btnMobile.classList.add('active');
+            btnDesktop.classList.remove('active');
+        } else {
+            container.classList.remove('mobile-sim');
+            btnDesktop.classList.add('active');
+            btnMobile.classList.remove('active');
+        }
+    }
+
+    // --- 2. FITUR DARK MODE ---
     const toggleBtn = document.getElementById('themeToggle');
     const toggleIcon = toggleBtn.querySelector('i');
     
     if (localStorage.getItem('theme') === 'dark') {
         document.body.classList.add('dark-mode');
-        toggleIcon.classList.remove('fa-moon'); toggleIcon.classList.add('fa-sun');
+        toggleIcon.classList.remove('fa-moon');
+        toggleIcon.classList.add('fa-sun');
     }
 
     function toggleTheme() {
         document.body.classList.toggle('dark-mode');
         if (document.body.classList.contains('dark-mode')) {
-            toggleIcon.classList.remove('fa-moon'); toggleIcon.classList.add('fa-sun');
+            toggleIcon.classList.remove('fa-moon');
+            toggleIcon.classList.add('fa-sun');
             localStorage.setItem('theme', 'dark');
         } else {
-            toggleIcon.classList.remove('fa-sun'); toggleIcon.classList.add('fa-moon');
+            toggleIcon.classList.remove('fa-sun');
+            toggleIcon.classList.add('fa-moon');
             localStorage.setItem('theme', 'light');
         }
     }
 
-    // --- SEARCH LOGIC ---
+    // --- 3. FITUR SEARCH ---
     function filterNames() {
-        var input, filter, grid, cards, h3, nim, i, txtValue, nimValue;
-        input = document.getElementById("searchInput");
-        filter = input.value.toUpperCase();
-        grid = document.getElementById("cardGrid");
-        cards = grid.getElementsByClassName("card");
+        var input = document.getElementById("searchInput");
+        var filter = input.value.toUpperCase();
+        var cards = document.getElementById("cardGrid").getElementsByClassName("card");
 
-        for (i = 0; i < cards.length; i++) {
-            h3 = cards[i].getElementsByTagName("h3")[0];
-            nim = cards[i].getElementsByClassName("nim-badge")[0];
-            txtValue = h3.textContent || h3.innerText;
-            nimValue = nim.textContent || nim.innerText;
+        for (var i = 0; i < cards.length; i++) {
+            var h3 = cards[i].getElementsByTagName("h3")[0];
+            var nim = cards[i].getElementsByClassName("nim-badge")[0];
+            var txtValue = h3.textContent || h3.innerText;
+            var nimValue = nim.textContent || nim.innerText;
+
             if (txtValue.toUpperCase().indexOf(filter) > -1 || nimValue.toUpperCase().indexOf(filter) > -1) {
                 cards[i].style.display = "";
             } else {
                 cards[i].style.display = "none";
             }
-        }
-    }
-
-    // --- VIEW MODE LOGIC (Mobile vs Desktop) ---
-    function setView(mode) {
-        const grid = document.getElementById('cardGrid');
-        const btnMobile = document.getElementById('btnMobile');
-        const btnDesktop = document.getElementById('btnDesktop');
-
-        if (mode === 'desktop') {
-            grid.classList.add('forced-desktop');
-            btnDesktop.classList.add('active');
-            btnMobile.classList.remove('active');
-        } else {
-            grid.classList.remove('forced-desktop');
-            btnMobile.classList.add('active');
-            btnDesktop.classList.remove('active');
         }
     }
 </script>
