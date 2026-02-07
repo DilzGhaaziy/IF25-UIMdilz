@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data Mahasiswa Angkatan 2022</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        /* --- RESET & BASIC STYLE --- */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border_box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            color: #333;
+            padding: 80px 20px 40px 20px; /* Padding atas ditambah agar tidak tertutup header tetap */
+        }
+
+        /* --- FIXED TOP ELEMENTS (Kredit & YouTube) --- */
+        .fixed-credit, .fixed-youtube {
+            position: fixed;
+            top: 20px;
+            z-index: 1000;
+            background: rgba(255, 255, 255, 0.85); /* Latar belakang semi-transparan */
+            padding: 10px 20px;
+            border-radius: 30px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            backdrop-filter: blur(10px); /* Efek kaca buram */
+            font-size: 14px;
+            font-weight: 500;
+            color: #2c3e50;
+            transition: transform 0.3s ease;
+        }
+
+        .fixed-credit {
+            left: 20px;
+        }
+
+        .fixed-youtube {
+            right: 20px;
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            color: #2c3e50;
+        }
+
+        .fixed-youtube:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(255, 0, 0, 0.15);
+        }
+
+        .fixed-youtube i {
+            color: #ff0000; /* Warna Merah YouTube */
+            font-size: 22px;
+            margin-right: 10px;
+        }
+        
+        /* Responsif untuk elemen tetap di layar kecil */
+        @media (max-width: 600px) {
+            .fixed-credit, .fixed-youtube {
+                padding: 8px 15px;
+                font-size: 12px;
+                top: 15px;
+            }
+            .fixed-youtube i { font-size: 18px; }
+        }
+
+
+        /* --- CONTAINER --- */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* --- HEADER SECTION --- */
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            margin-top: 20px;
+        }
+
+        h1 {
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 10px;
+            font-size: 2.5rem;
+        }
+
+        p.subtitle {
+            color: #7f8c8d;
+            margin-bottom: 30px;
+        }
+
+        /* --- SEARCH BAR --- */
+        .search-box {
+            position: relative;
+            max-width: 500px;
+            margin: 0 auto 40px auto;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 15px 25px;
+            border-radius: 50px;
+            border: 1px solid #ddd;
+            font-size: 16px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            outline: none;
+            transition: all 0.3s ease;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .search-box input:focus {
+            box-shadow: 0 5px 20px rgba(52, 152, 219, 0.3);
+            border-color: #3498db;
+        }
+
+        /* --- GRID LAYOUT --- */
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 25px;
+        }
+
+        /* --- CARD STYLE --- */
+        .card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            text-align: center;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border-top: 5px solid transparent;
+            position: relative;
+            overflow: hidden;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        /* Hover Effect yang "Menarik" */
+        .card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+            border-top: 5px solid #3498db;
+        }
+
+        /* Avatar/Icon dengan Inisial */
+        .avatar {
+            width: 70px;
+            height: 70px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            font-weight: bold;
+            margin: 0 auto 15px auto;
+            box-shadow: 0 5px 15px rgba(118, 75, 162, 0.4);
+        }
+
+        .card h3 {
+            font-size: 18px;
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 8px;
+            min-height: 54px; /* Agar tinggi kartu seragam jika nama panjang */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .nim-badge {
+            background-color: #ecf0f1;
+            color: #2c3e50;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 500;
+            display: inline-block;
+            letter-spacing: 1px;
+        }
+
+        .card:hover .nim-badge {
+            background-color: #3498db;
+            color: white;
+            transition: 0.3s;
+        }
+
+        /* --- ANIMATION --- */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* --- RESPONSIVE --- */
+        @media (max-width: 600px) {
+            h1 { font-size: 1.8rem; }
+            .grid-container { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="fixed-credit">
+    Karya: Gilang Aidil Pratama
+</div>
+
+<a href="http://www.youtube.com/@DilzGhaaziy" target="_blank" class="fixed-youtube">
+    <i class="fab fa-youtube"></i>
+    <span>Dilz Ghaaziy</span>
+</a>
+
+
+<div class="container">
+    <header>
+        <h1>Daftar Mahasiswa</h1>
+        <p class="subtitle">Data Mahasiswa Angkatan 2025</p>
+        
+        <div class="search-box">
+            <input type="text" id="searchInput" onkeyup="filterNames()" placeholder="Cari nama atau NIM...">
+        </div>
+    </header>
+
+    <div class="grid-container" id="cardGrid">
+        <div class="card">
+            <div class="avatar">AA</div>
+            <h3>Ahmad Afrizal</h3>
+            <span class="nim-badge">5520225011</span>
+        </div>
+        <div class="card">
+            <div class="avatar">AN</div>
+            <h3>Aisyah Nur Syifa</h3>
+            <span class="nim-badge">5520225021</span>
+        </div>
+        <div class="card">
+            <div class="avatar">AF</div>
+            <h3>Alfian Febriansyah</h3>
+            <span class="nim-badge">5520225028</span>
+        </div>
+        <div class="card">
+            <div class="avatar">AR</div>
+            <h3>Amri Rahman</h3>
+            <span class="nim-badge">5520225005</span>
+        </div>
+        <div class="card">
+            <div class="avatar">AF</div>
+            <h3>Azizah Fastabila Putri</h3>
+            <span class="nim-badge">5520225030</span>
+        </div>
+        <div class="card">
+            <div class="avatar">BJ</div>
+            <h3>Bahtera Juliandi</h3>
+            <span class="nim-badge">5520225031</span>
+        </div>
+        <div class="card">
+            <div class="avatar">DN</div>
+            <h3>Dela Nurcahyani</h3>
+            <span class="nim-badge">5520225003</span>
+        </div>
+        <div class="card">
+            <div class="avatar">DP</div>
+            <h3>Dian Parwati</h3>
+            <span class="nim-badge">5520225014</span>
+        </div>
+        <div class="card">
+            <div class="avatar">DA</div>
+            <h3>Dika Afriyogi</h3>
+            <span class="nim-badge">5520225018</span>
+        </div>
+        <div class="card">
+            <div class="avatar">FJ</div>
+            <h3>Fikri Julianda Laksono</h3>
+            <span class="nim-badge">5520225009</span>
+        </div>
+        <div class="card">
+            <div class="avatar">GA</div>
+            <h3>Gilang Aidil Pratama</h3>
+            <span class="nim-badge">5520225023</span>
+        </div>
+        <div class="card">
+            <div class="avatar">HK</div>
+            <h3>Hafizd Khoirul Azizah</h3>
+            <span class="nim-badge">5520225002</span>
+        </div>
+        <div class="card">
+            <div class="avatar">HM</div>
+            <h3>Hanysa Maryani</h3>
+            <span class="nim-badge">5520225006</span>
+        </div>
+        <div class="card">
+            <div class="avatar">H</div>
+            <h3>Herliyanda</h3>
+            <span class="nim-badge">5520225020</span>
+        </div>
+        <div class="card">
+            <div class="avatar">HS</div>
+            <h3>Hilma Sophia Rahmadhani</h3>
+            <span class="nim-badge">5520225032</span>
+        </div>
+        <div class="card">
+            <div class="avatar">IG</div>
+            <h3>I Gede Suparyane</h3>
+            <span class="nim-badge">5520225022</span>
+        </div>
+        <div class="card">
+            <div class="avatar">LN</div>
+            <h3>Leni Nuraeni</h3>
+            <span class="nim-badge">5520225026</span>
+        </div>
+        <div class="card">
+            <div class="avatar">LC</div>
+            <h3>Lilis Cahya Kurnia</h3>
+            <span class="nim-badge">5520225017</span>
+        </div>
+        <div class="card">
+            <div class="avatar">LA</div>
+            <h3>Lyla Apriliana</h3>
+            <span class="nim-badge">5520225016</span>
+        </div>
+        <div class="card">
+            <div class="avatar">MT</div>
+            <h3>M. Tohir</h3>
+            <span class="nim-badge">5520225004</span>
+        </div>
+        <div class="card">
+            <div class="avatar">MN</div>
+            <h3>Muhammad Nirwanda</h3>
+            <span class="nim-badge">5520225012</span>
+        </div>
+        <div class="card">
+            <div class="avatar">MR</div>
+            <h3>Muhammad Ridho</h3>
+            <span class="nim-badge">5520225029</span>
+        </div>
+        <div class="card">
+            <div class="avatar">MK</div>
+            <h3>Muhammad Ridho K.</h3>
+            <span class="nim-badge">5520225024</span>
+        </div>
+        <div class="card">
+            <div class="avatar">PP</div>
+            <h3>Prio Pambudi</h3>
+            <span class="nim-badge">5520225007</span>
+        </div>
+        <div class="card">
+            <div class="avatar">RA</div>
+            <h3>Rendi Aditya</h3>
+            <span class="nim-badge">5520225015</span>
+        </div>
+        <div class="card">
+            <div class="avatar">RW</div>
+            <h3>Rendra Wijaya</h3>
+            <span class="nim-badge">5520225010</span>
+        </div>
+        <div class="card">
+            <div class="avatar">RA</div>
+            <h3>Reynaldi Afriyandika</h3>
+            <span class="nim-badge">5520225013</span>
+        </div>
+        <div class="card">
+            <div class="avatar">SA</div>
+            <h3>Sayyid Adil Rosadi</h3>
+            <span class="nim-badge">5520225025</span>
+        </div>
+        <div class="card">
+            <div class="avatar">ZF</div>
+            <h3>Zahrosita Fathahunisa</h3>
+            <span class="nim-badge">5520225019</span>
+        </div>
+
+    </div>
+</div>
+
+<script>
+    // Fitur Pencarian Cepat
+    function filterNames() {
+        var input, filter, grid, cards, h3, nim, i, txtValue, nimValue;
+        input = document.getElementById("searchInput");
+        filter = input.value.toUpperCase();
+        grid = document.getElementById("cardGrid");
+        cards = grid.getElementsByClassName("card");
+
+        for (i = 0; i < cards.length; i++) {
+            h3 = cards[i].getElementsByTagName("h3")[0];
+            nim = cards[i].getElementsByClassName("nim-badge")[0];
+            
+            txtValue = h3.textContent || h3.innerText;
+            nimValue = nim.textContent || nim.innerText;
+
+            if (txtValue.toUpperCase().indexOf(filter) > -1 || nimValue.toUpperCase().indexOf(filter) > -1) {
+                cards[i].style.display = "";
+            } else {
+                cards[i].style.display = "none";
+            }
+        }
+    }
+</script>
+
+</body>
+</html>
