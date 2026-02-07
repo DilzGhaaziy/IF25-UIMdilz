@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>IF25 UIM BIO	</title>
+    <title>IF25 UIM BIO</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
@@ -46,19 +46,19 @@
 
         body {
             font-family: 'Poppins', sans-serif;
-            background: #2c3e50; /* Latar belakang luar saat mode simulasi */
+            background: #2c3e50;
             min-height: 100vh;
-            overflow-x: hidden; /* Mencegah scroll horizontal pada body utama */
+            overflow-x: hidden;
         }
 
-        /* --- VIEW CONTROLS (TOMBOL TENGAH ATAS) --- */
+        /* --- VIEW CONTROLS (TOMBOL TENGAH) --- */
         .view-controls {
             position: fixed;
-            top: 15px;
+            top: 20px; /* Posisi Desktop */
             left: 50%;
             transform: translateX(-50%);
             z-index: 9999;
-            background: rgba(255,255,255,0.1);
+            background: rgba(255,255,255,0.15);
             backdrop-filter: blur(10px);
             padding: 5px;
             border-radius: 50px;
@@ -66,6 +66,7 @@
             gap: 5px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.3);
             border: 1px solid rgba(255,255,255,0.2);
+            transition: all 0.3s ease;
         }
 
         .view-btn {
@@ -94,7 +95,7 @@
             background: rgba(255,255,255,0.2);
         }
 
-        /* --- MAIN WRAPPER (Tempat Website Berada) --- */
+        /* --- MAIN WRAPPER --- */
         #main-wrapper {
             background: var(--bg-gradient);
             min-height: 100vh;
@@ -102,34 +103,33 @@
             transition: width 0.5s ease, margin 0.5s ease, border-radius 0.5s ease, height 0.5s ease;
             position: relative;
             padding-bottom: 40px;
-            width: 100%; /* Default Desktop */
+            width: 100%;
         }
 
-        /* --- MODE DEKTOP (DEFAULT) --- */
+        /* Mode Desktop */
         #main-wrapper.desktop-view {
             width: 100%;
             margin: 0;
             padding-top: 90px;
         }
 
-        /* --- MODE MOBILE (SIMULASI) --- */
+        /* Mode Mobile (Simulasi) */
         #main-wrapper.mobile-view {
-            width: 375px; /* Ukuran iPhone standar */
-            height: 85vh; /* Tinggi terbatas */
-            margin: 80px auto 20px auto; /* Turunkan ke bawah tombol */
+            width: 375px;
+            height: 80vh; /* Sedikit dikurangi agar pas di layar HP asli saat simulasi */
+            margin: 80px auto 20px auto;
             border-radius: 35px;
-            border: 10px solid #111; /* Bingkai HP */
-            overflow-y: auto; /* Scroll di dalam bingkai */
+            border: 10px solid #111;
+            overflow-y: auto;
             overflow-x: hidden;
             box-shadow: 0 0 0 5px #333, 0 20px 50px rgba(0,0,0,0.5);
-            padding-top: 80px; /* Space untuk header fixed di dalam HP */
+            padding-top: 80px;
         }
         
-        /* Scrollbar cantik untuk mode mobile */
         #main-wrapper.mobile-view::-webkit-scrollbar { width: 5px; }
         #main-wrapper.mobile-view::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.2); border-radius: 10px; }
 
-        /* --- FIXED ELEMENTS --- */
+        /* --- FIXED ELEMENTS (Credit, Dark Mode, Youtube) --- */
         .fixed-element {
             position: fixed;
             top: 20px;
@@ -146,9 +146,8 @@
             justify-content: center;
         }
 
-        /* Penyesuaian saat Mode Mobile Aktif */
         #main-wrapper.mobile-view .fixed-element {
-            position: absolute; /* Menempel pada wrapper, bukan layar */
+            position: absolute;
             top: 15px; 
         }
 
@@ -160,73 +159,36 @@
         .pos-theme i { color: #f1c40f; }
         body.dark-mode .pos-theme i { color: #f39c12; }
 
-        /* Responsif CSS Khusus Mode Mobile Simulasi */
-        #main-wrapper.mobile-view .pos-right {
-            font-size: 0; padding: 8px 12px; right: 15px;
-        }
+        /* Simualsi Mobile: Styling elemen di dalam frame HP */
+        #main-wrapper.mobile-view .pos-right { font-size: 0; padding: 8px 12px; right: 15px; }
         #main-wrapper.mobile-view .pos-right i { margin-right: 0; font-size: 18px; }
-        
-        #main-wrapper.mobile-view .pos-theme {
-            right: 60px; width: 35px; height: 35px; font-size: 16px; top: 15px;
-        }
+        #main-wrapper.mobile-view .pos-theme { right: 60px; width: 35px; height: 35px; font-size: 16px; top: 15px; }
+        #main-wrapper.mobile-view .pos-left { font-size: 10px; padding: 8px 12px; top: 15px; left: 15px; }
+        #main-wrapper.mobile-view .grid-container { grid-template-columns: 1fr; padding: 0 5px; }
+        #main-wrapper.mobile-view .search-box { max-width: 100%; padding: 0 5px; }
 
-        #main-wrapper.mobile-view .pos-left {
-            font-size: 10px; padding: 8px 12px; top: 15px; left: 15px;
-        }
-
-        /* --- ISI KONTEN --- */
+        /* --- KONTEN --- */
         .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
         header { text-align: center; margin-bottom: 30px; }
         h1 { font-weight: 600; color: var(--h1-color); margin-bottom: 5px; font-size: 2.2rem; }
         p.subtitle { color: var(--subtitle-color); margin-bottom: 25px; }
 
-        /* --- SEARCH BOX (YANG DIPERBAIKI) --- */
-        .search-box { 
-            position: relative; 
-            width: 100%;
-            max-width: 500px; 
-            margin: 0 auto 30px auto; 
-            transition: max-width 0.3s ease; /* Transisi halus saat resize */
-        }
-        
-        /* PERBAIKAN BUG: CSS Khusus saat Mode Mobile aktif */
-        #main-wrapper.mobile-view .search-box {
-            max-width: 100%; /* Hapus batasan 500px, jadikan 100% dari container */
-            padding: 0 5px; /* Tambahkan sedikit padding aman */
-        }
-
+        .search-box { position: relative; width: 100%; max-width: 500px; margin: 0 auto 30px auto; transition: max-width 0.3s ease; }
         .search-box input {
             width: 100%; padding: 15px 25px; border-radius: 50px;
             border: 1px solid var(--input-border); background: var(--input-bg);
             color: var(--text-color); font-size: 16px; outline: none;
             font-family: 'Poppins', sans-serif;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
-            /* Pastikan input tidak melebihi container */
-            max-width: 100%; 
-            box-sizing: border-box; 
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05); max-width: 100%; box-sizing: border-box; 
         }
 
-        /* --- GRID & CARD --- */
-        .grid-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 20px;
-        }
-        
-        /* Paksa 1 kolom saat mode mobile */
-        #main-wrapper.mobile-view .grid-container {
-            grid-template-columns: 1fr;
-            padding: 0 5px;
-        }
-
+        .grid-container { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; }
         .card {
             background: var(--card-bg); border-radius: 15px; padding: 25px;
             text-align: center; box-shadow: 0 10px 20px var(--card-shadow);
-            transition: 0.3s; border-top: 5px solid transparent;
-            animation: fadeIn 0.5s ease-in-out;
+            transition: 0.3s; border-top: 5px solid transparent; animation: fadeIn 0.5s ease-in-out;
         }
         .card:hover { transform: translateY(-5px); border-top: 5px solid #3498db; }
-
         .avatar {
             width: 65px; height: 65px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center;
@@ -235,19 +197,59 @@
         .card h3 { font-size: 17px; font-weight: 600; color: var(--text-color); min-height: 50px; display: flex; align-items: center; justify-content: center; margin-bottom: 5px;}
         .nim-badge { background: var(--nim-bg); color: var(--nim-text); padding: 4px 12px; border-radius: 15px; font-size: 13px; font-weight: 500; }
         .card:hover .nim-badge { background: #3498db; color: white; }
-        
         @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* Media Query Asli (untuk layar fisik) */
+        /* ========================================= */
+        /* --- MEDIA QUERY KHUSUS LAYAR KECIL (HP) --- */
+        /* ========================================= */
         @media (max-width: 600px) {
-            .view-controls { display: none; } 
-            body { background: var(--bg-gradient); } 
-            #main-wrapper.desktop-view { padding-top: 90px; }
-            .pos-right { font-size: 0; padding: 8px 12px; }
-            .pos-right i { margin: 0; }
-            .pos-theme { right: 60px; }
+            /* 1. Memunculkan Tombol Desktop/Mobile di HP */
+            .view-controls {
+                display: flex; /* Paksa muncul */
+                top: 70px; /* Turunkan ke bawah agar tidak menutupi tombol atas */
+                padding: 4px;
+                transform: translateX(-50%) scale(0.9); /* Sedikit diperkecil */
+                width: 90%; /* Agar muat di layar */
+                justify-content: center;
+            }
+
+            .view-btn {
+                padding: 6px 15px;
+                font-size: 12px; /* Font tombol diperkecil */
+            }
+
+            /* Agar konten website turun ke bawah karena ada tombol view di tengah */
+            #main-wrapper.desktop-view {
+                padding-top: 130px; 
+            }
+
+            /* 2. Credit Lebih Kecil & Ringkas */
+            .pos-left {
+                font-size: 10px; /* Ukuran font kecil */
+                padding: 6px 10px; /* Padding tipis */
+                left: 10px;
+                top: 15px;
+                max-width: 150px; /* Batasi lebar */
+            }
+
+            /* 3. Perbaikan Jarak Tombol Dark Mode & YouTube */
+            .pos-right {
+                font-size: 0; /* Sembunyikan tulisan 'Dilz Ghaaziy' */
+                padding: 8px 12px;
+                right: 10px; /* Rapat kanan */
+                top: 15px;
+            }
+            .pos-right i { margin: 0; font-size: 18px; }
+
+            .pos-theme {
+                right: 75px; /* JARAK DIPERLEBAR (Sebelumnya 60px) */
+                width: 35px;
+                height: 35px;
+                font-size: 16px;
+                top: 15px;
+            }
             
-            /* Fix untuk HP asli juga */
+            /* Fix HP: Searchbox Full Width */
             .search-box { max-width: 100%; padding: 0 10px; }
         }
     </style>
