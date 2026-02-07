@@ -8,6 +8,42 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
+        /* --- CSS VARIABLES (Agar mudah ganti tema) --- */
+        :root {
+            --bg-color: #f5f7fa;
+            --bg-gradient: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            --text-color: #333;
+            --card-bg: #ffffff;
+            --card-shadow: rgba(0,0,0,0.05);
+            --card-hover-shadow: rgba(0,0,0,0.1);
+            --h1-color: #2c3e50;
+            --subtitle-color: #7f8c8d;
+            --input-bg: #ffffff;
+            --input-border: #ddd;
+            --nim-bg: #ecf0f1;
+            --nim-text: #2c3e50;
+            --credit-bg: rgba(255, 255, 255, 0.85);
+            --credit-text: #2c3e50;
+        }
+
+        /* --- DARK MODE VARIABLES --- */
+        body.dark-mode {
+            --bg-color: #1a1a2e;
+            --bg-gradient: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            --text-color: #e0e0e0;
+            --card-bg: #0f3460;
+            --card-shadow: rgba(0,0,0,0.3);
+            --card-hover-shadow: rgba(0,0,0,0.5);
+            --h1-color: #e94560;
+            --subtitle-color: #a0a0a0;
+            --input-bg: #16213e;
+            --input-border: #0f3460;
+            --nim-bg: #1a1a2e;
+            --nim-text: #bdc3c7;
+            --credit-bg: rgba(15, 52, 96, 0.85);
+            --credit-text: #e0e0e0;
+        }
+
         /* --- RESET & BASIC STYLE --- */
         * {
             margin: 0;
@@ -17,61 +53,97 @@
 
         body {
             font-family: 'Poppins', sans-serif;
-            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            background: var(--bg-gradient);
             min-height: 100vh;
-            color: #333;
-            padding: 80px 20px 40px 20px; /* Padding atas ditambah agar tidak tertutup header tetap */
+            color: var(--text-color);
+            padding: 90px 20px 40px 20px;
+            transition: background 0.3s ease, color 0.3s ease;
         }
 
-        /* --- FIXED TOP ELEMENTS (Kredit & YouTube) --- */
-        .fixed-credit, .fixed-youtube {
+        /* --- FIXED TOP ELEMENTS --- */
+        .fixed-credit, .fixed-youtube, .fixed-theme {
             position: fixed;
             top: 20px;
             z-index: 1000;
-            background: rgba(255, 255, 255, 0.85); /* Latar belakang semi-transparan */
+            background: var(--credit-bg);
             padding: 10px 20px;
             border-radius: 30px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-            backdrop-filter: blur(10px); /* Efek kaca buram */
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            backdrop-filter: blur(10px);
             font-size: 14px;
             font-weight: 500;
-            color: #2c3e50;
-            transition: transform 0.3s ease;
+            color: var(--credit-text);
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
+        /* Posisi Kiri: Credit */
         .fixed-credit {
             left: 20px;
         }
 
+        /* Posisi Kanan: YouTube & Theme Toggle */
         .fixed-youtube {
             right: 20px;
-            display: flex;
-            align-items: center;
             text-decoration: none;
-            color: #2c3e50;
         }
 
-        .fixed-youtube:hover {
+        .fixed-theme {
+            right: 180px; /* Digeser ke kiri tombol Youtube */
+            cursor: pointer;
+            width: 45px;
+            height: 45px;
+            padding: 0;
+            border: none;
+            font-size: 18px;
+        }
+
+        .fixed-youtube:hover, .fixed-theme:hover {
             transform: translateY(-3px);
-            box-shadow: 0 6px 20px rgba(255, 0, 0, 0.15);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.15);
         }
 
         .fixed-youtube i {
-            color: #ff0000; /* Warna Merah YouTube */
+            color: #ff0000;
             font-size: 22px;
             margin-right: 10px;
         }
-        
-        /* Responsif untuk elemen tetap di layar kecil */
-        @media (max-width: 600px) {
-            .fixed-credit, .fixed-youtube {
-                padding: 8px 15px;
-                font-size: 12px;
-                top: 15px;
-            }
-            .fixed-youtube i { font-size: 18px; }
+
+        /* Tombol Theme Icon Color */
+        .fixed-theme i {
+            color: #f1c40f; /* Warna kuning matahari */
+        }
+        body.dark-mode .fixed-theme i {
+            color: #f39c12; /* Sedikit orange saat dark mode */
         }
 
+        /* --- RESPONSIVE HEADER --- */
+        @media (max-width: 600px) {
+            .fixed-credit {
+                font-size: 10px;
+                padding: 8px 12px;
+                top: 15px;
+                left: 10px;
+                max-width: 120px;
+            }
+            .fixed-youtube {
+                padding: 8px 12px;
+                font-size: 0; /* Sembunyikan teks di HP */
+                top: 15px;
+                right: 10px;
+            }
+            .fixed-youtube i { margin-right: 0; font-size: 18px; }
+            
+            .fixed-theme {
+                right: 60px; /* Sesuaikan posisi di HP */
+                width: 35px;
+                height: 35px;
+                font-size: 16px;
+                top: 15px;
+            }
+        }
 
         /* --- CONTAINER --- */
         .container {
@@ -79,7 +151,7 @@
             margin: 0 auto;
         }
 
-        /* --- HEADER SECTION --- */
+        /* --- HEADER --- */
         header {
             text-align: center;
             margin-bottom: 40px;
@@ -88,17 +160,18 @@
 
         h1 {
             font-weight: 600;
-            color: #2c3e50;
+            color: var(--h1-color);
             margin-bottom: 10px;
             font-size: 2.5rem;
+            transition: color 0.3s;
         }
 
         p.subtitle {
-            color: #7f8c8d;
+            color: var(--subtitle-color);
             margin-bottom: 30px;
         }
 
-        /* --- SEARCH BAR --- */
+        /* --- SEARCH BOX --- */
         .search-box {
             position: relative;
             max-width: 500px;
@@ -109,7 +182,9 @@
             width: 100%;
             padding: 15px 25px;
             border-radius: 50px;
-            border: 1px solid #ddd;
+            border: 1px solid var(--input-border);
+            background-color: var(--input-bg);
+            color: var(--text-color);
             font-size: 16px;
             box-shadow: 0 5px 15px rgba(0,0,0,0.05);
             outline: none;
@@ -122,35 +197,33 @@
             border-color: #3498db;
         }
 
-        /* --- GRID LAYOUT --- */
+        /* --- GRID --- */
         .grid-container {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
             gap: 25px;
         }
 
-        /* --- CARD STYLE --- */
+        /* --- CARD --- */
         .card {
-            background: white;
+            background: var(--card-bg);
             border-radius: 15px;
             padding: 25px;
             text-align: center;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.05);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: 0 10px 20px var(--card-shadow);
+            transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.3s;
             border-top: 5px solid transparent;
             position: relative;
             overflow: hidden;
             animation: fadeIn 0.5s ease-in-out;
         }
 
-        /* Hover Effect yang "Menarik" */
         .card:hover {
             transform: translateY(-10px);
-            box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+            box-shadow: 0 15px 30px var(--card-hover-shadow);
             border-top: 5px solid #3498db;
         }
 
-        /* Avatar/Icon dengan Inisial */
         .avatar {
             width: 70px;
             height: 70px;
@@ -169,41 +242,35 @@
         .card h3 {
             font-size: 18px;
             font-weight: 600;
-            color: #2c3e50;
+            color: var(--text-color);
             margin-bottom: 8px;
-            min-height: 54px; /* Agar tinggi kartu seragam jika nama panjang */
+            min-height: 54px;
             display: flex;
             align-items: center;
             justify-content: center;
+            transition: color 0.3s;
         }
 
         .nim-badge {
-            background-color: #ecf0f1;
-            color: #2c3e50;
+            background-color: var(--nim-bg);
+            color: var(--nim-text);
             padding: 5px 15px;
             border-radius: 20px;
             font-size: 14px;
             font-weight: 500;
             display: inline-block;
             letter-spacing: 1px;
+            transition: background 0.3s, color 0.3s;
         }
 
         .card:hover .nim-badge {
             background-color: #3498db;
             color: white;
-            transition: 0.3s;
         }
 
-        /* --- ANIMATION --- */
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(20px); }
             to { opacity: 1; transform: translateY(0); }
-        }
-
-        /* --- RESPONSIVE --- */
-        @media (max-width: 600px) {
-            h1 { font-size: 1.8rem; }
-            .grid-container { grid-template-columns: 1fr; }
         }
     </style>
 </head>
@@ -213,16 +280,19 @@
     Karya: Gilang Aidil Pratama
 </div>
 
+<button class="fixed-theme" id="themeToggle" onclick="toggleTheme()">
+    <i class="fas fa-moon"></i>
+</button>
+
 <a href="http://www.youtube.com/@DilzGhaaziy" target="_blank" class="fixed-youtube">
     <i class="fab fa-youtube"></i>
     <span>Dilz Ghaaziy</span>
 </a>
 
-
 <div class="container">
     <header>
         <h1>Daftar Mahasiswa</h1>
-        <p class="subtitle">Data Mahasiswa Angkatan 2025</p>
+        <p class="subtitle">Data Mahasiswa IF25 &bull; Total: <span id="total-count">29</span></p>
         
         <div class="search-box">
             <input type="text" id="searchInput" onkeyup="filterNames()" placeholder="Cari nama atau NIM...">
@@ -230,157 +300,68 @@
     </header>
 
     <div class="grid-container" id="cardGrid">
-        <div class="card">
-            <div class="avatar">AA</div>
-            <h3>Ahmad Afrizal</h3>
-            <span class="nim-badge">5520225011</span>
-        </div>
-        <div class="card">
-            <div class="avatar">AN</div>
-            <h3>Aisyah Nur Syifa</h3>
-            <span class="nim-badge">5520225021</span>
-        </div>
-        <div class="card">
-            <div class="avatar">AF</div>
-            <h3>Alfian Febriansyah</h3>
-            <span class="nim-badge">5520225028</span>
-        </div>
-        <div class="card">
-            <div class="avatar">AR</div>
-            <h3>Amri Rahman</h3>
-            <span class="nim-badge">5520225005</span>
-        </div>
-        <div class="card">
-            <div class="avatar">AF</div>
-            <h3>Azizah Fastabila Putri</h3>
-            <span class="nim-badge">5520225030</span>
-        </div>
-        <div class="card">
-            <div class="avatar">BJ</div>
-            <h3>Bahtera Juliandi</h3>
-            <span class="nim-badge">5520225031</span>
-        </div>
-        <div class="card">
-            <div class="avatar">DN</div>
-            <h3>Dela Nurcahyani</h3>
-            <span class="nim-badge">5520225003</span>
-        </div>
-        <div class="card">
-            <div class="avatar">DP</div>
-            <h3>Dian Parwati</h3>
-            <span class="nim-badge">5520225014</span>
-        </div>
-        <div class="card">
-            <div class="avatar">DA</div>
-            <h3>Dika Afriyogi</h3>
-            <span class="nim-badge">5520225018</span>
-        </div>
-        <div class="card">
-            <div class="avatar">FJ</div>
-            <h3>Fikri Julianda Laksono</h3>
-            <span class="nim-badge">5520225009</span>
-        </div>
-        <div class="card">
-            <div class="avatar">GA</div>
-            <h3>Gilang Aidil Pratama</h3>
-            <span class="nim-badge">5520225023</span>
-        </div>
-        <div class="card">
-            <div class="avatar">HK</div>
-            <h3>Hafizd Khoirul Azizah</h3>
-            <span class="nim-badge">5520225002</span>
-        </div>
-        <div class="card">
-            <div class="avatar">HM</div>
-            <h3>Hanysa Maryani</h3>
-            <span class="nim-badge">5520225006</span>
-        </div>
-        <div class="card">
-            <div class="avatar">H</div>
-            <h3>Herliyanda</h3>
-            <span class="nim-badge">5520225020</span>
-        </div>
-        <div class="card">
-            <div class="avatar">HS</div>
-            <h3>Hilma Sophia Rahmadhani</h3>
-            <span class="nim-badge">5520225032</span>
-        </div>
-        <div class="card">
-            <div class="avatar">IG</div>
-            <h3>I Gede Suparyane</h3>
-            <span class="nim-badge">5520225022</span>
-        </div>
-        <div class="card">
-            <div class="avatar">LN</div>
-            <h3>Leni Nuraeni</h3>
-            <span class="nim-badge">5520225026</span>
-        </div>
-        <div class="card">
-            <div class="avatar">LC</div>
-            <h3>Lilis Cahya Kurnia</h3>
-            <span class="nim-badge">5520225017</span>
-        </div>
-        <div class="card">
-            <div class="avatar">LA</div>
-            <h3>Lyla Apriliana</h3>
-            <span class="nim-badge">5520225016</span>
-        </div>
-        <div class="card">
-            <div class="avatar">MT</div>
-            <h3>M. Tohir</h3>
-            <span class="nim-badge">5520225004</span>
-        </div>
-        <div class="card">
-            <div class="avatar">MN</div>
-            <h3>Muhammad Nirwanda</h3>
-            <span class="nim-badge">5520225012</span>
-        </div>
-        <div class="card">
-            <div class="avatar">MR</div>
-            <h3>Muhammad Ridho</h3>
-            <span class="nim-badge">5520225029</span>
-        </div>
-        <div class="card">
-            <div class="avatar">MK</div>
-            <h3>Muhammad Ridho K.</h3>
-            <span class="nim-badge">5520225024</span>
-        </div>
-        <div class="card">
-            <div class="avatar">PP</div>
-            <h3>Prio Pambudi</h3>
-            <span class="nim-badge">5520225007</span>
-        </div>
-        <div class="card">
-            <div class="avatar">RA</div>
-            <h3>Rendi Aditya</h3>
-            <span class="nim-badge">5520225015</span>
-        </div>
-        <div class="card">
-            <div class="avatar">RW</div>
-            <h3>Rendra Wijaya</h3>
-            <span class="nim-badge">5520225010</span>
-        </div>
-        <div class="card">
-            <div class="avatar">RA</div>
-            <h3>Reynaldi Afriyandika</h3>
-            <span class="nim-badge">5520225013</span>
-        </div>
-        <div class="card">
-            <div class="avatar">SA</div>
-            <h3>Sayyid Adil Rosadi</h3>
-            <span class="nim-badge">5520225025</span>
-        </div>
-        <div class="card">
-            <div class="avatar">ZF</div>
-            <h3>Zahrosita Fathahunisa</h3>
-            <span class="nim-badge">5520225019</span>
-        </div>
+        
+        <div class="card"><div class="avatar">AA</div><h3>Ahmad Afrizal</h3><span class="nim-badge">5520225011</span></div>
+        <div class="card"><div class="avatar">AN</div><h3>Aisyah Nur Syifa</h3><span class="nim-badge">5520225021</span></div>
+        <div class="card"><div class="avatar">AF</div><h3>Alfian Febriansyah</h3><span class="nim-badge">5520225028</span></div>
+        <div class="card"><div class="avatar">AR</div><h3>Amri Rahman</h3><span class="nim-badge">5520225005</span></div>
+        <div class="card"><div class="avatar">AF</div><h3>Azizah Fastabila Putri</h3><span class="nim-badge">5520225030</span></div>
+        <div class="card"><div class="avatar">BJ</div><h3>Bahtera Juliandi</h3><span class="nim-badge">5520225031</span></div>
+        <div class="card"><div class="avatar">DN</div><h3>Dela Nurcahyani</h3><span class="nim-badge">5520225003</span></div>
+        <div class="card"><div class="avatar">DP</div><h3>Dian Parwati</h3><span class="nim-badge">5520225014</span></div>
+        <div class="card"><div class="avatar">DA</div><h3>Dika Afriyogi</h3><span class="nim-badge">5520225018</span></div>
+        <div class="card"><div class="avatar">FJ</div><h3>Fikri Julianda Laksono</h3><span class="nim-badge">5520225009</span></div>
+        <div class="card"><div class="avatar">GA</div><h3>Gilang Aidil Pratama</h3><span class="nim-badge">5520225023</span></div>
+        <div class="card"><div class="avatar">HK</div><h3>Hafizd Khoirul Azizah</h3><span class="nim-badge">5520225002</span></div>
+        <div class="card"><div class="avatar">HM</div><h3>Hanysa Maryani</h3><span class="nim-badge">5520225006</span></div>
+        <div class="card"><div class="avatar">H</div><h3>Herliyanda</h3><span class="nim-badge">5520225020</span></div>
+        <div class="card"><div class="avatar">HS</div><h3>Hilma Sophia Rahmadhani</h3><span class="nim-badge">5520225032</span></div>
+        <div class="card"><div class="avatar">IG</div><h3>I Gede Suparyane</h3><span class="nim-badge">5520225022</span></div>
+        <div class="card"><div class="avatar">LN</div><h3>Leni Nuraeni</h3><span class="nim-badge">5520225026</span></div>
+        <div class="card"><div class="avatar">LC</div><h3>Lilis Cahya Kurnia</h3><span class="nim-badge">5520225017</span></div>
+        <div class="card"><div class="avatar">LA</div><h3>Lyla Apriliana</h3><span class="nim-badge">5520225016</span></div>
+        <div class="card"><div class="avatar">MT</div><h3>M. Tohir</h3><span class="nim-badge">5520225004</span></div>
+        <div class="card"><div class="avatar">MN</div><h3>Muhammad Nirwanda</h3><span class="nim-badge">5520225012</span></div>
+        <div class="card"><div class="avatar">MR</div><h3>Muhammad Ridho</h3><span class="nim-badge">5520225029</span></div>
+        <div class="card"><div class="avatar">MK</div><h3>Muhammad Ridho K.</h3><span class="nim-badge">5520225024</span></div>
+        <div class="card"><div class="avatar">PP</div><h3>Prio Pambudi</h3><span class="nim-badge">5520225007</span></div>
+        <div class="card"><div class="avatar">RA</div><h3>Rendi Aditya</h3><span class="nim-badge">5520225015</span></div>
+        <div class="card"><div class="avatar">RW</div><h3>Rendra Wijaya</h3><span class="nim-badge">5520225010</span></div>
+        <div class="card"><div class="avatar">RA</div><h3>Reynaldi Afriyandika</h3><span class="nim-badge">5520225013</span></div>
+        <div class="card"><div class="avatar">SA</div><h3>Sayyid Adil Rosadi</h3><span class="nim-badge">5520225025</span></div>
+        <div class="card"><div class="avatar">ZF</div><h3>Zahrosita Fathahunisa</h3><span class="nim-badge">5520225019</span></div>
 
     </div>
 </div>
 
 <script>
-    // Fitur Pencarian Cepat
+    // --- FITUR DARK MODE ---
+    const toggleBtn = document.getElementById('themeToggle');
+    const toggleIcon = toggleBtn.querySelector('i');
+    
+    // Cek penyimpanan lokal saat halaman dimuat
+    if (localStorage.getItem('theme') === 'dark') {
+        document.body.classList.add('dark-mode');
+        toggleIcon.classList.remove('fa-moon');
+        toggleIcon.classList.add('fa-sun');
+    }
+
+    function toggleTheme() {
+        document.body.classList.toggle('dark-mode');
+        
+        // Ganti Icon dan Simpan Preferensi
+        if (document.body.classList.contains('dark-mode')) {
+            toggleIcon.classList.remove('fa-moon');
+            toggleIcon.classList.add('fa-sun');
+            localStorage.setItem('theme', 'dark');
+        } else {
+            toggleIcon.classList.remove('fa-sun');
+            toggleIcon.classList.add('fa-moon');
+            localStorage.setItem('theme', 'light');
+        }
+    }
+
+    // --- FITUR SEARCH ---
     function filterNames() {
         var input, filter, grid, cards, h3, nim, i, txtValue, nimValue;
         input = document.getElementById("searchInput");
@@ -405,6 +386,4 @@
 </script>
 
 </body>
-
 </html>
-
