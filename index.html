@@ -40,14 +40,11 @@
             position: relative; 
         }
 
-        /* ========================================= */
-        /* --- ANIMASI KUNANG-KUNANG (FIREFLIES) --- */
-        /* ========================================= */
+        /* --- ANIMASI KUNANG-KUNANG --- */
         #fireflies-container {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             pointer-events: none; z-index: 0; overflow: hidden;
         }
-
         .firefly {
             position: absolute; border-radius: 50%;
             background-color: var(--firefly-color);
@@ -55,7 +52,6 @@
             opacity: 0;
             animation: fadeGlow 3s infinite alternate, moveX 12s infinite alternate ease-in-out, moveY 9s infinite alternate ease-in-out;
         }
-
         @keyframes fadeGlow { 0% { opacity: 0.2; transform: scale(0.8); } 50% { opacity: 0.8; transform: scale(1.1); } 100% { opacity: 0.2; transform: scale(0.8); } }
         @keyframes moveX { 0% { transform: translateX(0); } 100% { transform: translateX(100px); } }
         @keyframes moveY { 0% { transform: translateY(0); } 100% { transform: translateY(-80px); } }
@@ -70,38 +66,63 @@
             text-decoration: none; font-size: 14px; font-weight: 600;
             transition: all 0.3s ease; border: 1px solid rgba(255,255,255,0.1);
         }
-        
         .pos-left { left: 20px; }
         .pos-right { right: 20px; }
         .pos-theme { right: 180px; width: 45px; height: 45px; padding: 0; cursor: pointer; border: none; font-size: 18px; }
-
         .pos-right i { color: #ff0000; font-size: 18px; margin-right: 8px; }
         .pos-theme i { color: #f1c40f; }
         body.dark-mode .pos-theme i { color: #f39c12; }
 
-        /* --- MOBILE LAYOUT CONTROLS --- */
+        /* --- NOW PLAYING BOX (NEW) --- */
+        .now-playing-box {
+            position: fixed; bottom: 20px; right: -350px; /* Hidden initially */
+            z-index: 9999;
+            background: var(--fixed-bg);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255,255,255,0.2);
+            padding: 10px 20px;
+            border-radius: 50px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            display: flex; align-items: center; gap: 15px;
+            transition: right 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            max-width: 300px;
+        }
+        
+        .now-playing-box.show { right: 20px; }
+
+        .np-icon {
+            width: 35px; height: 35px; background: #e91e63; color: white;
+            border-radius: 50%; display: flex; align-items: center; justify-content: center;
+            font-size: 14px; animation: spin 3s linear infinite;
+        }
+        @keyframes spin { 100% { transform: rotate(360deg); } }
+
+        .np-info { display: flex; flex-direction: column; overflow: hidden; }
+        .np-label { font-size: 10px; color: var(--text-color); opacity: 0.7; text-transform: uppercase; letter-spacing: 1px; }
+        .np-title { font-size: 13px; font-weight: 700; color: var(--fixed-text); white-space: nowrap; }
+
+        .np-mute {
+            background: transparent; border: none; color: var(--fixed-text);
+            cursor: pointer; font-size: 16px; transition: 0.3s;
+        }
+        .np-mute:hover { color: #e91e63; }
+
+        /* --- MOBILE LAYOUT --- */
         .mobile-layout-controls {
             display: none; position: fixed; top: 75px; left: 50%; transform: translateX(-50%);
             z-index: 990; background: var(--fixed-bg); padding: 4px; border-radius: 50px;
             box-shadow: 0 5px 15px rgba(0,0,0,0.1); backdrop-filter: blur(5px);
             border: 1px solid rgba(255,255,255,0.1);
         }
-
         .mobile-btn {
             background: transparent; border: none; color: var(--fixed-text);
             padding: 6px 15px; border-radius: 20px; cursor: pointer;
-            font-size: 12px; font-weight: 600; display: flex; align-items: center; gap: 5px;
-            transition: 0.3s;
+            font-size: 12px; font-weight: 600; display: flex; align-items: center; gap: 5px; transition: 0.3s;
         }
+        .mobile-btn.active { background: #3498db; color: white; box-shadow: 0 4px 10px rgba(52, 152, 219, 0.3); }
 
-        .mobile-btn.active {
-            background: #3498db; color: white;
-            box-shadow: 0 4px 10px rgba(52, 152, 219, 0.3);
-        }
-
-        /* --- UTAMA (LIST VIEW) --- */
+        /* --- UTAMA --- */
         #main-view { position: relative; z-index: 10; transition: opacity 0.5s; min-height: 100vh; }
-        
         .container { max-width: 1200px; margin: 0 auto; padding: 0 20px 40px 20px; padding-top: 100px; }
         header { text-align: center; margin-bottom: 30px; }
         h1 { font-weight: 600; color: #fff; margin-bottom: 5px; font-size: 2.2rem; text-shadow: 0 2px 4px rgba(0,0,0,0.2); }
@@ -113,9 +134,7 @@
             font-family: 'Poppins', sans-serif; box-shadow: 0 5px 15px rgba(0,0,0,0.1);
             background: var(--card-bg); color: var(--text-color);
         }
-
         .grid-container { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; }
-        
         .card {
             background: var(--card-bg); border-radius: 15px; padding: 25px;
             text-align: center; box-shadow: 0 5px 15px rgba(0,0,0,0.05);
@@ -123,14 +142,12 @@
             position: relative; overflow: hidden; backdrop-filter: blur(5px);
         }
         .card:hover { transform: translateY(-5px); border-top: 5px solid #3498db; box-shadow: 0 15px 30px rgba(0,0,0,0.15); }
-        
         .gender-tag {
             position: absolute; top: 10px; right: 10px; font-size: 12px;
             padding: 2px 8px; border-radius: 10px; color: white; font-weight: bold;
         }
         .gender-L { background: #3498db; }
         .gender-P { background: #e91e63; }
-
         .avatar {
             width: 65px; height: 65px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center;
@@ -139,14 +156,12 @@
         .card h3 { font-size: 17px; font-weight: 600; color: var(--text-color); min-height: 50px; display: flex; align-items: center; justify-content: center; }
         .nim-badge { background: var(--nim-bg); color: var(--nim-text); padding: 4px 12px; border-radius: 15px; font-size: 13px; font-weight: 500; }
 
-        /* --- PROFIL VIEW --- */
+        /* --- PROFIL --- */
         #profile-view {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             z-index: 2000; display: none; opacity: 0;
-            transition: opacity 0.5s ease; overflow-y: auto;
-            background: rgba(0,0,0,0.8);
+            transition: opacity 0.5s ease; overflow-y: auto; background: rgba(0,0,0,0.8);
         }
-
         .galaxy-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; overflow: hidden; }
         .stars {
             width: 1px; height: 1px; background: transparent;
@@ -157,64 +172,44 @@
 
         .profile-content {
             position: relative; width: 100%; min-height: 100%;
-            display: flex; flex-direction: column; align-items: center; justify-content: center;
-            padding: 40px 20px;
+            display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 40px 20px;
         }
-
         .back-btn-float {
             position: fixed; top: 20px; left: 20px; z-index: 2001;
             background: rgba(255,255,255,0.2); backdrop-filter: blur(5px);
             color: white; padding: 10px 20px; border-radius: 30px; border: 1px solid rgba(255,255,255,0.3);
             cursor: pointer; font-weight: 600; transition: 0.3s;
         }
-
         .big-profile-card {
-            background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(15px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(15px); border: 1px solid rgba(255, 255, 255, 0.2);
             padding: 40px; border-radius: 30px; text-align: center; color: white;
-            width: 100%; max-width: 500px; box-shadow: 0 25px 50px rgba(0,0,0,0.5);
-            animation: zoomIn 0.4s ease;
+            width: 100%; max-width: 500px; box-shadow: 0 25px 50px rgba(0,0,0,0.5); animation: zoomIn 0.4s ease;
         }
-        
         .big-avatar {
             width: 120px; height: 120px; border-radius: 50%; margin: 0 auto 20px auto;
-            background: linear-gradient(45deg, #ff00cc, #333399);
-            display: flex; align-items: center; justify-content: center;
-            font-size: 40px; font-weight: bold; border: 4px solid rgba(255,255,255,0.5);
-            box-shadow: 0 0 30px rgba(255, 0, 204, 0.4);
+            background: linear-gradient(45deg, #ff00cc, #333399); display: flex; align-items: center; justify-content: center;
+            font-size: 40px; font-weight: bold; border: 4px solid rgba(255,255,255,0.5); box-shadow: 0 0 30px rgba(255, 0, 204, 0.4);
         }
-
-        /* Copy Button Style */
         .copy-btn {
-            background: transparent; border: none; color: #bbb; cursor: pointer;
-            margin-left: 8px; font-size: 14px; transition: 0.3s;
+            background: transparent; border: none; color: #bbb; cursor: pointer; margin-left: 8px; font-size: 14px; transition: 0.3s;
         }
         .copy-btn:hover { color: #fff; transform: scale(1.1); }
         .copy-tooltip { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: rgba(0,0,0,0.8); color: white; padding: 10px 20px; border-radius: 20px; z-index: 5000; opacity: 0; pointer-events: none; transition: 0.3s; }
         .copy-tooltip.show { opacity: 1; margin-top: -50px; }
-
-        .info-row {
-            display: flex; justify-content: space-between; padding: 12px 0;
-            border-bottom: 1px solid rgba(255,255,255,0.1); font-size: 14px;
-        }
+        
+        .info-row { display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid rgba(255,255,255,0.1); font-size: 14px; }
         .info-row:last-child { border-bottom: none; }
         .info-label { color: #aaa; text-align: left; }
         .info-val { font-weight: 600; text-align: right; }
-
+        
         .jodoh-btn {
-            margin-top: 30px; width: 100%; padding: 15px;
-            background: linear-gradient(90deg, #ff512f, #dd2476);
-            border: none; border-radius: 50px; color: white;
-            font-size: 16px; font-weight: bold; cursor: pointer;
-            box-shadow: 0 10px 20px rgba(221, 36, 118, 0.4);
-            transition: transform 0.2s; position: relative; overflow: hidden;
+            margin-top: 30px; width: 100%; padding: 15px; background: linear-gradient(90deg, #ff512f, #dd2476);
+            border: none; border-radius: 50px; color: white; font-size: 16px; font-weight: bold; cursor: pointer;
+            box-shadow: 0 10px 20px rgba(221, 36, 118, 0.4); transition: transform 0.2s; position: relative; overflow: hidden;
         }
-
-        /* Quote Box */
         .quote-box {
-            margin-top: 20px; padding: 15px; background: rgba(0,0,0,0.3);
-            border-radius: 15px; font-size: 13px; font-style: italic; color: #ddd;
-            border-left: 4px solid #f1c40f; text-align: center;
+            margin-top: 20px; padding: 15px; background: rgba(0,0,0,0.3); border-radius: 15px;
+            font-size: 13px; font-style: italic; color: #ddd; border-left: 4px solid #f1c40f; text-align: center;
         }
 
         /* --- MODAL JODOH & SELECTION --- */
@@ -232,10 +227,8 @@
             text-align: center; max-width: 90%; width: 400px; transform: scale(0.8); transition: 0.3s;
         }
         .modal-overlay.active .modal-box { transform: scale(1); }
-        
         .choice-btn {
-            padding: 15px 30px; border: none; border-radius: 12px; font-size: 18px; font-weight: 600;
-            cursor: pointer; color: white; margin: 0 10px;
+            padding: 15px 30px; border: none; border-radius: 12px; font-size: 18px; font-weight: 600; cursor: pointer; color: white; margin: 0 10px;
         }
         .btn-if1 { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
         .btn-if2 { background: linear-gradient(135deg, #ff9966 0%, #ff5e62 100%); }
@@ -244,9 +237,14 @@
         .match-name { font-size: 24px; font-weight: bold; color: #2c3e50; margin: 15px 0; min-height: 60px; display: flex; align-items: center; justify-content: center;}
         
         .couple-display { display: none; margin-top: 10px; animation: slideUp 0.5s ease; }
-        .couple-names { font-size: 20px; font-weight: bold; color: #e91e63; margin-bottom: 5px; }
-        .couple-names i { margin: 0 10px; animation: heartbeat 1s infinite; }
-        .couple-sub { font-size: 12px; color: #7f8c8d; }
+        .couple-container { display: flex; flex-direction: column; gap: 10px; align-items: center; justify-content: center; margin-bottom: 10px; }
+        .c-name-user { font-size: 18px; font-weight: 700; color: #2c3e50; }
+        .c-heart { font-size: 30px; color: #e91e63; animation: heartbeat 1s infinite; }
+        .c-name-partner { font-size: 18px; font-weight: 700; color: #e91e63; }
+        
+        .couple-sub { font-size: 13px; color: #7f8c8d; font-style: italic; margin-top: 5px; line-height: 1.4; padding: 0 5px; }
+        .couple-gif { width: 140px; height: auto; border-radius: 10px; margin-top: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+        .special-title { font-size: 26px; font-weight: 800; color: #c0392b; margin-bottom: 10px; }
 
         .close-match { margin-top: 20px; background: #333; color: white; border: none; padding: 10px 20px; border-radius: 20px; cursor: pointer;}
         .heart-beat { font-size: 60px; color: #e91e63; animation: heartbeat 1s infinite; margin-bottom: 20px; }
@@ -254,9 +252,7 @@
         @keyframes zoomIn { from { transform: scale(0.8); opacity: 0; } to { transform: scale(1); opacity: 1; } }
         @keyframes slideUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
 
-        /* ========================================= */
-        /* --- MEDIA QUERY (HP ASLI) --- */
-        /* ========================================= */
+        /* Media Query Mobile */
         @media (max-width: 600px) {
             .mobile-layout-controls { display: flex; }
             .grid-container { grid-template-columns: 1fr; padding: 0 10px; }
@@ -266,12 +262,13 @@
             .pos-right i { margin: 0; font-size: 18px; }
             .pos-theme { right: 75px; width: 35px; height: 35px; font-size: 16px; top: 15px; }
             h1 { font-size: 1.8rem; }
-            
             .grid-container.mobile-grid-active { grid-template-columns: repeat(2, 1fr) !important; gap: 10px; }
             .grid-container.mobile-grid-active .card { padding: 15px 10px; }
             .grid-container.mobile-grid-active .avatar { width: 45px; height: 45px; font-size: 16px; margin-bottom: 8px; }
             .grid-container.mobile-grid-active h3 { font-size: 13px; min-height: 40px; line-height: 1.2; margin-bottom: 5px; }
             .grid-container.mobile-grid-active .nim-badge { font-size: 10px; padding: 3px 8px; }
+            /* Adjust Now Playing for Mobile */
+            .now-playing-box { bottom: 70px; max-width: 250px; }
         }
     </style>
 </head>
@@ -279,6 +276,15 @@
 
 <div id="fireflies-container"></div>
 <div id="copy-tooltip" class="copy-tooltip">NIM Disalin!</div>
+
+<div id="now-playing-box" class="now-playing-box">
+    <div class="np-icon"><i class="fas fa-music"></i></div>
+    <div class="np-info">
+        <div class="np-label">Now Playing</div>
+        <div class="np-title" id="np-title">Judul Lagu</div>
+    </div>
+    <button class="np-mute" onclick="toggleMute()"><i class="fas fa-volume-up" id="mute-icon"></i></button>
+</div>
 
 <div class="modal-overlay" id="selectionModal">
     <div class="modal-box">
@@ -291,12 +297,8 @@
 </div>
 
 <div class="mobile-layout-controls">
-    <button class="mobile-btn active" onclick="setMobileList()" id="btnList">
-        <i class="fas fa-list"></i> List
-    </button>
-    <button class="mobile-btn" onclick="setMobileGrid()" id="btnGrid">
-        <i class="fas fa-th-large"></i> Petak
-    </button>
+    <button class="mobile-btn active" onclick="setMobileList()" id="btnList"><i class="fas fa-list"></i> List</button>
+    <button class="mobile-btn" onclick="setMobileGrid()" id="btnGrid"><i class="fas fa-th-large"></i> Petak</button>
 </div>
 
 <div id="main-view">
@@ -312,7 +314,6 @@
                 <input type="text" id="searchInput" onkeyup="filterNames()" placeholder="Cari nama atau NIM...">
             </div>
         </header>
-
         <div class="grid-container" id="cardGrid"></div>
     </div>
 </div>
@@ -325,12 +326,10 @@
         <div class="big-profile-card">
             <div class="big-avatar" id="p-avatar">GA</div>
             <h2 id="p-name" style="margin-bottom:5px;">Nama</h2>
-            
             <div style="display:flex; align-items:center; justify-content:center; margin-bottom:20px;">
                 <p id="p-nim" style="color:#ddd; margin:0;">NIM</p>
                 <button class="copy-btn" onclick="copyNIM()"><i class="fas fa-copy"></i></button>
             </div>
-
             <div class="info-row"><span class="info-label">Angkatan</span><span class="info-val">2025</span></div>
             <div class="info-row"><span class="info-label">Kelas</span><span class="info-val" id="p-class">IF X</span></div>
             <div class="info-row"><span class="info-label">Jenis Kelamin</span><span class="info-val" id="p-gender">-</span></div>
@@ -340,10 +339,7 @@
             <button class="jodoh-btn" onclick="cekJodoh()">
                 <i class="fas fa-heart"></i> Siapa Jodohmu?
             </button>
-
-            <div class="quote-box" id="daily-quote">
-                "Memuat kata-kata..."
-            </div>
+            <div class="quote-box" id="daily-quote">"Memuat kata-kata..."</div>
         </div>
     </div>
 </div>
@@ -351,19 +347,13 @@
 <div class="jodoh-modal" id="jodohModal">
     <div class="heart-beat"><i class="fas fa-heart"></i></div>
     <h2 style="color:white; margin-bottom:20px;">Mencari Koneksi Hati...</h2>
-    
     <div class="match-result-box">
         <div id="searching-ui">
             <div style="font-size:12px; color:#aaa; margin-bottom:10px;">JODOH KAMU ADALAH</div>
             <div class="match-name" id="match-name-display">X</div>
         </div>
-
-        <div class="couple-display" id="final-couple-ui">
-            <div class="couple-names" id="couple-text">
-                User <i class="fas fa-heart"></i> Jodoh
-            </div>
-            <div class="couple-sub">Semoga Langgeng Sampai Wisuda!</div>
-        </div>
+        
+        <div class="couple-display" id="final-couple-ui"></div>
 
         <br>
         <button class="close-match" onclick="closeJodoh()">Tutup</button>
@@ -371,7 +361,7 @@
 </div>
 
 <script>
-    // --- DATABASE MAHASISWA ---
+    // --- DATABASE ---
     const dataIF1 = [
         {name: "Ahmad Afrizal", nim: "5520225011", gender: "L", dob: "Belum Diisi", dospem: "Belum Diisi"},
         {name: "Aisyah Nur Syifa", nim: "5520225021", gender: "P", dob: "Belum Diisi", dospem: "Belum Diisi"},
@@ -404,7 +394,6 @@
         {name: "Sayyid Adil Rosadi", nim: "5520225025", gender: "L", dob: "Belum Diisi", dospem: "Belum Diisi"},
         {name: "Zahrosita Fathahunisa", nim: "5520225019", gender: "P", dob: "Belum Diisi", dospem: "Belum Diisi"}
     ];
-
     const dataIF2 = [
         {name: "Ade Ahmad Fahrizal", nim: "5520225043", gender: "L", dob: "Belum Diisi", dospem: "Belum Diisi"},
         {name: "Ade Rustam Ananta", nim: "5520225055", gender: "L", dob: "Belum Diisi", dospem: "Belum Diisi"},
@@ -428,306 +417,199 @@
         {name: "Sendi Agustiansyah", nim: "5520225050", gender: "L", dob: "Belum Diisi", dospem: "Belum Diisi"},
         {name: "Widia Lestari", nim: "5520225040", gender: "P", dob: "Belum Diisi", dospem: "Belum Diisi"}
     ];
+    const allStudents = [...dataIF1.map(s=>({...s, class:'IF 1'})), ...dataIF2.map(s=>({...s, class:'IF 2'}))];
+    const quotes = ["Jadilah versi terbaik.", "Turu jalan ninjaku.", "Coding: 10% ngetik 90% error.", "Revisi tanda sayang.", "Jodoh gak kemana.", "Tetap santuy.", "Mimpi gratis.", "Error 404.", "Ngoding dulu.", "Cintailah ususmu.", "Hidup seperti array.", "PHP bukan pemberi harapan palsu.", "Kuliah Pulang Tidur.", "Uang habis.", "Teman sejati contekan.", "Bersakit dahulu wisuda kemudian.", "Fokus masa depan.", "Laptop panas.", "Kopi bahan bakar.", "Bersyukur.", "Bahagia sederhana.", "Nilai A mitos.", "Tetap bernafas.", "Sabar ujian.", "Jauh dimata.", "Cita-cita sukses.", "Masa depan cerah.", "Kesuksesan proses.", "Jangan takut.", "Belajar ibadah.", "Doa ibu.", "Fokus!", "Jaga kesehatan.", "Tugas kelar.", "Wifi kencang.", "Lowbat cobaan.", "Semangat pagi.", "Senyum.", "Hidup pilihan.", "Data jodoh not found.", "Syntax Error.", "Logika buntu.", "Algoritma cinta.", "Database hati.", "Looping sukses.", "Break malas.", "Continue perjuangan.", "If sukses bersyukur.", "Switch serius.", "Array of hope.", "Pointer masa depan.", "Class winners.", "Object feeling.", "Bug fitur.", "Ctrl+C Ctrl+V.", "Stack overflow.", "Queue tugas.", "Linked list kenangan.", "Binary tree.", "Graph teman.", "Hash rahasia.", "Sorting hidup.", "Searching makna.", "O(n) masalah.", "Recursion.", "Memory leak.", "Garbage collection.", "Compile error.", "Runtime exception.", "Debug hidup.", "Deploy bahagia.", "Version control.", "Git commit.", "Git push.", "Git pull.", "Merge conflict.", "Branch baru.", "Master skills.", "Main function happy.", "Include doa.", "Import sukses.", "Print Hello.", "Return 0.", "Void sedih.", "Public static.", "System out.", "Console log.", "Echo bisa.", "Select rejeki.", "Insert usaha.", "Update skill.", "Delete pikiran.", "Drop malas.", "Create view.", "Grant success.", "Revoke gagal.", "Commit.", "Rollback dosa.", "Savepoint.", "Connect God.", "Disconnect toxic."];
 
-    const allStudents = [];
-    dataIF1.forEach(s => allStudents.push({...s, class: "IF 1"}));
-    dataIF2.forEach(s => allStudents.push({...s, class: "IF 2"}));
-
-    // --- KATA-KATA (100 Stok) ---
-    const quotes = [
-        "Jadilah versi terbaik dari dirimu sendiri.", "Turu adalah jalan ninjaku.", "Semester ini harus lebih baik!",
-        "Coding: 10% ngetik, 90% nyari error.", "Jangan lupa sarapan, biar kuat menghadapi kenyataan.",
-        "Revisi adalah tanda sayang dari dosen.", "IPK bukan segalanya, tapi kalau jelek pusing juga.",
-        "Semangat! Skripsi menanti.", "Jodoh gak kemana, saingan di mana-mana.", "Tetap santuy walau deadline menghantui.",
-        "Mimpi itu gratis, yang bayar itu usaha mewujudkannya.", "Error 404: Semangat not found.",
-        "Ngoding dulu, pusing kemudian.", "Cintailah ususmu, minum kopi tiap hari (jangan ditiru).",
-        "Hidup seperti array, dimulai dari 0.", "PHP: Pemberi Harapan Palsu? Bukan, Hypertext Preprocessor.",
-        "Jangan menyerah, masih ada semester depan.", "Kuliah, Pulang, Tidur, Ulangi.",
-        "Uang habis, kiriman belum datang, itulah seni bertahan hidup.", "Teman sejati adalah yang ngasih contekan.",
-        "Bersakit-sakit dahulu, wisuda kemudian.", "Fokus masa depan, jangan masa lalu.",
-        "Laptop panas, hati juga panas.", "Kopi adalah bahan bakar mahasiswa.",
-        "Jangan lupa bersyukur hari ini.", "Bahagia itu sederhana, dosen gak masuk.",
-        "Nilai A adalah mitos, C adalah realita.", "Tetaplah bernafas walau tugas menindas.",
-        "Sabar, ini ujian.", "Jauh di mata, dekat di doa.", "Cita-cita: Jadi orang sukses. Hobi: Rebahan.",
-        "Masa depan cerah menanti.", "Kesuksesan butuh proses.", "Jangan takut gagal.", "Belajar itu ibadah.",
-        "Doa ibu menyertaimu.", "Fokus, Fokus, Fokus!", "Jaga kesehatanmu kawan.", "Tugas kelar, hati mekar.",
-        "Wi-Fi kencang adalah anugerah.", "Baterai laptop lowbat adalah cobaan.", "Semangat pagi!", "Jangan lupa senyum.",
-        "Hidup itu pilihan, mau ngoding atau pusing.", "Data tidak ditemukan, seperti jodohku.", "Syntax Error.",
-        "Logika jalan, hati buntu.", "Algoritma cinta susah dipahami.", "Database hatiku penuh namamu.",
-        "Looping terus sampai sukses.", "Break; dari kemalasan.", "Continue; perjuanganmu.",
-        "If (sukses) { bersyukur; } else { usaha_lagi; }", "Switch ke mode serius.", "Array of hope.",
-        "Pointer masa depan.", "Class of winners.", "Object oriented feeling.", "Bug adalah fitur tersembunyi.",
-        "Ctrl+C, Ctrl+V adalah jalan pintas.", "Stack overflow pikiran.", "Queue tugas panjang.",
-        "Linked list kenangan.", "Binary tree kehidupan.", "Graph pertemanan.", "Hash table rahasia.",
-        "Sorting prioritas hidup.", "Searching makna hidup.", "Complexity O(n) masalah.",
-        "Recursion tanpa henti.", "Memory leak dompet.", "Garbage collection masa lalu.",
-        "Compile error hati.", "Runtime exception tiba-tiba.", "Debug jalan hidupmu.", "Deploy kebahagiaan.",
-        "Version control perasaan.", "Git commit 'perbaikan diri'.", "Git push semangat.", "Git pull rejeki.",
-        "Merge conflict keinginan.", "Branch baru kehidupan.", "Master your skills.", "Main function: Be Happy.",
-        "Include <doa.h>", "Import kesuksesan.", "Print('Hello World');", "Return 0; masalah.",
-        "Void kesedihan().", "Public static void main(String[] args).", "System.out.println('Semangat');",
-        "Console.log('Pantang Mundur');", "Echo 'Aku Bisa';", "Select * From Rejeki Where Halal.",
-        "Insert Into Usaha Values ('Keras');", "Update Skill Set Level = 'Expert';", "Delete From Pikiran Where Negative;",
-        "Drop Table Malas;", "Create View MasaDepan;", "Grant Success To Me;", "Revoke Gagal;",
-        "Commit;", "Rollback Dosa;", "Savepoint KenanganIndah;", "Connect to God;", "Disconnect from Toxic People;"
+    const coupleVariations = [
+        { t: "Ciee, dunia serasa milik berdua nih.", type: "cute" }, { t: "Semoga langgeng sampai wisuda ya!", type: "cute" }, { t: "Aduh gemes banget liatnya.", type: "cute" }, { t: "Cocok banget, kayak kopi sama gula.", type: "cute" }, { t: "Udah jadian aja belum sih?", type: "cute" }, { t: "Definisi pasangan goals banget ini.", type: "cute" }, { t: "Jangan lupa undang-undang kalau nikah.", type: "cute" }, { t: "Liat kalian berdua bikin iri jomblo.", type: "cute" }, { t: "Chemistry-nya dapet banget!", type: "cute" }, { t: "Kawal sampai halal pokoknya!", type: "cute" }, { t: "Senyumnya mirip, jodoh beneran nih.", type: "cute" }, { t: "Semesta merestui hubungan ini.", type: "cute" }, { t: "Gak usah malu-malu, tembak aja langsung.", type: "cute" }, { t: "Pasangan ter-uwu di angkatan 2025.", type: "cute" }, { t: "Bahagia terus ya kalian berdua.", type: "cute" }, { t: "Kayak ada manis-manisnya gitu.", type: "cute" }, { t: "Fix, tahun depan nyebar undangan.", type: "cute" }, { t: "Cintaku bersemi di ruang kelas.", type: "cute" }, { t: "Jangan berantem terus ya, sayang kuota.", type: "cute" }, { t: "Semoga jodoh dunia akhirat.", type: "cute" }, { t: "Gandengan terus kayak truk gandeng, sweet!", type: "cute" }, { t: "Tatapan matanya itu lho, dalem banget.", type: "cute" }, { t: "Yang satu ganteng, yang satu cantik. Pas!", type: "cute" }, { t: "Jodoh emang gak kemana, ternyata di kelas sebelah.", type: "cute" }, { t: "Semoga kalian selalu bahagia bersama.", type: "cute" },
+        { t: "Hadeh, kasian banget jodohnya sama dia.", type: "mock" }, { t: "Yakin mau sama dia? Pikir lagi deh 7x24 jam.", type: "mock" }, { t: "Siap-siap makan ati ya tiap hari.", type: "mock" }, { t: "Jodoh sih, tapi kok kayak terpaksa gitu mukanya?", type: "mock" }, { t: "Awas, dia galak lho kalau lagi laper.", type: "mock" }, { t: "Kuat-kuatin iman ya ngadepin dia.", type: "mock" }, { t: "Yah, nasibmu kurang beruntung dapet dia.", type: "mock" }, { t: "Kok bisa sih jodohnya sama modelan begini?", type: "mock" }, { t: "Sabar ya, ini ujian hidup.", type: "mock" }, { t: "Dompet aman? Dia doyan jajan lho.", type: "mock" }, { t: "Mending pura-pura gak kenal aja deh.", type: "mock" }, { t: "Selamat menikmati penderitaan.", type: "mock" }, { t: "Dia tidurnya ngorok lho, yakin mau?", type: "mock" }, { t: "Jodoh sih, tapi boong (canda deng).", type: "mock" }, { t: "Aduh, turun standar banget dapet dia.", type: "mock" }, { t: "Semoga gak cepet bosen ya liat mukanya.", type: "mock" }, { t: "Dia kalau mandi lama banget lho, awas telat ngampus.", type: "mock" }, { t: "Chat dibalesnya 3 hari kerja, sabar ya.", type: "mock" }, { t: "Hati-hati, dia buaya/kucing garong berkedok mahasiswa.", type: "mock" }, { t: "Yakin mentalmu kuat? Dia drama queen/king lho.", type: "mock" }, { t: "Duh, sainganmu berat (sama hobi tidurnya).", type: "mock" }, { t: "Pasti dulu kamu banyak dosa makanya dapet dia.", type: "mock" }, { t: "Jangan kaget kalau dia tiba-tiba minjem duit.", type: "mock" }, { t: "Selamat menempuh hidup penuh huru-hara.", type: "mock" }, { t: "Cinta itu buta, makanya kamu mau sama dia.", type: "mock" }
     ];
+    const cuteGifs = ["https://media.tenor.com/36d8ovZxZsgAAAAi/bubu-bubu-dudu.gif", "https://media.tenor.com/qQmsOJoeMoMAAAAi/dudu-bubu.gif", "https://media.tenor.com/Eazcnx5O-bgAAAAM/dudu-dudu-cute.gif", "https://media.tenor.com/pN7xf12qQcwAAAAM/cuddle-cute.gif", "https://media.tenor.com/RDwCMZeZ7b8AAAAi/hugs.gif", "https://media.tenor.com/wA5xWw0tNBwAAAAi/h%C3%AAh.gif", "https://media.tenor.com/9Pnoc6MKDrEAAAAi/love-you-too.gif", "https://media.tenor.com/JcPATwwdUOQAAAAi/bubu-dudu-sseeyall.gif", "https://media.tenor.com/pdv5YIMB-hkAAAAi/cute.gif", "https://media1.tenor.com/m/z2TX5B4RD34AAAAC/your-so-cute-mini-seb.gif", "https://media1.tenor.com/m/pjBtpAFSnmgAAAAC/peach-goma-peach-and-goma.gif", "https://media1.tenor.com/m/FYrmLKoB1UIAAAAC/peach-and-goma-peach-loves-goma.gif", "https://media.tenor.com/Zrr4L_Wd4JkAAAAi/bubu-rub-bubu-love-dudu.gif", "https://media.tenor.com/vzkveVGDzmAAAAAi/dudu-hug-bubu-dudu-kiss.gif", "https://media1.tenor.com/m/hOmnC-qwGagAAAAC/peach-and-goma.gif", "https://media.tenor.com/KqqtGmNZ_vkAAAAi/bubu-dudu.gif", "https://media.tenor.com/rjnOQXkO-TEAAAAi/bubu-dudu-sseeyall.gif", "https://media.tenor.com/wKP-p_HtfOoAAAAi/bubu-dudu.gif", "https://media.tenor.com/cqGxLDiHeKoAAAAi/bubu-dudu-bubu-dudu-love.gif", "https://media.tenor.com/MkU0kjfQnngAAAAi/kiss-bubu.gif", "https://media.tenor.com/vEvRDC60wpoAAAAi/bubu-dudu-sseeyall.gif", "https://media.tenor.com/u7fyNJeFi44AAAAi/bubu-dudu-sseeyall.gif", "https://media.tenor.com/fQ0oZELv1y4AAAAi/bubu-dudu-sseeyall.gif", "https://media.tenor.com/UeanLw-I3B4AAAAi/tkthao219-bubududu.gif", "https://media.tenor.com/vJRHkcdlEQQAAAAi/casal-dudu.gif", "https://media.tenor.com/tnTcMaEkXzAAAAAi/tonibear-bubu.gif", "https://media.tenor.com/Zc42xR3zFWYAAAAi/bubu-dudu-sseeyall.gif", "https://media.tenor.com/NgAmTbY1aokAAAAi/dare-aggie-dare-aggie-bunny.gif", "https://media.tenor.com/S_lMGnbCMzYAAAAi/bubu-bubu-dudu.gif", "https://media.tenor.com/3BTNvUaCiGgAAAAi/bubu-dudu-sseeyall.gif", "https://media.tenor.com/wG7yYjwS7F8AAAAi/milk-and-mocha-sleeping.gif", "https://media1.tenor.com/m/2BrMVhEIsgIAAAAC/mocha-bear-kiss-bear-kiss.gif", "https://media1.tenor.com/m/1gf_Jz8WYH0AAAAC/sami-en-dina-sami-dina.gif", "https://media1.tenor.com/m/WAqsZeIoxnEAAAAC/milk-and-mocha-milk-and-mocha-kiss.gif"];
+    const mockGifs = ["https://media.tenor.com/vu0bClH3OiUAAAAM/bubu-dudu-sseeyall.gif", "https://media.tenor.com/8Hs24bl0z94AAAAM/12.gif", "https://media.tenor.com/IFAObJVF4tEAAAAi/bubu-dudu.gif", "https://media.tenor.com/2L3bWLooqT8AAAAi/bubu-silly.gif", "https://media1.tenor.com/m/ddBFqmr_qp0AAAAC/laughing-bubu.gif", "https://media.tenor.com/eSMmyYMJXOcAAAAi/miss-you.gif", "https://media.tenor.com/KmIZbENMqx4AAAAi/bubu-dudu-sseeyall.gif", "https://media1.tenor.com/m/KUGbLzdDd9YAAAAC/bubu-dudu.gif", "https://media.tenor.com/7awxGekCrFoAAAAi/bubu-dudu-sseeyall.gif", "https://media.tenor.com/SzjZCjI1kZQAAAAi/bubu-bubu-dudu.gif", "https://media.tenor.com/RhdwDUpRXeMAAAAi/bubu-dudu-sseeyall.gif", "https://media.tenor.com/LC74nzQObQ0AAAAi/bubu-dudu.gif", "https://media.tenor.com/tJk6yhct0wMAAAAi/bubu-dudu-sseeyall.gif", "https://media.tenor.com/kTIu00Dc0WwAAAAi/hi.gif", "https://media.tenor.com/WZyHt5hOIKsAAAAi/bubu-bubu-dudu.gif", "https://media.tenor.com/wSjhsZknWUsAAAAi/bubu-dudu-sseeyall.gif", "https://media.tenor.com/9gBByPt6k4oAAAAi/bubu-dudu-twitter.gif"];
 
-    let currentClassData = [];
-    let currentClassLabel = "";
-    let currentProfile = null;
-
-    // --- AUDIO SYSTEM (BGM + JODOH) ---
-    const bgmUrls = [
-        "https://s19.aconvert.com/convert/p3r68-cdx67/dhmq0-rfcfq.mp3",
-        "https://s31.aconvert.com/convert/p3r68-cdx67/dnu98-a9l0s.mp3",
-        "https://s19.aconvert.com/convert/p3r68-cdx67/2ncdt-c6sf9.mp3",
-        "https://s33.aconvert.com/convert/p3r68-cdx67/cviy4-smh7b.mp3"
-    ];
-    const jodohUrl = "https://s31.aconvert.com/convert/p3r68-cdx67/2w248-szgtx.mp3";
-
+    let availableVariationIndices = Array.from({length: coupleVariations.length}, (_, i) => i);
+    let currentClassData = [], currentClassLabel = "", currentProfile = null;
     let bgmAudio = new Audio();
-    let jodohAudio = new Audio(jodohUrl);
+    let jodohAudio = new Audio(); 
     let currentBgmIndex = -1;
+    let currentJodohSongIndex = -1;
+    let isMuted = false;
+    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
 
+    // --- PLAYLISTS ---
+    const bgmPlaylist = [
+        {title: "A Thousand Years", url: "https://od.lk/s/NjhfMTYyNzYyNDM2Xw/A%20Thousand%20Years%20%20Shania%20Yan%20Cover.mp3"},
+        {title: "Ghost", url: "https://od.lk/s/NjhfMTYyNzYyNDUxXw/Ghost%20-%20Justin%20Bieber%20_%20%23coverbyfaithcns.mp3"},
+        {title: "Die With A Smile", url: "https://od.lk/s/NjhfMTYyNzYyNDM4Xw/NGGA%20DULU%20%20Akbar%20Chalay%20feat.%20Ciloqciliq%20_%20Zynakal%20%28Cover%20Akustik%20%20Lirik%20%20Viral%20TikTok%29.mp3"}, 
+        {title: "Engga Dulu", url: "https://od.lk/s/NjhfMTYyNzYyNDM4Xw/NGGA%20DULU%20%20Akbar%20Chalay%20feat.%20Ciloqciliq%20_%20Zynakal%20%28Cover%20Akustik%20%20Lirik%20%20Viral%20TikTok%29.mp3"},
+        {title: "Night Changes", url: "https://od.lk/s/NjhfMTYyNzYyNDM3Xw/Night%20Changes%20-%20One%20Direction%20%20Shania%20Yan%20Cover.mp3"},
+        {title: "Perfect", url: "https://od.lk/s/NjhfMTYyNzYyNDExXw/Perfect%20%20Shania%20Yan%20Cover.mp3"},
+        {title: "Rewrite The Stars", url: "https://od.lk/s/NjhfMTYyNzYyNDM1Xw/Rewrite%20The%20Stars%20-%20The%20Greatest%20Showman%20_%20Shania%20Yan%20Cover.mp3"},
+        {title: "Angel Baby", url: "https://od.lk/s/NjhfMTYyNzYyNDM5Xw/Troye%20Sivan-Angel%20Baby%20%28cover%29-Studio%20Version%20%20Gigi%20De%20Lana%20%20Jon%20%20Jake%20%20Romeo-Oyus.mp3"}
+    ];
+
+    const jodohSongs = [
+        "https://od.lk/s/NjhfMTYyNzYyNDI5Xw/Beautiful%20in%20white%20CUT_2_2.mp3",
+        "https://od.lk/s/NjhfMTYyNzYyNDMxXw/Rewrite%20the%20start%20CUT.mp3",
+        "https://od.lk/s/NjhfMTYyNzYyNDU0Xw/dandelions%20CUT.mp3",
+        "https://od.lk/s/NjhfMTYyNzYyNDYwXw/Melukis%20Senja%20CUT.mp3",
+        "https://od.lk/s/NjhfMTYyNzYyNDYxXw/Love%20Story%20CUT.mp3"
+    ];
+
+    const S_MATI = "https://od.lk/s/NjhfMTYyNzYyNDE3Xw/Ingat%20Mati%20CUT.mp3";
+    const S_ISLAMI = "https://od.lk/s/NjhfMTYyNzYyNDE5Xw/Haaaaa%20Islami%20CUT.mp3";
+    const S_FUNNY = "https://od.lk/s/NjhfMTYyNzYyNDIwXw/Alur%20Cerita%20FB%20CUT.mp3";
+    const S_SAD = "https://od.lk/s/NjhfMTYyNzYyNDE4Xw/Sampai%20kini%20masih%20ku%20coba%20CUT.mp3";
+    const S_YALILI = "https://od.lk/s/NjhfMTYyNzYyNDE2Xw/Yalil%20Yalili%20CUT.mp3";
+    const CEO_NAMES = ["CEO MBG", "CEO Cendol", "CEO Ayam Potong", "CEO Gorengan", "CEO Ayam Geprek", "CEO Seblak", "CEO EpEp", "CEO Pecel Lele", "CEO Tahu Bulat"];
+
+    window.onload = function() {
+        document.getElementById('selectionModal').classList.add('active');
+        createStars(); createFireflies(); 
+        if(localStorage.getItem('theme')==='dark') { document.body.classList.add('dark-mode'); document.querySelector('#themeToggle i').classList.replace('fa-moon','fa-sun'); }
+        if(localStorage.getItem('mobileLayout')==='grid') setMobileGrid();
+    };
+
+    // --- BGM PLAYER LOGIC ---
     function playRandomBGM() {
-        // Stop jika ada lagu lama
         bgmAudio.pause();
-        
-        // Pilih lagu baru (tidak boleh sama dengan sebelumnya)
         let newIdx;
-        do {
-            newIdx = Math.floor(Math.random() * bgmUrls.length);
-        } while (newIdx === currentBgmIndex && bgmUrls.length > 1);
+        do { newIdx = Math.floor(Math.random() * bgmPlaylist.length); } while (newIdx === currentBgmIndex && bgmPlaylist.length > 1);
         
         currentBgmIndex = newIdx;
-        bgmAudio.src = bgmUrls[currentBgmIndex];
-        bgmAudio.volume = 0; // Mulai dari 0 untuk Fade In
+        bgmAudio.src = bgmPlaylist[currentBgmIndex].url;
+        bgmAudio.volume = 0; // Start for Fade In
         bgmAudio.play().then(() => {
             fadeInBGM();
-        }).catch(err => console.log("Autoplay blocked, waiting for interaction"));
-
-        // Event: Ganti lagu otomatis jika habis
+            showNowPlaying(bgmPlaylist[currentBgmIndex].title);
+        }).catch(e => console.log("Autoplay blocked"));
+        
         bgmAudio.onended = playRandomBGM;
     }
 
     function fadeInBGM() {
         let vol = 0;
-        const fadeInterval = setInterval(() => {
-            if (vol < 1.0) {
-                vol += 0.1;
-                bgmAudio.volume = Math.min(vol, 1.0);
-            } else {
-                clearInterval(fadeInterval);
+        const fade = setInterval(() => { 
+            if(vol < 1.0) { 
+                vol += 0.1; 
+                if(!isMuted) bgmAudio.volume = Math.min(vol, 1.0); 
+            } else { 
+                clearInterval(fade); 
             }
-        }, 100); // Naik setiap 100ms (Total 1 detik)
+        }, 100);
     }
 
-    // --- SOUND EFFECT (Web Audio API) ---
-    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    function showNowPlaying(title) {
+        const box = document.getElementById('now-playing-box');
+        document.getElementById('np-title').innerText = title;
+        box.classList.add('show');
+        setTimeout(() => { box.classList.remove('show'); }, 5000); // Hide after 5s
+    }
 
+    function toggleMute() {
+        isMuted = !isMuted;
+        bgmAudio.muted = isMuted;
+        jodohAudio.muted = isMuted;
+        const icon = document.getElementById('mute-icon');
+        icon.className = isMuted ? 'fas fa-volume-mute' : 'fas fa-volume-up';
+    }
+
+    // --- JODOH PLAYER LOGIC ---
+    function playRandomJodohSong() {
+        let newIdx;
+        do { newIdx = Math.floor(Math.random() * jodohSongs.length); } while (newIdx === currentJodohSongIndex && jodohSongs.length > 1);
+        currentJodohSongIndex = newIdx;
+        jodohAudio.src = jodohSongs[currentJodohSongIndex];
+        jodohAudio.play();
+        jodohAudio.onended = playRandomJodohSong; // Loop to next random song
+    }
+
+    // --- HELPER UNTUK CONTENT JODOH ---
+    function getStudentCoupleContent() {
+        if (availableVariationIndices.length === 0) {
+            availableVariationIndices = Array.from({length: coupleVariations.length}, (_, i) => i);
+        }
+        const randomIndex = Math.floor(Math.random() * availableVariationIndices.length);
+        const selectedIndex = availableVariationIndices[randomIndex];
+        availableVariationIndices.splice(randomIndex, 1);
+        
+        const variation = coupleVariations[selectedIndex];
+        let gifUrl = variation.type === 'cute' ? cuteGifs[Math.floor(Math.random() * cuteGifs.length)] : mockGifs[Math.floor(Math.random() * mockGifs.length)];
+        return { text: variation.t, gif: gifUrl };
+    }
+    
+    // --- UI FUNCTIONS ---
     function playTick() {
         if(audioCtx.state === 'suspended') audioCtx.resume();
-        const osc = audioCtx.createOscillator();
-        const gain = audioCtx.createGain();
-        osc.type = 'square';
-        osc.frequency.setValueAtTime(800, audioCtx.currentTime);
+        const osc = audioCtx.createOscillator(); const gain = audioCtx.createGain();
+        osc.type = 'square'; osc.frequency.setValueAtTime(800, audioCtx.currentTime);
         osc.frequency.exponentialRampToValueAtTime(100, audioCtx.currentTime + 0.05);
         gain.gain.setValueAtTime(0.05, audioCtx.currentTime);
         gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.05);
-        osc.connect(gain);
-        gain.connect(audioCtx.destination);
-        osc.start();
-        osc.stop(audioCtx.currentTime + 0.05);
-    }
-
-    function playWin() {
-        // Backsound Pause, Jodoh Song Play
-        bgmAudio.pause();
-        jodohAudio.currentTime = 0;
-        jodohAudio.play();
-        
-        // Sprinkle Sound (Web Audio)
-        if(audioCtx.state === 'suspended') audioCtx.resume();
-        const notes = [523.25, 659.25, 783.99, 1046.50];
-        let time = audioCtx.currentTime;
-        notes.forEach((freq, i) => {
-            const osc = audioCtx.createOscillator();
-            const gain = audioCtx.createGain();
-            osc.type = 'sine';
-            osc.frequency.setValueAtTime(freq, time + i * 0.1);
-            gain.gain.setValueAtTime(0.05, time + i * 0.1);
-            gain.gain.exponentialRampToValueAtTime(0.001, time + i * 0.1 + 0.5);
-            osc.connect(gain);
-            gain.connect(audioCtx.destination);
-            osc.start(time + i * 0.1);
-            osc.stop(time + i * 0.1 + 0.5);
-        });
-    }
-
-    window.onload = function() {
-        document.getElementById('selectionModal').classList.add('active');
-        createStars(); 
-        createFireflies(); 
-        
-        if (localStorage.getItem('theme') === 'dark') {
-            document.body.classList.add('dark-mode');
-            document.querySelector('#themeToggle i').classList.replace('fa-moon', 'fa-sun');
-        }
-        if (localStorage.getItem('mobileLayout') === 'grid') {
-            setMobileGrid();
-        }
-    };
-
-    // --- FUNGSI TATA LETAK MOBILE ---
-    const btnList = document.getElementById('btnList');
-    const btnGrid = document.getElementById('btnGrid');
-    const cardGrid = document.getElementById('cardGrid');
-
-    function setMobileList() {
-        cardGrid.classList.remove('mobile-grid-active');
-        btnList.classList.add('active');
-        btnGrid.classList.remove('active');
-        localStorage.setItem('mobileLayout', 'list');
-    }
-
-    function setMobileGrid() {
-        cardGrid.classList.add('mobile-grid-active');
-        btnGrid.classList.add('active');
-        btnList.classList.remove('active');
-        localStorage.setItem('mobileLayout', 'grid');
-    }
-
-    // --- FUNGSI COPY NIM ---
-    function copyNIM() {
-        const nimText = document.getElementById('p-nim').innerText;
-        navigator.clipboard.writeText(nimText).then(() => {
-            const tooltip = document.getElementById('copy-tooltip');
-            tooltip.classList.add('show');
-            setTimeout(() => { tooltip.classList.remove('show'); }, 1500);
-        });
-    }
-
-    // --- VISUAL EFFECT FUNCTIONS ---
-    function createFireflies() {
-        const container = document.getElementById('fireflies-container');
-        for(let i=0; i<50; i++){
-            const fly = document.createElement('div');
-            fly.classList.add('firefly');
-            fly.style.left = Math.random() * 100 + 'vw';
-            fly.style.top = Math.random() * 100 + 'vh';
-            const size = Math.random() * 4 + 4; 
-            fly.style.width = size + 'px';
-            fly.style.height = size + 'px';
-            const durationX = Math.random() * 10 + 10 + 's';
-            const durationY = Math.random() * 10 + 10 + 's';
-            fly.style.animationDuration = `3s, ${durationX}, ${durationY}`;
-            fly.style.animationDelay = `-${Math.random() * 20}s`;
-            container.appendChild(fly);
-        }
-    }
-
-    function createStars() {
-        const starContainer = document.getElementById('stars');
-        let boxShadow = "";
-        for(let i=0; i<300; i++){
-            let x = Math.floor(Math.random() * 2000);
-            let y = Math.floor(Math.random() * 2000);
-            boxShadow += `${x}px ${y}px #FFF, `;
-        }
-        starContainer.style.boxShadow = boxShadow.slice(0, -2);
-    }
-
-    function getInitials(name) {
-        let parts = name.split(" ");
-        return parts.length > 1 ? (parts[0][0] + parts[1][0]).toUpperCase() : parts[0].substring(0, 2).toUpperCase();
+        osc.connect(gain); gain.connect(audioCtx.destination); osc.start(); osc.stop(audioCtx.currentTime + 0.05);
     }
 
     function loadClassData(type) {
-        cardGrid.innerHTML = "";
-        
-        if (type === 'IF1') {
-            currentClassData = dataIF1;
-            currentClassLabel = "IF 1";
-        } else {
-            currentClassData = dataIF2;
-            currentClassLabel = "IF 2";
-        }
-
+        document.getElementById('cardGrid').innerHTML = "";
+        currentClassData = (type === 'IF1') ? dataIF1 : dataIF2;
+        currentClassLabel = (type === 'IF1') ? "IF 1" : "IF 2";
         document.getElementById('class-name').innerText = currentClassLabel;
-
-        currentClassData.forEach((student) => {
-            const initial = getInitials(student.name);
-            const genderClass = student.gender === 'L' ? 'gender-L' : 'gender-P';
-            const genderLabel = student.gender === 'L' ? 'L' : 'P';
-            
-            const card = document.createElement('div');
-            card.className = 'card';
-            card.onclick = () => openProfile(student);
-            card.innerHTML = `
-                <div class="gender-tag ${genderClass}">${genderLabel}</div>
-                <div class="avatar">${initial}</div>
-                <h3>${student.name}</h3>
-                <span class="nim-badge">${student.nim}</span>
-            `;
-            cardGrid.appendChild(card);
+        currentClassData.forEach(s => {
+            const card = document.createElement('div'); card.className = 'card';
+            card.onclick = () => openProfile(s);
+            card.innerHTML = `<div class="gender-tag ${s.gender==='L'?'gender-L':'gender-P'}">${s.gender}</div><div class="avatar">${getInitials(s.name)}</div><h3>${s.name}</h3><span class="nim-badge">${s.nim}</span>`;
+            document.getElementById('cardGrid').appendChild(card);
         });
-
         document.getElementById('selectionModal').classList.remove('active');
-        
-        // TRIGGER BGM SAAT USER PERTAMA KALI KLIK TOMBOL KELAS
-        // (Ini penting agar browser mengizinkan autoplay)
-        if (bgmAudio.paused) {
-            playRandomBGM();
-        }
+        if(bgmAudio.paused) playRandomBGM();
     }
 
-    function openProfile(student) {
-        currentProfile = student; 
-        
-        document.getElementById('p-avatar').innerText = getInitials(student.name);
-        document.getElementById('p-name').innerText = student.name;
-        document.getElementById('p-nim').innerText = student.nim;
+    function openProfile(s) {
+        currentProfile = s;
+        // LOWER VOLUME
+        if(!isMuted) bgmAudio.volume = 0.2;
+
+        document.getElementById('p-avatar').innerText = getInitials(s.name);
+        document.getElementById('p-name').innerText = s.name;
+        document.getElementById('p-nim').innerText = s.nim;
         document.getElementById('p-class').innerText = currentClassLabel;
-        document.getElementById('p-gender').innerText = student.gender === 'L' ? 'Laki-Laki' : 'Perempuan';
-        document.getElementById('p-dob').innerText = student.dob;
-        document.getElementById('p-dospem').innerText = student.dospem;
-
-        // Random Quote
-        const randomQuote = quotes[Math.floor(Math.random() * quotes.length)];
-        document.getElementById('daily-quote').innerText = `"${randomQuote}"`;
-
+        document.getElementById('p-gender').innerText = s.gender==='L'?'Laki-Laki':'Perempuan';
+        document.getElementById('p-dob').innerText = s.dob;
+        document.getElementById('p-dospem').innerText = s.dospem;
+        document.getElementById('daily-quote').innerText = `"${quotes[Math.floor(Math.random()*quotes.length)]}"`;
         document.getElementById('main-view').style.opacity = '0';
-        setTimeout(() => {
-            document.getElementById('main-view').style.display = 'none';
-            const pView = document.getElementById('profile-view');
-            pView.style.display = 'block';
-            setTimeout(() => { pView.style.opacity = '1'; }, 50);
-        }, 300);
+        setTimeout(() => { document.getElementById('main-view').style.display = 'none'; document.getElementById('profile-view').style.display = 'block'; setTimeout(() => document.getElementById('profile-view').style.opacity = '1', 50); }, 300);
     }
 
     function closeProfile() {
-        const pView = document.getElementById('profile-view');
-        pView.style.opacity = '0';
-        setTimeout(() => {
-            pView.style.display = 'none';
-            const mView = document.getElementById('main-view');
-            mView.style.display = 'block';
-            setTimeout(() => { mView.style.opacity = '1'; }, 50);
-        }, 500);
+        // RESTORE VOLUME
+        if(!isMuted) bgmAudio.volume = 1.0;
+
+        document.getElementById('profile-view').style.opacity = '0';
+        setTimeout(() => { document.getElementById('profile-view').style.display = 'none'; document.getElementById('main-view').style.display = 'block'; setTimeout(() => document.getElementById('main-view').style.opacity = '1', 50); }, 500);
     }
-
+    
     let matchInterval;
-
+    
     function cekJodoh() {
         if (!currentProfile) return;
+        const gender = currentProfile.gender;
+        const targetGender = gender === 'L' ? 'P' : 'L'; 
+        
+        let candidates = allStudents.filter(s => s.gender === targetGender).map(s => ({ type: 'student', ...s }));
+        
+        candidates.push({ type: 'special', subtype: 'kematian', name: "Kematian" });
+        candidates.push({ type: 'special', subtype: 'allah', name: "Hanya Allah Yang Tahu" });
+        candidates.push({ type: 'special', subtype: 'ceo', name: "CEO" }); 
+        candidates.push({ type: 'special', subtype: 'halu', name: "Dih Ngarepin Siapa Sih, Halu!" });
 
-        const myGender = currentProfile.gender;
-        const targetGender = myGender === 'L' ? 'P' : 'L'; 
+        if (gender === 'L') {
+            candidates.push({ type: 'special', subtype: 'ukthi', name: "Ukthi Yalil Yalili" });
+        } else {
+            candidates.push({ type: 'special', subtype: 'korea', name: "Cowo Korea" });
+            candidates.push({ type: 'special', subtype: 'cina', name: "Cowo Cina" });
+        }
 
-        const candidates = allStudents.filter(s => s.gender === targetGender);
-        if (candidates.length === 0) { alert("Data lawan jenis kosong!"); return; }
-
-        // Reset UI
         const modal = document.getElementById('jodohModal');
         const searchUI = document.getElementById('searching-ui');
         const finalUI = document.getElementById('final-couple-ui');
@@ -736,78 +618,89 @@
         searchUI.style.display = 'block';
         finalUI.style.display = 'none';
         modal.classList.add('active');
-
         if (audioCtx.state === 'suspended') audioCtx.resume();
 
-        let counter = 0;
         matchInterval = setInterval(() => {
-            const randomCandidate = candidates[Math.floor(Math.random() * candidates.length)];
-            nameDisplay.innerText = randomCandidate.name;
+            const r = candidates[Math.floor(Math.random() * candidates.length)];
+            nameDisplay.innerText = r.name === "CEO" ? CEO_NAMES[Math.floor(Math.random()*CEO_NAMES.length)] : r.name;
             nameDisplay.style.color = "#ccc"; 
-            playTick(); // SOUND TICK
-            counter++;
-        }, 100); 
+            playTick();
+        }, 100);
 
         setTimeout(() => {
             clearInterval(matchInterval);
-            const finalMatch = candidates[Math.floor(Math.random() * candidates.length)];
+            let result = candidates[Math.floor(Math.random() * candidates.length)];
             
-            // Tampilkan UI Akhir
             searchUI.style.display = 'none';
             finalUI.style.display = 'block';
+            finalUI.innerHTML = "";
             
-            // Set Text Couple
-            const coupleText = document.getElementById('couple-text');
-            coupleText.innerHTML = `${currentProfile.name.split(" ")[0]} <i class="fas fa-heart"></i> ${finalMatch.name.split(" ")[0]}`;
+            bgmAudio.pause(); // PAUSE BGM
             
-            playWin(); // SOUND WIN & SPRINKLE
+            let htmlContent = "";
+
+            if (result.type === 'student') {
+                const content = getStudentCoupleContent();
+                htmlContent = `
+                    <div class="couple-container">
+                        <div class="c-name-user">${currentProfile.name}</div>
+                        <div class="c-heart"><i class="fas fa-heart"></i></div>
+                        <div class="c-name-partner">${result.name}</div>
+                    </div>
+                    <div class="couple-sub">${content.text}</div>
+                    <img src="${content.gif}" class="couple-gif" alt="Funny Gif">
+                `;
+                playRandomJodohSong(); // PLAY RANDOM JODOH SONG (Special List)
+            } else {
+                let title = result.name;
+                let sub = "";
+                let soundToPlay = "";
+
+                switch(result.subtype) {
+                    case 'kematian': title = "KEMATIAN"; sub = "Perbaiki Ibadahmu, Kematian Gak Ada Yang Tahu Kapan"; soundToPlay = S_MATI; break;
+                    case 'allah': sub = "Sempurnakan, Perbaiki, Dan Pantaskan Agar Allah Berikan Yang Terbaik"; soundToPlay = S_ISLAMI; break;
+                    case 'ceo': 
+                        title = CEO_NAMES[Math.floor(Math.random() * CEO_NAMES.length)]; sub = "Korban Drachin"; soundToPlay = S_FUNNY; 
+                        htmlContent = `<div class="couple-container"><div class="c-name-user">${currentProfile.name}</div><div class="c-heart"><i class="fas fa-heart"></i></div><div class="c-name-partner">${title}</div></div><div class="couple-sub">${sub}</div>`;
+                        break;
+                    case 'halu': sub = "Dia Udah Jadi Milik Yang Lain :)"; soundToPlay = S_SAD; break;
+                    case 'ukthi': sub = "Perbaiki Dirimu Agar Pantas Dengannya Atau Akan Allah Jauhkan"; soundToPlay = S_YALILI; break;
+                    case 'korea': case 'cina': sub = "Ah Masa Sih, Emang Dia Mau Ya?"; soundToPlay = S_FUNNY; break;
+                }
+
+                if (result.subtype !== 'ceo') {
+                    htmlContent = `<div class="special-title">${title}</div><div class="couple-sub">${sub}</div>`;
+                }
+                
+                // Play Specific SFX for Special Match
+                jodohAudio.src = soundToPlay;
+                jodohAudio.play();
+                jodohAudio.onended = null; // Do not loop special SFX
+            }
             
+            finalUI.innerHTML = htmlContent;
+
         }, 3000);
     }
 
     function closeJodoh() {
         document.getElementById('jodohModal').classList.remove('active');
         clearInterval(matchInterval);
+        jodohAudio.pause(); jodohAudio.currentTime = 0;
         
-        // Stop Lagu Jodoh, Resume BGM
-        jodohAudio.pause();
+        // RESUME BGM
         bgmAudio.play();
-        fadeInBGM();
+        if(!isMuted) bgmAudio.volume = 0.2; // Keep it low as we are still in profile
     }
 
-    function toggleTheme() {
-        document.body.classList.toggle('dark-mode');
-        const icon = document.querySelector('#themeToggle i');
-        if (document.body.classList.contains('dark-mode')) {
-            icon.classList.remove('fa-moon');
-            icon.classList.add('fa-sun');
-            localStorage.setItem('theme', 'dark');
-        } else {
-            icon.classList.remove('fa-sun');
-            icon.classList.add('fa-moon');
-            localStorage.setItem('theme', 'light');
-        }
-    }
-
-    function filterNames() {
-        var input, filter, cards, h3, nim, txtValue, nimValue;
-        input = document.getElementById("searchInput");
-        filter = input.value.toUpperCase();
-        cards = cardGrid.getElementsByClassName("card");
-
-        for (let i = 0; i < cards.length; i++) {
-            h3 = cards[i].getElementsByTagName("h3")[0];
-            nim = cards[i].getElementsByClassName("nim-badge")[0];
-            txtValue = h3.textContent || h3.innerText;
-            nimValue = nim.textContent || nim.innerText;
-            if (txtValue.toUpperCase().indexOf(filter) > -1 || nimValue.toUpperCase().indexOf(filter) > -1) {
-                cards[i].style.display = "";
-            } else {
-                cards[i].style.display = "none";
-            }
-        }
-    }
+    function copyNIM() { navigator.clipboard.writeText(document.getElementById('p-nim').innerText).then(() => { document.getElementById('copy-tooltip').classList.add('show'); setTimeout(() => document.getElementById('copy-tooltip').classList.remove('show'), 1500); }); }
+    function setMobileList() { document.getElementById('cardGrid').classList.remove('mobile-grid-active'); document.getElementById('btnList').classList.add('active'); document.getElementById('btnGrid').classList.remove('active'); localStorage.setItem('mobileLayout', 'list'); }
+    function setMobileGrid() { document.getElementById('cardGrid').classList.add('mobile-grid-active'); document.getElementById('btnGrid').classList.add('active'); document.getElementById('btnList').classList.remove('active'); localStorage.setItem('mobileLayout', 'grid'); }
+    function toggleTheme() { document.body.classList.toggle('dark-mode'); localStorage.setItem('theme', document.body.classList.contains('dark-mode')?'dark':'light'); document.querySelector('#themeToggle i').className = document.body.classList.contains('dark-mode') ? 'fas fa-sun' : 'fas fa-moon'; }
+    function getInitials(n) { let p=n.split(" "); return p.length>1?(p[0][0]+p[1][0]).toUpperCase():p[0].substring(0,2).toUpperCase(); }
+    function createFireflies() { const c=document.getElementById('fireflies-container'); for(let i=0;i<50;i++){ const d=document.createElement('div'); d.className='firefly'; d.style.left=Math.random()*100+'vw'; d.style.top=Math.random()*100+'vh'; const s=Math.random()*4+4; d.style.width=s+'px'; d.style.height=s+'px'; d.style.animationDuration=`3s, ${Math.random()*10+10}s, ${Math.random()*10+10}s`; d.style.animationDelay=`-${Math.random()*20}s`; c.appendChild(d); } }
+    function createStars() { const s=document.getElementById('stars'); let b=""; for(let i=0;i<300;i++) b+=`${Math.floor(Math.random()*2000)}px ${Math.floor(Math.random()*2000)}px #FFF, `; s.style.boxShadow=b.slice(0,-2); }
+    function filterNames() { const v=document.getElementById("searchInput").value.toUpperCase(); const c=document.getElementById("cardGrid").getElementsByClassName("card"); for(let i=0;i<c.length;i++){ const t=c[i].textContent||c[i].innerText; c[i].style.display=t.toUpperCase().indexOf(v)>-1?"":"none"; } }
 </script>
-
 </body>
 </html>
