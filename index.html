@@ -51,7 +51,7 @@
             overflow-x: hidden;
         }
 
-        /* --- VIEW CONTROLS (TOMBOL TENGAH) --- */
+        /* --- VIEW CONTROLS (Simulasi Desktop Only) --- */
         .view-controls {
             position: fixed;
             top: 20px;
@@ -69,6 +69,23 @@
             transition: all 0.3s ease;
         }
 
+        /* --- MOBILE LAYOUT CONTROLS (List vs Grid) --- */
+        /* Default hidden, hanya muncul di mobile */
+        .mobile-layout-controls {
+            display: none; 
+            position: fixed;
+            top: 60px; /* Di bawah header fixed */
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 990;
+            background: var(--credit-bg);
+            padding: 4px;
+            border-radius: 50px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(0,0,0,0.05);
+        }
+
         .view-btn {
             background: transparent;
             border: none;
@@ -84,72 +101,65 @@
             gap: 8px;
             transition: 0.3s;
         }
+        
+        /* Tombol Mobile Styling */
+        .mobile-btn {
+            background: transparent;
+            border: none;
+            color: var(--credit-text);
+            padding: 6px 15px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            transition: 0.3s;
+        }
 
-        .view-btn.active {
+        .view-btn.active, .mobile-btn.active {
             background: #3498db;
             color: white;
-            box-shadow: 0 4px 15px rgba(52, 152, 219, 0.4);
+            box-shadow: 0 4px 10px rgba(52, 152, 219, 0.3);
         }
 
-        .view-btn:hover:not(.active) {
-            background: rgba(255,255,255,0.2);
-        }
+        .view-btn:hover:not(.active) { background: rgba(255,255,255,0.2); }
 
         /* --- MAIN WRAPPER --- */
         #main-wrapper {
             background: var(--bg-gradient);
             min-height: 100vh;
             color: var(--text-color);
-            transition: width 0.5s ease, margin 0.5s ease, border-radius 0.5s ease, height 0.5s ease;
+            transition: all 0.5s ease;
             position: relative;
             padding-bottom: 40px;
             width: 100%;
         }
 
-        /* Mode Desktop (Default) */
-        #main-wrapper.desktop-view {
-            width: 100%;
-            margin: 0;
-            padding-top: 90px;
-        }
+        #main-wrapper.desktop-view { width: 100%; margin: 0; padding-top: 90px; }
 
-        /* Mode Mobile (Simulasi - Hanya aktif jika tombol ditekan di PC) */
+        /* Mode Simulasi (Hanya di PC) */
         #main-wrapper.mobile-view {
-            width: 375px;
-            height: 80vh;
-            margin: 80px auto 20px auto;
-            border-radius: 35px;
-            border: 10px solid #111;
-            overflow-y: auto;
-            overflow-x: hidden;
+            width: 375px; height: 80vh; margin: 80px auto 20px auto;
+            border-radius: 35px; border: 10px solid #111;
+            overflow-y: auto; overflow-x: hidden;
             box-shadow: 0 0 0 5px #333, 0 20px 50px rgba(0,0,0,0.5);
             padding-top: 80px;
         }
-        
         #main-wrapper.mobile-view::-webkit-scrollbar { width: 5px; }
         #main-wrapper.mobile-view::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.2); border-radius: 10px; }
 
-        /* --- FIXED ELEMENTS (Credit, Dark Mode, Youtube) --- */
+        /* --- FIXED ELEMENTS --- */
         .fixed-element {
-            position: fixed;
-            top: 20px;
-            z-index: 1000;
-            background: var(--credit-bg);
-            padding: 10px 20px;
-            border-radius: 30px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-            backdrop-filter: blur(10px);
-            color: var(--credit-text);
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            position: fixed; top: 20px; z-index: 1000;
+            background: var(--credit-bg); padding: 10px 20px;
+            border-radius: 30px; box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            backdrop-filter: blur(10px); color: var(--credit-text);
+            transition: all 0.3s ease; display: flex; align-items: center; justify-content: center;
         }
 
-        #main-wrapper.mobile-view .fixed-element {
-            position: absolute;
-            top: 15px; 
-        }
+        #main-wrapper.mobile-view .fixed-element { position: absolute; top: 15px; }
 
         .pos-left { left: 20px; }
         .pos-right { right: 20px; text-decoration: none;}
@@ -159,7 +169,7 @@
         .pos-theme i { color: #f1c40f; }
         body.dark-mode .pos-theme i { color: #f39c12; }
 
-        /* Simualsi Mobile: Styling elemen di dalam frame HP */
+        /* Simulasi Styles */
         #main-wrapper.mobile-view .pos-right { font-size: 0; padding: 8px 12px; right: 15px; }
         #main-wrapper.mobile-view .pos-right i { margin-right: 0; font-size: 18px; }
         #main-wrapper.mobile-view .pos-theme { right: 60px; width: 35px; height: 35px; font-size: 16px; top: 15px; }
@@ -182,6 +192,7 @@
             box-shadow: 0 5px 15px rgba(0,0,0,0.05); max-width: 100%; box-sizing: border-box; 
         }
 
+        /* --- GRID & CARD --- */
         .grid-container { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; }
         .card {
             background: var(--card-bg); border-radius: 15px; padding: 25px;
@@ -193,9 +204,10 @@
             width: 65px; height: 65px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center;
             font-size: 22px; font-weight: bold; margin: 0 auto 10px auto;
+            transition: all 0.3s ease;
         }
-        .card h3 { font-size: 17px; font-weight: 600; color: var(--text-color); min-height: 50px; display: flex; align-items: center; justify-content: center; margin-bottom: 5px;}
-        .nim-badge { background: var(--nim-bg); color: var(--nim-text); padding: 4px 12px; border-radius: 15px; font-size: 13px; font-weight: 500; }
+        .card h3 { font-size: 17px; font-weight: 600; color: var(--text-color); min-height: 50px; display: flex; align-items: center; justify-content: center; margin-bottom: 5px; transition: font-size 0.3s ease;}
+        .nim-badge { background: var(--nim-bg); color: var(--nim-text); padding: 4px 12px; border-radius: 15px; font-size: 13px; font-weight: 500; transition: font-size 0.3s ease; }
         .card:hover .nim-badge { background: #3498db; color: white; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 
@@ -204,48 +216,60 @@
         /* ========================================= */
         @media (max-width: 600px) {
             
-            /* 1. HILANGKAN TOMBOL VIEW MODE (Desktop/Mobile) DI HP */
-            .view-controls {
-                display: none; 
-            }
+            /* 1. Hilangkan Tombol Simulasi, Tampilkan Tombol Layout Mobile */
+            .view-controls { display: none; }
+            .mobile-layout-controls { display: flex; }
 
-            /* Balikin Background Body ke Gradient (bukan warna gelap simulator) */
+            /* Reset ke tampilan asli HP */
             body { background: var(--bg-gradient); }
+            #main-wrapper.desktop-view { padding-top: 100px; }
 
-            /* Reset Padding */
-            #main-wrapper.desktop-view {
-                padding-top: 90px; 
-            }
-
-            /* 2. Credit Lebih Kecil & Ringkas */
-            .pos-left {
-                font-size: 10px; /* Ukuran font kecil */
-                padding: 6px 10px;
-                left: 10px;
-                top: 15px;
-                max-width: 150px;
-            }
-
-            /* 3. Jarak Tombol Dark Mode & YouTube Aman */
-            .pos-right {
-                font-size: 0; /* Sembunyikan tulisan 'Dilz Ghaaziy' */
-                padding: 8px 12px;
-                right: 10px; /* Rapat kanan */
-                top: 15px;
-            }
+            /* Fix Layout Elemen Tetap */
+            .pos-left { font-size: 10px; padding: 6px 10px; left: 10px; top: 15px; max-width: 150px; }
+            .pos-right { font-size: 0; padding: 8px 12px; right: 10px; top: 15px; }
             .pos-right i { margin: 0; font-size: 18px; }
-
-            .pos-theme {
-                /* Memberi jarak aman 75px dari kanan agar tidak mepet Youtube */
-                right: 75px; 
-                width: 35px;
-                height: 35px;
-                font-size: 16px;
-                top: 15px;
-            }
-            
-            /* Fix HP: Searchbox Full Width */
+            .pos-theme { right: 75px; width: 35px; height: 35px; font-size: 16px; top: 15px; }
             .search-box { max-width: 100%; padding: 0 10px; }
+
+            /* ----------------------------------------------- */
+            /* --- FITUR TATA LETAK KHUSUS MOBILE (Grid) --- */
+            /* ----------------------------------------------- */
+            
+            /* Default: List View (1 Kolom) */
+            .grid-container {
+                grid-template-columns: 1fr; /* 1 kartu per baris */
+                padding: 0 5px;
+            }
+
+            /* Active: Grid View (2 Kolom - Petak) */
+            .grid-container.mobile-grid-active {
+                grid-template-columns: repeat(2, 1fr) !important; /* Paksa 2 kolom */
+                gap: 10px;
+            }
+
+            /* Penyesuaian Ukuran Kartu saat Mode Petak Aktif */
+            .grid-container.mobile-grid-active .card {
+                padding: 15px 10px; /* Padding lebih kecil */
+            }
+
+            .grid-container.mobile-grid-active .avatar {
+                width: 45px; /* Avatar mengecil */
+                height: 45px;
+                font-size: 16px;
+                margin-bottom: 8px;
+            }
+
+            .grid-container.mobile-grid-active h3 {
+                font-size: 13px; /* Nama mengecil */
+                min-height: 40px;
+                line-height: 1.2;
+                margin-bottom: 5px;
+            }
+
+            .grid-container.mobile-grid-active .nim-badge {
+                font-size: 10px; /* Badge mengecil */
+                padding: 3px 8px;
+            }
         }
     </style>
 </head>
@@ -260,6 +284,15 @@
     </button>
 </div>
 
+<div class="mobile-layout-controls">
+    <button class="mobile-btn active" onclick="setMobileList()" id="btnList">
+        <i class="fas fa-list"></i> Default
+    </button>
+    <button class="mobile-btn" onclick="setMobileGrid()" id="btnGrid">
+        <i class="fas fa-th-large"></i> Petak
+    </button>
+</div>
+
 <div id="main-wrapper" class="desktop-view">
 
     <div class="fixed-element pos-left">
@@ -270,7 +303,7 @@
         <i class="fas fa-moon"></i>
     </button>
 
-    <a href="https://www.youtube.com/results?search_query=Dilz+Ghaaziy" target="_blank" class="fixed-element pos-right">
+    <a href="http://www.youtube.com/@DilzGhaaziy" target="_blank" class="fixed-element pos-right">
         <i class="fab fa-youtube"></i>
         <span>Dilz Ghaaziy</span>
     </a>
@@ -320,7 +353,7 @@
 </div>
 
 <script>
-    // --- FITUR VIEW MODE ---
+    // --- 1. FITUR VIEW MODE (PC) ---
     const wrapper = document.getElementById('main-wrapper');
     const btnDesktop = document.getElementById('btnDesktop');
     const btnMobile = document.getElementById('btnMobile');
@@ -328,7 +361,6 @@
     function setDesktop() {
         wrapper.classList.remove('mobile-view');
         wrapper.classList.add('desktop-view');
-        
         btnDesktop.classList.add('active');
         btnMobile.classList.remove('active');
     }
@@ -336,12 +368,45 @@
     function setMobile() {
         wrapper.classList.remove('desktop-view');
         wrapper.classList.add('mobile-view');
-
         btnMobile.classList.add('active');
         btnDesktop.classList.remove('active');
     }
 
-    // --- FITUR DARK MODE ---
+    // --- 2. FITUR TATA LETAK MOBILE (HP) ---
+    const cardGrid = document.getElementById('cardGrid');
+    const btnList = document.getElementById('btnList');
+    const btnGrid = document.getElementById('btnGrid');
+
+    // Cek Local Storage saat load
+    if (localStorage.getItem('mobileLayout') === 'grid') {
+        setMobileGrid();
+    }
+
+    function setMobileList() {
+        // Hapus class grid active
+        cardGrid.classList.remove('mobile-grid-active');
+        
+        // Update tombol
+        btnList.classList.add('active');
+        btnGrid.classList.remove('active');
+        
+        // Simpan preferensi
+        localStorage.setItem('mobileLayout', 'list');
+    }
+
+    function setMobileGrid() {
+        // Tambah class grid active
+        cardGrid.classList.add('mobile-grid-active');
+        
+        // Update tombol
+        btnGrid.classList.add('active');
+        btnList.classList.remove('active');
+        
+        // Simpan preferensi
+        localStorage.setItem('mobileLayout', 'grid');
+    }
+
+    // --- 3. FITUR DARK MODE ---
     const toggleBtn = document.getElementById('themeToggle');
     const toggleIcon = toggleBtn.querySelector('i');
     
@@ -365,7 +430,7 @@
         }
     }
 
-    // --- FITUR SEARCH ---
+    // --- 4. FITUR SEARCH ---
     function filterNames() {
         var input, filter, grid, cards, h3, nim, i, txtValue, nimValue;
         input = document.getElementById("searchInput");
