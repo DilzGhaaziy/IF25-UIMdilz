@@ -2,9 +2,8 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=1200">
-    
-    <title>IF25 UIM BIO</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BIODATA IF25</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
@@ -46,35 +45,26 @@
         }
 
         /* --- RESET & BASIC STYLE --- */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border_box;
-        }
+        * { margin: 0; padding: 0; box-sizing: border_box; }
 
         body {
             font-family: 'Poppins', sans-serif;
             background: var(--bg-gradient);
             min-height: 100vh;
             color: var(--text-color);
-            padding: 90px 20px 40px 20px;
+            padding: 100px 20px 40px 20px; /* Padding atas lebih besar untuk tombol view */
             transition: background 0.3s ease, color 0.3s ease;
-            /* Memastikan lebar body minimal 1200px */
-            min-width: 1200px; 
         }
 
-        /* --- FIXED TOP ELEMENTS --- */
-        .fixed-credit, .fixed-youtube, .fixed-theme {
+        /* --- FIXED ELEMENTS --- */
+        .fixed-credit, .fixed-youtube, .fixed-theme, .view-toggle {
             position: fixed;
             top: 20px;
             z-index: 1000;
             background: var(--credit-bg);
-            padding: 10px 20px;
             border-radius: 30px;
             box-shadow: 0 4px 15px rgba(0,0,0,0.1);
             backdrop-filter: blur(10px);
-            font-size: 14px;
-            font-weight: 500;
             color: var(--credit-text);
             transition: all 0.3s ease;
             display: flex;
@@ -82,17 +72,26 @@
             justify-content: center;
         }
 
+        /* Credit (Kiri) */
         .fixed-credit {
             left: 20px;
+            padding: 10px 20px;
+            font-size: 14px;
+            font-weight: 500;
         }
 
+        /* YouTube (Kanan) */
         .fixed-youtube {
             right: 20px;
             text-decoration: none;
+            padding: 10px 20px;
+            font-size: 14px;
+            font-weight: 500;
         }
 
+        /* Theme Toggle (Sebelah YouTube) */
         .fixed-theme {
-            right: 180px; 
+            right: 180px;
             cursor: pointer;
             width: 45px;
             height: 45px;
@@ -101,181 +100,157 @@
             font-size: 18px;
         }
 
-        .fixed-youtube:hover, .fixed-theme:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+        .fixed-youtube i { color: #ff0000; font-size: 22px; margin-right: 10px; }
+        .fixed-theme i { color: #f1c40f; }
+        body.dark-mode .fixed-theme i { color: #f39c12; }
+
+        /* --- VIEW TOGGLE BUTTONS (FITUR BARU) --- */
+        .view-toggle {
+            left: 50%;
+            transform: translateX(-50%); /* Posisi Tengah Atas */
+            padding: 5px;
+            gap: 5px;
         }
 
-        .fixed-youtube i {
-            color: #ff0000;
-            font-size: 22px;
-            margin-right: 10px;
+        .view-btn {
+            border: none;
+            background: transparent;
+            color: var(--credit-text);
+            padding: 8px 15px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-family: 'Poppins', sans-serif;
+            font-size: 12px;
+            font-weight: 600;
+            transition: 0.3s;
         }
 
-        .fixed-theme i {
-            color: #f1c40f; 
+        .view-btn.active {
+            background-color: #3498db;
+            color: white;
+            box-shadow: 0 2px 5px rgba(52, 152, 219, 0.4);
         }
-        body.dark-mode .fixed-theme i {
-            color: #f39c12; 
+
+        /* --- LOGIKA SEMBUNYIKAN DI PC --- */
+        /* Jika layar lebih besar dari 768px (Tablet/PC), sembunyikan tombol toggle view */
+        @media (min-width: 769px) {
+            .view-toggle {
+                display: none !important;
+            }
+        }
+
+        /* --- RESPONSIVE HEADER LAINNYA --- */
+        @media (max-width: 768px) {
+            .fixed-credit { font-size: 10px; padding: 8px 12px; top: 15px; left: 10px; max-width: 100px; }
+            .fixed-youtube { padding: 8px; font-size: 0; top: 15px; right: 10px; }
+            .fixed-youtube i { margin-right: 0; font-size: 18px; }
+            .fixed-theme { right: 50px; width: 35px; height: 35px; font-size: 14px; top: 15px; }
+            .view-toggle { top: 60px; } /* Turun sedikit di HP agar tidak nabrak credit */
         }
 
         /* --- CONTAINER --- */
-        .container {
-            width: 1100px; /* Lebar tetap agar layout stabil */
-            margin: 0 auto;
-        }
-
-        /* --- HEADER --- */
-        header {
-            text-align: center;
-            margin-bottom: 40px;
-            margin-top: 20px;
-        }
-
-        h1 {
-            font-weight: 600;
-            color: var(--h1-color);
-            margin-bottom: 10px;
-            font-size: 2.5rem;
-            transition: color 0.3s;
-        }
-
-        p.subtitle {
-            color: var(--subtitle-color);
-            margin-bottom: 30px;
-        }
+        .container { max-width: 1200px; margin: 0 auto; }
+        
+        header { text-align: center; margin-bottom: 40px; margin-top: 20px; }
+        h1 { font-weight: 600; color: var(--h1-color); margin-bottom: 10px; font-size: 2.5rem; }
+        p.subtitle { color: var(--subtitle-color); margin-bottom: 30px; }
 
         /* --- SEARCH BOX --- */
-        .search-box {
-            position: relative;
-            max-width: 500px;
-            margin: 0 auto 40px auto;
-        }
-
+        .search-box { position: relative; max-width: 500px; margin: 0 auto 40px auto; }
         .search-box input {
-            width: 100%;
-            padding: 15px 25px;
-            border-radius: 50px;
-            border: 1px solid var(--input-border);
-            background-color: var(--input-bg);
-            color: var(--text-color);
-            font-size: 16px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
-            outline: none;
-            transition: all 0.3s ease;
-            font-family: 'Poppins', sans-serif;
+            width: 100%; padding: 15px 25px; border-radius: 50px;
+            border: 1px solid var(--input-border); background-color: var(--input-bg);
+            color: var(--text-color); font-size: 16px; outline: none;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05); transition: all 0.3s ease;
         }
+        .search-box input:focus { border-color: #3498db; }
 
-        .search-box input:focus {
-            box-shadow: 0 5px 20px rgba(52, 152, 219, 0.3);
-            border-color: #3498db;
-        }
-
-        /* --- GRID --- */
+        /* --- GRID CONTAINER --- */
         .grid-container {
             display: grid;
-            /* Memaksa grid selalu 4 kolom, tidak mengecil */
-            grid-template-columns: repeat(4, 1fr); 
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
             gap: 25px;
+            transition: all 0.3s ease;
         }
 
-        /* --- CARD --- */
+        /* --- CARD STYLE --- */
         .card {
-            background: var(--card-bg);
-            border-radius: 15px;
-            padding: 25px;
-            text-align: center;
-            box-shadow: 0 10px 20px var(--card-shadow);
-            transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.3s;
-            border-top: 5px solid transparent;
-            position: relative;
-            overflow: hidden;
-            animation: fadeIn 0.5s ease-in-out;
+            background: var(--card-bg); border-radius: 15px; padding: 25px;
+            text-align: center; box-shadow: 0 10px 20px var(--card-shadow);
+            transition: 0.3s; border-top: 5px solid transparent; position: relative;
         }
-
-        .card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 15px 30px var(--card-hover-shadow);
-            border-top: 5px solid #3498db;
-        }
-
+        .card:hover { transform: translateY(-10px); box-shadow: 0 15px 30px var(--card-hover-shadow); border-top: 5px solid #3498db; }
+        
         .avatar {
-            width: 70px;
-            height: 70px;
+            width: 70px; height: 70px; margin: 0 auto 15px auto;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 24px;
-            font-weight: bold;
-            margin: 0 auto 15px auto;
-            box-shadow: 0 5px 15px rgba(118, 75, 162, 0.4);
+            color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center;
+            font-size: 24px; font-weight: bold;
         }
 
         .card h3 {
-            font-size: 18px;
-            font-weight: 600;
-            color: var(--text-color);
-            margin-bottom: 8px;
-            min-height: 54px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: color 0.3s;
+            font-size: 18px; font-weight: 600; color: var(--text-color);
+            margin-bottom: 8px; min-height: 54px;
+            display: flex; align-items: center; justify-content: center;
         }
-
         .nim-badge {
-            background-color: var(--nim-bg);
-            color: var(--nim-text);
-            padding: 5px 15px;
-            border-radius: 20px;
-            font-size: 14px;
-            font-weight: 500;
-            display: inline-block;
-            letter-spacing: 1px;
-            transition: background 0.3s, color 0.3s;
+            background-color: var(--nim-bg); color: var(--nim-text); padding: 5px 15px;
+            border-radius: 20px; font-size: 14px; font-weight: 500;
+        }
+        .card:hover .nim-badge { background-color: #3498db; color: white; }
+
+        /* --- FORCED DESKTOP MODE ON MOBILE (CSS Logic) --- */
+        .grid-container.forced-desktop {
+            grid-template-columns: 1fr 1fr; /* Paksa 2 kolom */
+            gap: 10px;
+        }
+        
+        /* Penyesuaian tampilan kartu saat mode desktop di HP */
+        .grid-container.forced-desktop .card {
+            padding: 15px 10px;
+        }
+        .grid-container.forced-desktop .avatar {
+            width: 50px; height: 50px; font-size: 16px; margin-bottom: 10px;
+        }
+        .grid-container.forced-desktop h3 {
+            font-size: 14px; min-height: 40px;
+        }
+        .grid-container.forced-desktop .nim-badge {
+            font-size: 11px; padding: 3px 10px;
         }
 
-        .card:hover .nim-badge {
-            background-color: #3498db;
-            color: white;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
+        @media (max-width: 600px) {
+            h1 { font-size: 1.8rem; }
+            /* Default Mobile: 1 Kolom */
+            .grid-container { grid-template-columns: 1fr; }
         }
     </style>
 </head>
 <body>
 
-<div class="fixed-credit">
-    Karya: Gilang Aidil Pratama
-</div>
+<div class="fixed-credit">By: Gilang Aidil P.</div>
 
-<button class="fixed-theme" id="themeToggle" onclick="toggleTheme()">
-    <i class="fas fa-moon"></i>
-</button>
+<button class="fixed-theme" id="themeToggle" onclick="toggleTheme()"><i class="fas fa-moon"></i></button>
 
 <a href="http://www.youtube.com/@DilzGhaaziy" target="_blank" class="fixed-youtube">
-    <i class="fab fa-youtube"></i>
-    <span>Dilz Ghaaziy</span>
+    <i class="fab fa-youtube"></i><span>Dilz Ghaaziy</span>
 </a>
+
+<div class="view-toggle">
+    <button class="view-btn active" onclick="setView('mobile')" id="btnMobile">Mobile</button>
+    <button class="view-btn" onclick="setView('desktop')" id="btnDesktop">Desktop</button>
+</div>
 
 <div class="container">
     <header>
         <h1>Daftar Mahasiswa</h1>
-        <p class="subtitle">Data Mahasiswa IF25 &bull; Total: <span id="total-count">29</span></p>
-        
+        <p class="subtitle">Mahasiswa IF25 &bull; Total: <span id="total-count">29</span></p>
         <div class="search-box">
             <input type="text" id="searchInput" onkeyup="filterNames()" placeholder="Cari nama atau NIM...">
         </div>
     </header>
 
     <div class="grid-container" id="cardGrid">
-        
         <div class="card"><div class="avatar">AA</div><h3>Ahmad Afrizal</h3><span class="nim-badge">5520225011</span></div>
         <div class="card"><div class="avatar">AN</div><h3>Aisyah Nur Syifa</h3><span class="nim-badge">5520225021</span></div>
         <div class="card"><div class="avatar">AF</div><h3>Alfian Febriansyah</h3><span class="nim-badge">5520225028</span></div>
@@ -305,36 +280,31 @@
         <div class="card"><div class="avatar">RA</div><h3>Reynaldi Afriyandika</h3><span class="nim-badge">5520225013</span></div>
         <div class="card"><div class="avatar">SA</div><h3>Sayyid Adil Rosadi</h3><span class="nim-badge">5520225025</span></div>
         <div class="card"><div class="avatar">ZF</div><h3>Zahrosita Fathahunisa</h3><span class="nim-badge">5520225019</span></div>
-
     </div>
 </div>
 
 <script>
-    // --- FITUR DARK MODE ---
+    // --- DARK MODE LOGIC ---
     const toggleBtn = document.getElementById('themeToggle');
     const toggleIcon = toggleBtn.querySelector('i');
     
     if (localStorage.getItem('theme') === 'dark') {
         document.body.classList.add('dark-mode');
-        toggleIcon.classList.remove('fa-moon');
-        toggleIcon.classList.add('fa-sun');
+        toggleIcon.classList.remove('fa-moon'); toggleIcon.classList.add('fa-sun');
     }
 
     function toggleTheme() {
         document.body.classList.toggle('dark-mode');
-        
         if (document.body.classList.contains('dark-mode')) {
-            toggleIcon.classList.remove('fa-moon');
-            toggleIcon.classList.add('fa-sun');
+            toggleIcon.classList.remove('fa-moon'); toggleIcon.classList.add('fa-sun');
             localStorage.setItem('theme', 'dark');
         } else {
-            toggleIcon.classList.remove('fa-sun');
-            toggleIcon.classList.add('fa-moon');
+            toggleIcon.classList.remove('fa-sun'); toggleIcon.classList.add('fa-moon');
             localStorage.setItem('theme', 'light');
         }
     }
 
-    // --- FITUR SEARCH ---
+    // --- SEARCH LOGIC ---
     function filterNames() {
         var input, filter, grid, cards, h3, nim, i, txtValue, nimValue;
         input = document.getElementById("searchInput");
@@ -345,15 +315,30 @@
         for (i = 0; i < cards.length; i++) {
             h3 = cards[i].getElementsByTagName("h3")[0];
             nim = cards[i].getElementsByClassName("nim-badge")[0];
-            
             txtValue = h3.textContent || h3.innerText;
             nimValue = nim.textContent || nim.innerText;
-
             if (txtValue.toUpperCase().indexOf(filter) > -1 || nimValue.toUpperCase().indexOf(filter) > -1) {
                 cards[i].style.display = "";
             } else {
                 cards[i].style.display = "none";
             }
+        }
+    }
+
+    // --- VIEW MODE LOGIC (Mobile vs Desktop) ---
+    function setView(mode) {
+        const grid = document.getElementById('cardGrid');
+        const btnMobile = document.getElementById('btnMobile');
+        const btnDesktop = document.getElementById('btnDesktop');
+
+        if (mode === 'desktop') {
+            grid.classList.add('forced-desktop');
+            btnDesktop.classList.add('active');
+            btnMobile.classList.remove('active');
+        } else {
+            grid.classList.remove('forced-desktop');
+            btnMobile.classList.add('active');
+            btnDesktop.classList.remove('active');
         }
     }
 </script>
