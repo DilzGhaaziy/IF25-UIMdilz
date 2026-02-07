@@ -2,13 +2,14 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=1200">
+    
     <title>IF25 UIM BIO</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
-        /* --- CSS VARIABLES (Agar mudah ganti tema) --- */
+        /* --- CSS VARIABLES --- */
         :root {
             --bg-color: #f5f7fa;
             --bg-gradient: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
@@ -58,6 +59,8 @@
             color: var(--text-color);
             padding: 90px 20px 40px 20px;
             transition: background 0.3s ease, color 0.3s ease;
+            /* Memastikan lebar body minimal 1200px */
+            min-width: 1200px; 
         }
 
         /* --- FIXED TOP ELEMENTS --- */
@@ -79,19 +82,17 @@
             justify-content: center;
         }
 
-        /* Posisi Kiri: Credit */
         .fixed-credit {
             left: 20px;
         }
 
-        /* Posisi Kanan: YouTube & Theme Toggle */
         .fixed-youtube {
             right: 20px;
             text-decoration: none;
         }
 
         .fixed-theme {
-            right: 180px; /* Digeser ke kiri tombol Youtube */
+            right: 180px; 
             cursor: pointer;
             width: 45px;
             height: 45px;
@@ -111,43 +112,16 @@
             margin-right: 10px;
         }
 
-        /* Tombol Theme Icon Color */
         .fixed-theme i {
-            color: #f1c40f; /* Warna kuning matahari */
+            color: #f1c40f; 
         }
         body.dark-mode .fixed-theme i {
-            color: #f39c12; /* Sedikit orange saat dark mode */
-        }
-
-        /* --- RESPONSIVE HEADER --- */
-        @media (max-width: 600px) {
-            .fixed-credit {
-                font-size: 10px;
-                padding: 8px 12px;
-                top: 15px;
-                left: 10px;
-                max-width: 120px;
-            }
-            .fixed-youtube {
-                padding: 8px 12px;
-                font-size: 0; /* Sembunyikan teks di HP */
-                top: 15px;
-                right: 10px;
-            }
-            .fixed-youtube i { margin-right: 0; font-size: 18px; }
-            
-            .fixed-theme {
-                right: 60px; /* Sesuaikan posisi di HP */
-                width: 35px;
-                height: 35px;
-                font-size: 16px;
-                top: 15px;
-            }
+            color: #f39c12; 
         }
 
         /* --- CONTAINER --- */
         .container {
-            max-width: 1200px;
+            width: 1100px; /* Lebar tetap agar layout stabil */
             margin: 0 auto;
         }
 
@@ -200,7 +174,8 @@
         /* --- GRID --- */
         .grid-container {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            /* Memaksa grid selalu 4 kolom, tidak mengecil */
+            grid-template-columns: repeat(4, 1fr); 
             gap: 25px;
         }
 
@@ -339,7 +314,6 @@
     const toggleBtn = document.getElementById('themeToggle');
     const toggleIcon = toggleBtn.querySelector('i');
     
-    // Cek penyimpanan lokal saat halaman dimuat
     if (localStorage.getItem('theme') === 'dark') {
         document.body.classList.add('dark-mode');
         toggleIcon.classList.remove('fa-moon');
@@ -349,7 +323,6 @@
     function toggleTheme() {
         document.body.classList.toggle('dark-mode');
         
-        // Ganti Icon dan Simpan Preferensi
         if (document.body.classList.contains('dark-mode')) {
             toggleIcon.classList.remove('fa-moon');
             toggleIcon.classList.add('fa-sun');
