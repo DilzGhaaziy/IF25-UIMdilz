@@ -79,12 +79,10 @@
         .pos-theme i { color: #f1c40f; }
         body.dark-mode .pos-theme i { color: #f39c12; }
 
-        /* --- MOBILE LAYOUT CONTROLS (FITUR YANG DIKEMBALIKAN) --- */
+        /* --- MOBILE LAYOUT CONTROLS --- */
         .mobile-layout-controls {
-            display: none; /* Default hidden di PC */
-            position: fixed; top: 75px; left: 50%; transform: translateX(-50%);
-            z-index: 990;
-            background: var(--fixed-bg); padding: 4px; border-radius: 50px;
+            display: none; position: fixed; top: 75px; left: 50%; transform: translateX(-50%);
+            z-index: 990; background: var(--fixed-bg); padding: 4px; border-radius: 50px;
             box-shadow: 0 5px 15px rgba(0,0,0,0.1); backdrop-filter: blur(5px);
             border: 1px solid rgba(255,255,255,0.1);
         }
@@ -102,10 +100,7 @@
         }
 
         /* --- UTAMA (LIST VIEW) --- */
-        #main-view { 
-            position: relative; z-index: 10; 
-            transition: opacity 0.5s; min-height: 100vh;
-        }
+        #main-view { position: relative; z-index: 10; transition: opacity 0.5s; min-height: 100vh; }
         
         .container { max-width: 1200px; margin: 0 auto; padding: 0 20px 40px 20px; padding-top: 100px; }
         header { text-align: center; margin-bottom: 30px; }
@@ -189,6 +184,15 @@
             box-shadow: 0 0 30px rgba(255, 0, 204, 0.4);
         }
 
+        /* Copy Button Style */
+        .copy-btn {
+            background: transparent; border: none; color: #bbb; cursor: pointer;
+            margin-left: 8px; font-size: 14px; transition: 0.3s;
+        }
+        .copy-btn:hover { color: #fff; transform: scale(1.1); }
+        .copy-tooltip { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: rgba(0,0,0,0.8); color: white; padding: 10px 20px; border-radius: 20px; z-index: 5000; opacity: 0; pointer-events: none; transition: 0.3s; }
+        .copy-tooltip.show { opacity: 1; margin-top: -50px; }
+
         .info-row {
             display: flex; justify-content: space-between; padding: 12px 0;
             border-bottom: 1px solid rgba(255,255,255,0.1); font-size: 14px;
@@ -204,6 +208,13 @@
             font-size: 16px; font-weight: bold; cursor: pointer;
             box-shadow: 0 10px 20px rgba(221, 36, 118, 0.4);
             transition: transform 0.2s; position: relative; overflow: hidden;
+        }
+
+        /* Quote Box */
+        .quote-box {
+            margin-top: 20px; padding: 15px; background: rgba(0,0,0,0.3);
+            border-radius: 15px; font-size: 13px; font-style: italic; color: #ddd;
+            border-left: 4px solid #f1c40f; text-align: center;
         }
 
         /* --- MODAL JODOH & SELECTION --- */
@@ -229,36 +240,34 @@
         .btn-if1 { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
         .btn-if2 { background: linear-gradient(135deg, #ff9966 0%, #ff5e62 100%); }
 
-        .match-result-box { background: white; padding: 30px; border-radius: 20px; width: 300px; text-align: center; }
+        .match-result-box { background: white; padding: 30px; border-radius: 20px; width: 90%; max-width: 350px; text-align: center; overflow: hidden; }
         .match-name { font-size: 24px; font-weight: bold; color: #2c3e50; margin: 15px 0; min-height: 60px; display: flex; align-items: center; justify-content: center;}
-        .match-class { font-size: 14px; color: #7f8c8d; background: #ecf0f1; padding: 5px 10px; border-radius: 10px; display: inline-block;}
+        
+        .couple-display { display: none; margin-top: 10px; animation: slideUp 0.5s ease; }
+        .couple-names { font-size: 20px; font-weight: bold; color: #e91e63; margin-bottom: 5px; }
+        .couple-names i { margin: 0 10px; animation: heartbeat 1s infinite; }
+        .couple-sub { font-size: 12px; color: #7f8c8d; }
+
         .close-match { margin-top: 20px; background: #333; color: white; border: none; padding: 10px 20px; border-radius: 20px; cursor: pointer;}
         .heart-beat { font-size: 60px; color: #e91e63; animation: heartbeat 1s infinite; margin-bottom: 20px; }
         @keyframes heartbeat { 0% { transform: scale(1); } 50% { transform: scale(1.2); } 100% { transform: scale(1); } }
         @keyframes zoomIn { from { transform: scale(0.8); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+        @keyframes slideUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
 
         /* ========================================= */
         /* --- MEDIA QUERY (HP ASLI) --- */
         /* ========================================= */
         @media (max-width: 600px) {
-            .mobile-layout-controls { display: flex; } /* Tampilkan Tombol Tata Letak */
-            
+            .mobile-layout-controls { display: flex; }
             .grid-container { grid-template-columns: 1fr; padding: 0 10px; }
             .search-box { padding: 0 10px; }
-            
-            /* Penyesuaian Elemen Tetap */
             .pos-left { font-size: 10px; padding: 6px 10px; left: 10px; top: 15px; width: auto; max-width: 150px; }
             .pos-right { font-size: 0; padding: 8px 12px; right: 10px; top: 15px; }
             .pos-right i { margin: 0; font-size: 18px; }
             .pos-theme { right: 75px; width: 35px; height: 35px; font-size: 16px; top: 15px; }
             h1 { font-size: 1.8rem; }
             
-            /* --- LOGIKA TATA LETAK GRID (PETAK) --- */
-            /* Saat tombol 'Petak' aktif, class ini ditambahkan ke grid-container */
-            .grid-container.mobile-grid-active {
-                grid-template-columns: repeat(2, 1fr) !important;
-                gap: 10px;
-            }
+            .grid-container.mobile-grid-active { grid-template-columns: repeat(2, 1fr) !important; gap: 10px; }
             .grid-container.mobile-grid-active .card { padding: 15px 10px; }
             .grid-container.mobile-grid-active .avatar { width: 45px; height: 45px; font-size: 16px; margin-bottom: 8px; }
             .grid-container.mobile-grid-active h3 { font-size: 13px; min-height: 40px; line-height: 1.2; margin-bottom: 5px; }
@@ -269,6 +278,7 @@
 <body>
 
 <div id="fireflies-container"></div>
+<div id="copy-tooltip" class="copy-tooltip">NIM Disalin!</div>
 
 <div class="modal-overlay" id="selectionModal">
     <div class="modal-box">
@@ -290,19 +300,9 @@
 </div>
 
 <div id="main-view">
-    
-    <div class="fixed-element pos-left">
-        Karya: Gilang Aidil Pratama
-    </div>
-
-    <button class="fixed-element pos-theme" id="themeToggle" onclick="toggleTheme()">
-        <i class="fas fa-moon"></i>
-    </button>
-
-    <a href="http://www.youtube.com/@DilzGhaaziy" target="_blank" class="fixed-element pos-right">
-        <i class="fab fa-youtube"></i>
-        <span>Dilz Ghaaziy</span>
-    </a>
+    <div class="fixed-element pos-left">Karya: Gilang Aidil Pratama</div>
+    <button class="fixed-element pos-theme" id="themeToggle" onclick="toggleTheme()"><i class="fas fa-moon"></i></button>
+    <a href="http://www.youtube.com/@DilzGhaaziy" target="_blank" class="fixed-element pos-right"><i class="fab fa-youtube"></i><span>Dilz Ghaaziy</span></a>
 
     <div class="container">
         <header>
@@ -313,25 +313,23 @@
             </div>
         </header>
 
-        <div class="grid-container" id="cardGrid">
-            </div>
+        <div class="grid-container" id="cardGrid"></div>
     </div>
 </div>
 
 <div id="profile-view">
-    <div class="galaxy-bg">
-        <div class="stars" id="stars"></div>
-    </div>
-    
-    <button class="back-btn-float" onclick="closeProfile()">
-        <i class="fas fa-arrow-left"></i> Kembali
-    </button>
+    <div class="galaxy-bg"><div class="stars" id="stars"></div></div>
+    <button class="back-btn-float" onclick="closeProfile()"><i class="fas fa-arrow-left"></i> Kembali</button>
 
     <div class="profile-content">
         <div class="big-profile-card">
             <div class="big-avatar" id="p-avatar">GA</div>
-            <h2 id="p-name" style="margin-bottom:5px;">Nama Mahasiswa</h2>
-            <p id="p-nim" style="color:#ddd; margin-bottom:20px;">NIM</p>
+            <h2 id="p-name" style="margin-bottom:5px;">Nama</h2>
+            
+            <div style="display:flex; align-items:center; justify-content:center; margin-bottom:20px;">
+                <p id="p-nim" style="color:#ddd; margin:0;">NIM</p>
+                <button class="copy-btn" onclick="copyNIM()"><i class="fas fa-copy"></i></button>
+            </div>
 
             <div class="info-row"><span class="info-label">Angkatan</span><span class="info-val">2025</span></div>
             <div class="info-row"><span class="info-label">Kelas</span><span class="info-val" id="p-class">IF X</span></div>
@@ -342,6 +340,10 @@
             <button class="jodoh-btn" onclick="cekJodoh()">
                 <i class="fas fa-heart"></i> Siapa Jodohmu?
             </button>
+
+            <div class="quote-box" id="daily-quote">
+                "Memuat kata-kata..."
+            </div>
         </div>
     </div>
 </div>
@@ -351,9 +353,18 @@
     <h2 style="color:white; margin-bottom:20px;">Mencari Koneksi Hati...</h2>
     
     <div class="match-result-box">
-        <div style="font-size:12px; color:#aaa; margin-bottom:10px;">JODOH KAMU ADALAH</div>
-        <div class="match-name" id="match-name-display">X</div>
-        <div class="match-class" id="match-class-display">IF ?</div>
+        <div id="searching-ui">
+            <div style="font-size:12px; color:#aaa; margin-bottom:10px;">JODOH KAMU ADALAH</div>
+            <div class="match-name" id="match-name-display">X</div>
+        </div>
+
+        <div class="couple-display" id="final-couple-ui">
+            <div class="couple-names" id="couple-text">
+                User <i class="fas fa-heart"></i> Jodoh
+            </div>
+            <div class="couple-sub">Semoga Langgeng Sampai Wisuda!</div>
+        </div>
+
         <br>
         <button class="close-match" onclick="closeJodoh()">Tutup</button>
     </div>
@@ -422,22 +433,146 @@
     dataIF1.forEach(s => allStudents.push({...s, class: "IF 1"}));
     dataIF2.forEach(s => allStudents.push({...s, class: "IF 2"}));
 
+    // --- KATA-KATA (100 Stok) ---
+    const quotes = [
+        "Jadilah versi terbaik dari dirimu sendiri.", "Turu adalah jalan ninjaku.", "Semester ini harus lebih baik!",
+        "Coding: 10% ngetik, 90% nyari error.", "Jangan lupa sarapan, biar kuat menghadapi kenyataan.",
+        "Revisi adalah tanda sayang dari dosen.", "IPK bukan segalanya, tapi kalau jelek pusing juga.",
+        "Semangat! Skripsi menanti.", "Jodoh gak kemana, saingan di mana-mana.", "Tetap santuy walau deadline menghantui.",
+        "Mimpi itu gratis, yang bayar itu usaha mewujudkannya.", "Error 404: Semangat not found.",
+        "Ngoding dulu, pusing kemudian.", "Cintailah ususmu, minum kopi tiap hari (jangan ditiru).",
+        "Hidup seperti array, dimulai dari 0.", "PHP: Pemberi Harapan Palsu? Bukan, Hypertext Preprocessor.",
+        "Jangan menyerah, masih ada semester depan.", "Kuliah, Pulang, Tidur, Ulangi.",
+        "Uang habis, kiriman belum datang, itulah seni bertahan hidup.", "Teman sejati adalah yang ngasih contekan.",
+        "Bersakit-sakit dahulu, wisuda kemudian.", "Fokus masa depan, jangan masa lalu.",
+        "Laptop panas, hati juga panas.", "Kopi adalah bahan bakar mahasiswa.",
+        "Jangan lupa bersyukur hari ini.", "Bahagia itu sederhana, dosen gak masuk.",
+        "Nilai A adalah mitos, C adalah realita.", "Tetaplah bernafas walau tugas menindas.",
+        "Sabar, ini ujian.", "Jauh di mata, dekat di doa.", "Cita-cita: Jadi orang sukses. Hobi: Rebahan.",
+        "Masa depan cerah menanti.", "Kesuksesan butuh proses.", "Jangan takut gagal.", "Belajar itu ibadah.",
+        "Doa ibu menyertaimu.", "Fokus, Fokus, Fokus!", "Jaga kesehatanmu kawan.", "Tugas kelar, hati mekar.",
+        "Wi-Fi kencang adalah anugerah.", "Baterai laptop lowbat adalah cobaan.", "Semangat pagi!", "Jangan lupa senyum.",
+        "Hidup itu pilihan, mau ngoding atau pusing.", "Data tidak ditemukan, seperti jodohku.", "Syntax Error.",
+        "Logika jalan, hati buntu.", "Algoritma cinta susah dipahami.", "Database hatiku penuh namamu.",
+        "Looping terus sampai sukses.", "Break; dari kemalasan.", "Continue; perjuanganmu.",
+        "If (sukses) { bersyukur; } else { usaha_lagi; }", "Switch ke mode serius.", "Array of hope.",
+        "Pointer masa depan.", "Class of winners.", "Object oriented feeling.", "Bug adalah fitur tersembunyi.",
+        "Ctrl+C, Ctrl+V adalah jalan pintas.", "Stack overflow pikiran.", "Queue tugas panjang.",
+        "Linked list kenangan.", "Binary tree kehidupan.", "Graph pertemanan.", "Hash table rahasia.",
+        "Sorting prioritas hidup.", "Searching makna hidup.", "Complexity O(n) masalah.",
+        "Recursion tanpa henti.", "Memory leak dompet.", "Garbage collection masa lalu.",
+        "Compile error hati.", "Runtime exception tiba-tiba.", "Debug jalan hidupmu.", "Deploy kebahagiaan.",
+        "Version control perasaan.", "Git commit 'perbaikan diri'.", "Git push semangat.", "Git pull rejeki.",
+        "Merge conflict keinginan.", "Branch baru kehidupan.", "Master your skills.", "Main function: Be Happy.",
+        "Include <doa.h>", "Import kesuksesan.", "Print('Hello World');", "Return 0; masalah.",
+        "Void kesedihan().", "Public static void main(String[] args).", "System.out.println('Semangat');",
+        "Console.log('Pantang Mundur');", "Echo 'Aku Bisa';", "Select * From Rejeki Where Halal.",
+        "Insert Into Usaha Values ('Keras');", "Update Skill Set Level = 'Expert';", "Delete From Pikiran Where Negative;",
+        "Drop Table Malas;", "Create View MasaDepan;", "Grant Success To Me;", "Revoke Gagal;",
+        "Commit;", "Rollback Dosa;", "Savepoint KenanganIndah;", "Connect to God;", "Disconnect from Toxic People;"
+    ];
+
     let currentClassData = [];
     let currentClassLabel = "";
     let currentProfile = null;
+
+    // --- AUDIO SYSTEM (BGM + JODOH) ---
+    const bgmUrls = [
+        "https://s19.aconvert.com/convert/p3r68-cdx67/dhmq0-rfcfq.mp3",
+        "https://s31.aconvert.com/convert/p3r68-cdx67/dnu98-a9l0s.mp3",
+        "https://s19.aconvert.com/convert/p3r68-cdx67/2ncdt-c6sf9.mp3",
+        "https://s33.aconvert.com/convert/p3r68-cdx67/cviy4-smh7b.mp3"
+    ];
+    const jodohUrl = "https://s31.aconvert.com/convert/p3r68-cdx67/2w248-szgtx.mp3";
+
+    let bgmAudio = new Audio();
+    let jodohAudio = new Audio(jodohUrl);
+    let currentBgmIndex = -1;
+
+    function playRandomBGM() {
+        // Stop jika ada lagu lama
+        bgmAudio.pause();
+        
+        // Pilih lagu baru (tidak boleh sama dengan sebelumnya)
+        let newIdx;
+        do {
+            newIdx = Math.floor(Math.random() * bgmUrls.length);
+        } while (newIdx === currentBgmIndex && bgmUrls.length > 1);
+        
+        currentBgmIndex = newIdx;
+        bgmAudio.src = bgmUrls[currentBgmIndex];
+        bgmAudio.volume = 0; // Mulai dari 0 untuk Fade In
+        bgmAudio.play().then(() => {
+            fadeInBGM();
+        }).catch(err => console.log("Autoplay blocked, waiting for interaction"));
+
+        // Event: Ganti lagu otomatis jika habis
+        bgmAudio.onended = playRandomBGM;
+    }
+
+    function fadeInBGM() {
+        let vol = 0;
+        const fadeInterval = setInterval(() => {
+            if (vol < 1.0) {
+                vol += 0.1;
+                bgmAudio.volume = Math.min(vol, 1.0);
+            } else {
+                clearInterval(fadeInterval);
+            }
+        }, 100); // Naik setiap 100ms (Total 1 detik)
+    }
+
+    // --- SOUND EFFECT (Web Audio API) ---
+    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+    function playTick() {
+        if(audioCtx.state === 'suspended') audioCtx.resume();
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = 'square';
+        osc.frequency.setValueAtTime(800, audioCtx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(100, audioCtx.currentTime + 0.05);
+        gain.gain.setValueAtTime(0.05, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.05);
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.start();
+        osc.stop(audioCtx.currentTime + 0.05);
+    }
+
+    function playWin() {
+        // Backsound Pause, Jodoh Song Play
+        bgmAudio.pause();
+        jodohAudio.currentTime = 0;
+        jodohAudio.play();
+        
+        // Sprinkle Sound (Web Audio)
+        if(audioCtx.state === 'suspended') audioCtx.resume();
+        const notes = [523.25, 659.25, 783.99, 1046.50];
+        let time = audioCtx.currentTime;
+        notes.forEach((freq, i) => {
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(freq, time + i * 0.1);
+            gain.gain.setValueAtTime(0.05, time + i * 0.1);
+            gain.gain.exponentialRampToValueAtTime(0.001, time + i * 0.1 + 0.5);
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            osc.start(time + i * 0.1);
+            osc.stop(time + i * 0.1 + 0.5);
+        });
+    }
 
     window.onload = function() {
         document.getElementById('selectionModal').classList.add('active');
         createStars(); 
         createFireflies(); 
         
-        // Cek LocalStorage Theme
         if (localStorage.getItem('theme') === 'dark') {
             document.body.classList.add('dark-mode');
             document.querySelector('#themeToggle i').classList.replace('fa-moon', 'fa-sun');
         }
-
-        // Cek LocalStorage Mobile Layout
         if (localStorage.getItem('mobileLayout') === 'grid') {
             setMobileGrid();
         }
@@ -462,26 +597,30 @@
         localStorage.setItem('mobileLayout', 'grid');
     }
 
-    // --- FUNGSI KUNANG-KUNANG ---
+    // --- FUNGSI COPY NIM ---
+    function copyNIM() {
+        const nimText = document.getElementById('p-nim').innerText;
+        navigator.clipboard.writeText(nimText).then(() => {
+            const tooltip = document.getElementById('copy-tooltip');
+            tooltip.classList.add('show');
+            setTimeout(() => { tooltip.classList.remove('show'); }, 1500);
+        });
+    }
+
+    // --- VISUAL EFFECT FUNCTIONS ---
     function createFireflies() {
         const container = document.getElementById('fireflies-container');
-        const count = 50; 
-
-        for(let i=0; i<count; i++){
+        for(let i=0; i<50; i++){
             const fly = document.createElement('div');
             fly.classList.add('firefly');
-            
             fly.style.left = Math.random() * 100 + 'vw';
             fly.style.top = Math.random() * 100 + 'vh';
-            
             const size = Math.random() * 4 + 4; 
             fly.style.width = size + 'px';
             fly.style.height = size + 'px';
-            
             const durationX = Math.random() * 10 + 10 + 's';
             const durationY = Math.random() * 10 + 10 + 's';
             fly.style.animationDuration = `3s, ${durationX}, ${durationY}`;
-            
             fly.style.animationDelay = `-${Math.random() * 20}s`;
             container.appendChild(fly);
         }
@@ -504,8 +643,7 @@
     }
 
     function loadClassData(type) {
-        const grid = document.getElementById('cardGrid');
-        grid.innerHTML = "";
+        cardGrid.innerHTML = "";
         
         if (type === 'IF1') {
             currentClassData = dataIF1;
@@ -531,10 +669,16 @@
                 <h3>${student.name}</h3>
                 <span class="nim-badge">${student.nim}</span>
             `;
-            grid.appendChild(card);
+            cardGrid.appendChild(card);
         });
 
         document.getElementById('selectionModal').classList.remove('active');
+        
+        // TRIGGER BGM SAAT USER PERTAMA KALI KLIK TOMBOL KELAS
+        // (Ini penting agar browser mengizinkan autoplay)
+        if (bgmAudio.paused) {
+            playRandomBGM();
+        }
     }
 
     function openProfile(student) {
@@ -547,6 +691,10 @@
         document.getElementById('p-gender').innerText = student.gender === 'L' ? 'Laki-Laki' : 'Perempuan';
         document.getElementById('p-dob').innerText = student.dob;
         document.getElementById('p-dospem').innerText = student.dospem;
+
+        // Random Quote
+        const randomQuote = quotes[Math.floor(Math.random() * quotes.length)];
+        document.getElementById('daily-quote').innerText = `"${randomQuote}"`;
 
         document.getElementById('main-view').style.opacity = '0';
         setTimeout(() => {
@@ -577,23 +725,26 @@
         const targetGender = myGender === 'L' ? 'P' : 'L'; 
 
         const candidates = allStudents.filter(s => s.gender === targetGender);
+        if (candidates.length === 0) { alert("Data lawan jenis kosong!"); return; }
 
-        if (candidates.length === 0) {
-            alert("Waduh, belum ada data lawan jenis di database!");
-            return;
-        }
-
+        // Reset UI
         const modal = document.getElementById('jodohModal');
+        const searchUI = document.getElementById('searching-ui');
+        const finalUI = document.getElementById('final-couple-ui');
         const nameDisplay = document.getElementById('match-name-display');
-        const classDisplay = document.getElementById('match-class-display');
+
+        searchUI.style.display = 'block';
+        finalUI.style.display = 'none';
         modal.classList.add('active');
+
+        if (audioCtx.state === 'suspended') audioCtx.resume();
 
         let counter = 0;
         matchInterval = setInterval(() => {
             const randomCandidate = candidates[Math.floor(Math.random() * candidates.length)];
             nameDisplay.innerText = randomCandidate.name;
-            classDisplay.innerText = "Mencari...";
             nameDisplay.style.color = "#ccc"; 
+            playTick(); // SOUND TICK
             counter++;
         }, 100); 
 
@@ -601,19 +752,27 @@
             clearInterval(matchInterval);
             const finalMatch = candidates[Math.floor(Math.random() * candidates.length)];
             
-            nameDisplay.innerText = finalMatch.name;
-            nameDisplay.style.color = "#2c3e50"; 
-            classDisplay.innerText = finalMatch.class;
+            // Tampilkan UI Akhir
+            searchUI.style.display = 'none';
+            finalUI.style.display = 'block';
             
-            nameDisplay.style.transform = "scale(1.2)";
-            setTimeout(()=> nameDisplay.style.transform = "scale(1)", 200);
-
+            // Set Text Couple
+            const coupleText = document.getElementById('couple-text');
+            coupleText.innerHTML = `${currentProfile.name.split(" ")[0]} <i class="fas fa-heart"></i> ${finalMatch.name.split(" ")[0]}`;
+            
+            playWin(); // SOUND WIN & SPRINKLE
+            
         }, 3000);
     }
 
     function closeJodoh() {
         document.getElementById('jodohModal').classList.remove('active');
-        clearInterval(matchInterval); 
+        clearInterval(matchInterval);
+        
+        // Stop Lagu Jodoh, Resume BGM
+        jodohAudio.pause();
+        bgmAudio.play();
+        fadeInBGM();
     }
 
     function toggleTheme() {
@@ -634,8 +793,7 @@
         var input, filter, cards, h3, nim, txtValue, nimValue;
         input = document.getElementById("searchInput");
         filter = input.value.toUpperCase();
-        const grid = document.getElementById("cardGrid");
-        cards = grid.getElementsByClassName("card");
+        cards = cardGrid.getElementsByClassName("card");
 
         for (let i = 0; i < cards.length; i++) {
             h3 = cards[i].getElementsByTagName("h3")[0];
