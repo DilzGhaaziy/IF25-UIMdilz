@@ -41,7 +41,7 @@
             position: relative; 
         }
 
-        /* --- ANIMASI KUNANG-KUNANG --- */
+        /* --- OPTIMISASI ANIMASI KUNANG-KUNANG (GPU BASED) --- */
         #fireflies-container {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             pointer-events: none; z-index: 0; overflow: hidden;
@@ -51,11 +51,16 @@
             background-color: var(--firefly-color);
             box-shadow: 0 0 10px var(--firefly-color), 0 0 20px var(--firefly-color);
             opacity: 0;
-            animation: fadeGlow 3s infinite alternate, moveX 12s infinite alternate ease-in-out, moveY 9s infinite alternate ease-in-out;
+            will-change: transform, opacity; /* Memberitahu browser untuk optimasi GPU */
         }
-        @keyframes fadeGlow { 0% { opacity: 0.2; transform: scale(0.8); } 50% { opacity: 0.8; transform: scale(1.1); } 100% { opacity: 0.2; transform: scale(0.8); } }
-        @keyframes moveX { 0% { transform: translateX(0); } 100% { transform: translateX(100px); } }
-        @keyframes moveY { 0% { transform: translateY(0); } 100% { transform: translateY(-80px); } }
+
+        /* Menggunakan Transform lebih ringan daripada Top/Left */
+        @keyframes drift {
+            0% { transform: translate(0, 0) scale(0.8); opacity: 0; }
+            20% { opacity: 0.8; transform: translate(20px, -20px) scale(1.1); }
+            80% { opacity: 0.2; transform: translate(80px, -80px) scale(0.8); }
+            100% { opacity: 0; transform: translate(100px, -100px) scale(0.5); }
+        }
 
         /* --- FIXED ELEMENTS --- */
         .fixed-element {
@@ -123,13 +128,12 @@
         .container { max-width: 1200px; margin: 0 auto; padding: 0 20px 40px 20px; padding-top: 100px; }
         header { text-align: center; margin-bottom: 30px; }
         
-        /* JUDUL UTAMA DENGAN FONT MAGIC */
         h1 { 
-            font-family: 'Berkshire Swash', cursive; /* Font Magic */
+            font-family: 'Berkshire Swash', cursive;
             font-weight: 400; 
-            color: #ff0000; /* Warna Merah */
+            color: #ff0000;
             margin-bottom: 5px; 
-            font-size: 3rem; /* Ukuran Besar */
+            font-size: 3rem;
             letter-spacing: 2px;
         }
 
@@ -142,14 +146,19 @@
             background: var(--card-bg); color: var(--text-color);
         }
         .grid-container { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; }
+        
+        /* Optimasi Card: will-change */
         .card {
             background: var(--card-bg); border-radius: 15px; padding: 25px;
             text-align: center; box-shadow: 0 5px 15px rgba(0,0,0,0.05);
-            transition: 0.3s; border-top: 5px solid transparent; cursor: pointer;
+            transition: transform 0.3s ease, box-shadow 0.3s ease; 
+            border-top: 5px solid transparent; cursor: pointer;
             position: relative; overflow: hidden; backdrop-filter: blur(5px);
+            /* will-change: transform; Hindari penggunaan berlebihan, tapi berguna jika lag */
         }
         .card:hover { transform: translateY(-5px); border-top: 5px solid #3498db; box-shadow: 0 15px 30px rgba(0,0,0,0.15); }
-        
+        .card.hidden-card { display: none; } /* Class untuk filter */
+
         /* STYLE KHUSUS OWNER CARD */
         .card.owner-card {
             background: linear-gradient(135deg, #10b981 0%, #059669 100%);
@@ -162,7 +171,7 @@
 
         /* STYLE KHUSUS KETUA KELAS */
         .card.ketua-card {
-            background: linear-gradient(135deg, #2980b9 0%, #6dd5fa 100%); /* Biru Muda Gradient */
+            background: linear-gradient(135deg, #2980b9 0%, #6dd5fa 100%);
             color: white !important;
             border: 2px solid #fff;
         }
@@ -170,22 +179,13 @@
         .card.ketua-card .nim-badge { background: rgba(255,255,255,0.2); }
         .card.ketua-card:hover { border-top: 5px solid #fff; }
 
-        .owner-badge {
+        .owner-badge, .ketua-badge {
             position: absolute; top: 10px; left: 10px;
-            background: #ffd700; color: #b45309; font-size: 10px;
-            padding: 2px 8px; border-radius: 8px; font-weight: 800;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-            display: flex; align-items: center; gap: 4px; z-index: 5;
+            font-size: 10px; padding: 2px 8px; border-radius: 8px; font-weight: 800;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2); display: flex; align-items: center; gap: 4px; z-index: 5;
         }
-
-        /* BADGE KETUA KELAS */
-        .ketua-badge {
-            position: absolute; top: 10px; left: 10px;
-            background: #fff; color: #2980b9; font-size: 10px;
-            padding: 2px 8px; border-radius: 8px; font-weight: 800;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-            display: flex; align-items: center; gap: 4px; z-index: 5;
-        }
+        .owner-badge { background: #ffd700; color: #b45309; }
+        .ketua-badge { background: #fff; color: #2980b9; }
 
         .gender-tag {
             position: absolute; top: 10px; right: 10px; font-size: 12px;
@@ -208,9 +208,11 @@
             transition: opacity 0.5s ease; overflow-y: auto; background: rgba(0,0,0,0.8);
         }
         .galaxy-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; overflow: hidden; }
+        
+        /* Optimasi Stars: Menggunakan CSS Animation yang proper */
         .stars {
             width: 1px; height: 1px; background: transparent;
-            box-shadow: 1744px 122px #FFF , 134px 1321px #FFF , 92px 859px #FFF;
+            /* Box-shadow akan diinject via JS */
             animation: animStar 50s linear infinite;
         }
         @keyframes animStar { from { transform: translateY(0px); } to { transform: translateY(-2000px); } }
@@ -232,12 +234,10 @@
             position: relative; overflow: hidden;
         }
 
-        /* STYLE KHUSUS PROFILE OWNER */
         .big-profile-card.owner-profile {
             background: linear-gradient(135deg, rgba(16, 185, 129, 0.9) 0%, rgba(5, 150, 105, 0.9) 100%);
             border: 2px solid #ffd700;
         }
-        /* STYLE KHUSUS PROFILE KETUA */
         .big-profile-card.ketua-profile {
             background: linear-gradient(135deg, rgba(41, 128, 185, 0.9) 0%, rgba(109, 213, 250, 0.9) 100%);
             border: 2px solid #fff;
@@ -248,11 +248,7 @@
             border-radius: 10px; display: inline-block; font-weight: 800; margin-bottom: 10px;
             text-transform: uppercase; letter-spacing: 1px;
         }
-
-        /* STYLE ROLE UNTUK KETUA */
-        .owner-role.ketua-role-tag {
-            background: #fff; color: #2980b9;
-        }
+        .owner-role.ketua-role-tag { background: #fff; color: #2980b9; }
 
         .big-avatar {
             width: 120px; height: 120px; border-radius: 50%; margin: 0 auto 20px auto;
@@ -269,7 +265,6 @@
         .info-row { display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid rgba(255,255,255,0.1); font-size: 14px; }
         .info-row:last-child { border-bottom: none; }
         .info-label { color: #aaa; text-align: left; }
-        /* Perbaikan warna label agar terbaca di background hijau/biru */
         .big-profile-card.owner-profile .info-label, .big-profile-card.ketua-profile .info-label { color: #e0f2fe; } 
         .info-val { font-weight: 600; text-align: right; }
         
@@ -283,7 +278,7 @@
             font-size: 13px; font-style: italic; color: #ddd; border-left: 4px solid #f1c40f; text-align: center;
         }
 
-        /* --- MODAL JODOH & SELECTION --- */
+        /* --- MODAL --- */
         .jodoh-modal, .modal-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(0,0,0,0.9); z-index: 3000;
@@ -443,13 +438,10 @@
         {name: "Azizah Fastabila Putri", nim: "5520225030", gender: "P", dob: "15 November 2006", dospem: "Fathoni Dwi Atmoko, S.Kom.,M.Kom."},
         {name: "Bahtera Juliandi", nim: "5520225031", gender: "L", dob: "17 Januari 2005", dospem: "Fathoni Dwi Atmoko, S.Kom.,M.Kom."},
         {name: "Dela Nurcahyani", nim: "5520225003", gender: "P", dob: "15 Desember 2005", dospem: "Muawan Bisri, S.Kom., M.Kom"},
-        // UDPATE DERI FARHAN SYAH
         {name: "Deri Farhan Syah", nim: "5520225008", gender: "L", dob: "10 November 2006", dospem: "Muawan Bisri, S.Kom., M.Kom", status: "Menghilang Dari Lane"},
         {name: "Dian Parwati", nim: "5520225014", gender: "P", dob: "8 Maret 2006", dospem: "Muawan Bisri, S.Kom., M.Kom"},
         {name: "Dika Afriyogi", nim: "5520225018", gender: "L", dob: "30 September 2005", dospem: "Eko Aziz Apriadi, S.T., M.Kom."},
-        // UPDATE FIKRI JULIANDA LAKSONO (KETUA IF 1)
         {name: "Fikri Julianda Laksono", nim: "5520225009", gender: "L", dob: "21 Juli 2005", dospem: "Muawan Bisri, S.Kom., M.Kom", role: "Ketua IF 1"},
-        // UPDATE GILANG AIDIL PRATAMA (OWNER)
         {name: "Gilang Aidil Pratama", nim: "5520225023", gender: "L", dob: "24 Oktober 2006", dospem: "Eko Aziz Apriadi, S.T., M.Kom.", isOwner: true, status: "Calon Ketua Himatika"},
         {name: "Hafizd Khoirul Azizah", nim: "5520225002", gender: "P", dob: "29 Juli 2006", dospem: "Muawan Bisri, S.Kom., M.Kom"},
         {name: "Hanysa Maryani", nim: "5520225006", gender: "P", dob: "20 Maret 2007", dospem: "Muawan Bisri, S.Kom., M.Kom"},
@@ -470,7 +462,7 @@
         {name: "Sayyid Adil Rosadi", nim: "5520225025", gender: "L", dob: "4 September 2006", dospem: "Eko Aziz Apriadi, S.T., M.Kom."},
         {name: "Zahrosita Fathahunisa", nim: "5520225019", gender: "P", dob: "24 Desemeber 2005", dospem: "Eko Aziz Apriadi, S.T., M.Kom."}
     ];
-        const dataIF2 = [
+    const dataIF2 = [
         {name: "Ade Ahmad Fahrizal", nim: "5520225043", gender: "L", dob: "Saya Gak Tau", dospem: "Ribut Julianto, S.Kom.,M.T.I."},
         {name: "Ade Rustam Ananta", nim: "5520225055", gender: "L", dob: "19 Januari 2007", dospem: "Agus Komarudin, S.Kom.,M.T.I."},
         {name: "Ayidil Putra Mahkoara", nim: "5520225046", gender: "L", dob: "6 Januari 2006", dospem: "Ribut Julianto, S.Kom.,M.T.I."},
@@ -489,7 +481,6 @@
         {name: "Nana Santiya", nim: "5520225056", gender: "P", dob: "27 September 2007", dospem: "Agus Komarudin, S.Kom.,M.T.I."},
         {name: "Reka Sabila", nim: "5520225060", gender: "P", dob: "22 September 2006", dospem: " Agus Komarudin, S.Kom.,M.T.I."},
         {name: "Reyhan", nim: "5520225047", gender: "L", dob: "5 Juni 2007", dospem: "Ribut Julianto, S.Kom.,M.T.I."},
-        // UPDATE RIZKI AGUSTIN MAULANA (KETUA IF 2)
         {name: "Rizki Agustin Maulana", nim: "5520225061", gender: "L", dob: "14 Mei 2007", dospem: "Agus Komarudin, S.Kom.,M.T.I.", role: "Ketua IF 2"},
         {name: "Sendi Agustiansyah", nim: "5520225050", gender: "L", dob: "21 September 2005", dospem: "Ribut Julianto, S.Kom.,M.T.I."},
         {name: "Widia Lestari", nim: "5520225040", gender: "P", dob: "23 Mei 2007", dospem: "Ribut Julianto, S.Kom.,M.T.I."}
@@ -542,33 +533,31 @@
 
     window.onload = function() {
         document.getElementById('selectionModal').classList.add('active');
-        createStars(); createFireflies(); 
+        
+        // Optimasi: Init visual dalam frame berikutnya untuk hindari lag awal
+        requestAnimationFrame(() => {
+            createStars(); 
+            createFireflies(); 
+        });
+
         if(localStorage.getItem('theme')==='dark') { document.body.classList.add('dark-mode'); document.querySelector('#themeToggle i').classList.replace('fa-moon','fa-sun'); }
         if(localStorage.getItem('mobileLayout')==='grid') setMobileGrid();
         
-        // --- PRELOAD AUDIO ---
-        preloadAudio();
+        // Optimasi: Defer audio loading agar tidak blocking UI thread
+        if (window.requestIdleCallback) {
+            requestIdleCallback(preloadAudio);
+        } else {
+            setTimeout(preloadAudio, 2000);
+        }
     };
 
     function preloadAudio() {
-        // Preload Jodoh Songs
         jodohSongs.forEach(url => {
             const tempAudio = new Audio();
             tempAudio.src = url;
-            tempAudio.preload = 'auto';
-            tempAudio.load(); // Force browser to fetch/buffer
+            tempAudio.preload = 'none'; // Hemat data sampai diperlukan
         });
-        
-        // Preload SFX
-        const sfxUrls = [S_MATI, S_ISLAMI, S_FUNNY, S_SAD, S_YALILI];
-        sfxUrls.forEach(url => {
-            const tempAudio = new Audio();
-            tempAudio.src = url;
-            tempAudio.preload = 'auto';
-            tempAudio.load();
-        });
-        
-        console.log("Audio preloading started...");
+        console.log("Audio lazy preload setup.");
     }
 
     // --- BGM PLAYER LOGIC ---
@@ -604,7 +593,7 @@
         const box = document.getElementById('now-playing-box');
         document.getElementById('np-title').innerText = title;
         box.classList.add('show');
-        setTimeout(() => { box.classList.remove('show'); }, 30000); // Hide after 5s
+        setTimeout(() => { box.classList.remove('show'); }, 5000); 
     }
 
     function toggleMute() {
@@ -622,10 +611,9 @@
         currentJodohSongIndex = newIdx;
         jodohAudio.src = jodohSongs[currentJodohSongIndex];
         jodohAudio.play();
-        jodohAudio.onended = playRandomJodohSong; // Loop to next random song
+        jodohAudio.onended = playRandomJodohSong; 
     }
 
-    // --- HELPER UNTUK CONTENT JODOH ---
     function getStudentCoupleContent() {
         if (availableVariationIndices.length === 0) {
             availableVariationIndices = Array.from({length: coupleVariations.length}, (_, i) => i);
@@ -650,15 +638,19 @@
         osc.connect(gain); gain.connect(audioCtx.destination); osc.start(); osc.stop(audioCtx.currentTime + 0.05);
     }
 
+    // Optimasi: Menggunakan DocumentFragment untuk render cepat
     function loadClassData(type) {
-        document.getElementById('cardGrid').innerHTML = "";
+        const grid = document.getElementById('cardGrid');
+        grid.innerHTML = "";
         currentClassData = (type === 'IF1') ? dataIF1 : dataIF2;
         currentClassLabel = (type === 'IF1') ? "IF 1" : "IF 2";
         document.getElementById('class-name').innerText = currentClassLabel;
+        
+        const fragment = document.createDocumentFragment();
+
         currentClassData.forEach(s => {
             const card = document.createElement('div'); 
             
-            // LOGIKA STYLE CARD (OWNER & KETUA)
             let cardClass = 'card';
             let roleBadge = '';
             
@@ -671,17 +663,20 @@
             }
             
             card.className = cardClass;
-            card.onclick = () => openProfile(s);
+            // Gunakan addEventListener untuk best practice
+            card.addEventListener('click', () => openProfile(s));
+            
             card.innerHTML = `${roleBadge}<div class="gender-tag ${s.gender==='L'?'gender-L':'gender-P'}">${s.gender}</div><div class="avatar">${getInitials(s.name)}</div><h3>${s.name}</h3><span class="nim-badge">${s.nim}</span>`;
-            document.getElementById('cardGrid').appendChild(card);
+            fragment.appendChild(card);
         });
+        
+        grid.appendChild(fragment); // Append sekali saja
         document.getElementById('selectionModal').classList.remove('active');
         if(bgmAudio.paused) playRandomBGM();
     }
 
     function openProfile(s) {
         currentProfile = s;
-        // LOWER VOLUME
         if(!isMuted) bgmAudio.volume = 0.2;
 
         document.getElementById('p-avatar').innerText = getInitials(s.name);
@@ -692,7 +687,6 @@
         document.getElementById('p-dob').innerText = s.dob;
         document.getElementById('p-dospem').innerText = s.dospem;
         
-        // LOGIC KHUSUS STATUS KULIAH
         const statusRow = document.getElementById('p-status-row');
         if(s.status) {
             document.getElementById('p-status-val').innerText = s.status;
@@ -701,11 +695,9 @@
             statusRow.style.display = 'none';
         }
 
-        // LOGIC KHUSUS OWNER & KETUA DI PROFILE DETAIL
         const profileCard = document.querySelector('.big-profile-card');
         const roleDiv = document.getElementById('p-role');
         
-        // Reset Classes
         profileCard.classList.remove('owner-profile', 'ketua-profile');
         roleDiv.classList.remove('ketua-role-tag');
 
@@ -728,9 +720,7 @@
     }
 
     function closeProfile() {
-        // RESTORE VOLUME
         if(!isMuted) bgmAudio.volume = 1.0;
-
         document.getElementById('profile-view').style.opacity = '0';
         setTimeout(() => { document.getElementById('profile-view').style.display = 'none'; document.getElementById('main-view').style.display = 'block'; setTimeout(() => document.getElementById('main-view').style.opacity = '1', 50); }, 500);
     }
@@ -781,12 +771,13 @@
             finalUI.style.display = 'block';
             finalUI.innerHTML = "";
             
-            bgmAudio.pause(); // PAUSE BGM
+            bgmAudio.pause(); 
             
             let htmlContent = "";
 
             if (result.type === 'student') {
                 const content = getStudentCoupleContent();
+                // Add loading=lazy for optimization
                 htmlContent = `
                     <div class="couple-container">
                         <div class="c-name-user">${currentProfile.name}</div>
@@ -794,9 +785,9 @@
                         <div class="c-name-partner">${result.name}</div>
                     </div>
                     <div class="couple-sub">${content.text}</div>
-                    <img src="${content.gif}" class="couple-gif" alt="Funny Gif">
+                    <img src="${content.gif}" class="couple-gif" alt="Funny Gif" loading="lazy">
                 `;
-                playRandomJodohSong(); // PLAY RANDOM JODOH SONG (Special List)
+                playRandomJodohSong(); 
             } else {
                 let title = result.name;
                 let sub = "";
@@ -818,10 +809,9 @@
                     htmlContent = `<div class="special-title">${title}</div><div class="couple-sub">${sub}</div>`;
                 }
                 
-                // Play Specific SFX for Special Match
                 jodohAudio.src = soundToPlay;
                 jodohAudio.play();
-                jodohAudio.onended = null; // Do not loop special SFX
+                jodohAudio.onended = null; 
             }
             
             finalUI.innerHTML = htmlContent;
@@ -833,10 +823,8 @@
         document.getElementById('jodohModal').classList.remove('active');
         clearInterval(matchInterval);
         jodohAudio.pause(); jodohAudio.currentTime = 0;
-        
-        // RESUME BGM
         bgmAudio.play();
-        if(!isMuted) bgmAudio.volume = 0.2; // Keep it low as we are still in profile
+        if(!isMuted) bgmAudio.volume = 0.2; 
     }
 
     function copyNIM() { navigator.clipboard.writeText(document.getElementById('p-nim').innerText).then(() => { document.getElementById('copy-tooltip').classList.add('show'); setTimeout(() => document.getElementById('copy-tooltip').classList.remove('show'), 1500); }); }
@@ -844,9 +832,62 @@
     function setMobileGrid() { document.getElementById('cardGrid').classList.add('mobile-grid-active'); document.getElementById('btnGrid').classList.add('active'); document.getElementById('btnList').classList.remove('active'); localStorage.setItem('mobileLayout', 'grid'); }
     function toggleTheme() { document.body.classList.toggle('dark-mode'); localStorage.setItem('theme', document.body.classList.contains('dark-mode')?'dark':'light'); document.querySelector('#themeToggle i').className = document.body.classList.contains('dark-mode') ? 'fas fa-sun' : 'fas fa-moon'; }
     function getInitials(n) { let p=n.split(" "); return p.length>1?(p[0][0]+p[1][0]).toUpperCase():p[0].substring(0,2).toUpperCase(); }
-    function createFireflies() { const c=document.getElementById('fireflies-container'); for(let i=0;i<50;i++){ const d=document.createElement('div'); d.className='firefly'; d.style.left=Math.random()*100+'vw'; d.style.top=Math.random()*100+'vh'; const s=Math.random()*4+4; d.style.width=s+'px'; d.style.height=s+'px'; d.style.animationDuration=`3s, ${Math.random()*10+10}s, ${Math.random()*10+10}s`; d.style.animationDelay=`-${Math.random()*20}s`; c.appendChild(d); } }
-    function createStars() { const s=document.getElementById('stars'); let b=""; for(let i=0;i<300;i++) b+=`${Math.floor(Math.random()*2000)}px ${Math.floor(Math.random()*2000)}px #FFF, `; s.style.boxShadow=b.slice(0,-2); }
-    function filterNames() { const v=document.getElementById("searchInput").value.toUpperCase(); const c=document.getElementById("cardGrid").getElementsByClassName("card"); for(let i=0;i<c.length;i++){ const t=c[i].textContent||c[i].innerText; c[i].style.display=t.toUpperCase().indexOf(v)>-1?"":"none"; } }
+    
+    // --- OPTIMISASI PARTIKEL ---
+    function createFireflies() { 
+        const c=document.getElementById('fireflies-container'); 
+        const fragment = document.createDocumentFragment();
+        // Kurangi jumlah sedikit untuk HP kentang, tapi tetap estetik (30 cukup)
+        for(let i=0;i<30;i++){ 
+            const d=document.createElement('div'); 
+            d.className='firefly'; 
+            // Posisi awal acak
+            const startX = Math.random() * 100;
+            const startY = Math.random() * 100;
+            d.style.left = startX + 'vw';
+            d.style.top = startY + 'vh';
+            
+            const s=Math.random()*4+4; 
+            d.style.width=s+'px'; 
+            d.style.height=s+'px'; 
+            // Animasi menggunakan drift yang definisikan di CSS (GPU optimized)
+            d.style.animationName = 'drift';
+            d.style.animationDuration=`${Math.random()*10+10}s`; 
+            d.style.animationDelay=`-${Math.random()*20}s`; 
+            d.style.animationIterationCount = 'infinite';
+            d.style.animationTimingFunction = 'ease-in-out';
+            fragment.appendChild(d); 
+        } 
+        c.appendChild(fragment);
+    }
+    
+    // Optimasi: Create stars string sekali saja
+    function createStars() { 
+        const s=document.getElementById('stars'); 
+        let b=""; 
+        // Kurangi jumlah shadow jika lag parah, tapi 200 masih aman untuk box-shadow static
+        for(let i=0;i<200;i++) b+=`${Math.floor(Math.random()*2000)}px ${Math.floor(Math.random()*2000)}px #FFF, `; 
+        s.style.boxShadow=b.slice(0,-2); 
+    }
+    
+    // Optimasi: Debounce search agar tidak re-render setiap ketik (tunggu 300ms)
+    let searchTimeout;
+    function filterNames() { 
+        clearTimeout(searchTimeout);
+        searchTimeout = setTimeout(() => {
+            const v=document.getElementById("searchInput").value.toUpperCase(); 
+            const c=document.getElementById("cardGrid").getElementsByClassName("card"); 
+            for(let i=0;i<c.length;i++){ 
+                const t=c[i].textContent||c[i].innerText; 
+                // Gunakan classList toggle untuk performa lebih baik daripada inline style display
+                if(t.toUpperCase().indexOf(v) > -1) {
+                    c[i].classList.remove('hidden-card');
+                } else {
+                    c[i].classList.add('hidden-card');
+                }
+            } 
+        }, 150); // Delay kecil agar responsif tapi tidak berat
+    }
 </script>
 </body>
 </html>
