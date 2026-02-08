@@ -13,24 +13,25 @@
         :root {
             --bg-gradient: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
             --text-color: #333;
-            /* Optimisasi: Warna card dibuat lebih solid untuk menghindari backdrop-filter berat */
             --card-bg: rgba(255, 255, 255, 0.96); 
             --nim-bg: #ecf0f1;
             --nim-text: #2c3e50;
             --fixed-bg: rgba(255, 255, 255, 0.85);
             --fixed-text: #2c3e50;
             --firefly-color: #ffeb3b; 
+            --glow-color: rgba(52, 152, 219, 0.3); 
         }
 
         body.dark-mode {
             --bg-gradient: linear-gradient(135deg, #0f2027 0%, #203a43 50%, #2c5364 100%);
             --text-color: #e0e0e0;
-            --card-bg: rgba(45, 20, 60, 0.95); /* Solid dark, high opacity */
+            --card-bg: rgba(26, 32, 44, 0.96); 
             --nim-bg: #1a1a2e;
             --nim-text: #bdc3c7;
             --fixed-bg: rgba(15, 52, 96, 0.85);
             --fixed-text: #e0e0e0;
             --firefly-color: #76ff03;
+            --glow-color: rgba(255, 255, 255, 0.1);
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -41,27 +42,24 @@
             min-height: 100vh; 
             overflow-x: hidden; 
             position: relative;
-            /* Optimisasi scroll utama */
             -webkit-overflow-scrolling: touch; 
         }
 
-        /* --- BACKGROUND LAYERS (Fixed Position = GPU Friendly) --- */
+        /* --- BACKGROUND LAYERS --- */
         #fireflies-container {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             pointer-events: none; z-index: 0; overflow: hidden;
-            /* Pastikan background tidak ikut repaint saat scroll */
             transform: translateZ(0); 
         }
         
         .firefly {
             position: absolute; border-radius: 50%;
             background-color: var(--firefly-color);
-            box-shadow: 0 0 6px var(--firefly-color); /* Kurangi blur radius shadow */
+            box-shadow: 0 0 6px var(--firefly-color);
             opacity: 0;
             will-change: transform, opacity; 
         }
 
-        /* Animasi Menggunakan Translate (GPU) */
         @keyframes drift {
             0% { transform: translate(0, 0) scale(0.8); opacity: 0; }
             20% { opacity: 0.8; transform: translate(20px, -20px) scale(1.1); }
@@ -69,12 +67,12 @@
             100% { opacity: 0; transform: translate(100px, -100px) scale(0.5); }
         }
 
-        /* --- FIXED ELEMENTS (Keep Blur here, it's small & static) --- */
+        /* --- FIXED ELEMENTS --- */
         .fixed-element {
             position: fixed; top: 20px; z-index: 1000;
             background: var(--fixed-bg); padding: 10px 20px;
             border-radius: 30px; box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-            backdrop-filter: blur(8px); /* Aman karena elemen kecil & fixed */
+            backdrop-filter: blur(8px);
             -webkit-backdrop-filter: blur(8px);
             color: var(--fixed-text);
             display: flex; align-items: center; justify-content: center;
@@ -141,7 +139,7 @@
             font-family: 'Berkshire Swash', cursive;
             font-weight: 400; color: #ff0000; margin-bottom: 5px; 
             font-size: 3rem; letter-spacing: 2px;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.3); /* Static shadow is cheaper than filter */
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
         }
 
         p.subtitle { color: #ddd; margin-bottom: 25px; }
@@ -153,78 +151,126 @@
             background: var(--card-bg); color: var(--text-color);
         }
         
-        /* Grid Container */
         .grid-container { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; }
         
-        /* --- KUNCI OPTIMISASI SCROLL: THE CARD --- */
+        /* --- CARD STYLING --- */
         .card {
             background: var(--card-bg); 
             border-radius: 15px; padding: 25px; text-align: center; 
             border-top: 5px solid transparent; cursor: pointer;
             position: relative; overflow: hidden;
             
-            /* PERFORMANCE BOOSTERS */
-            backdrop-filter: none !important; /* HAPUS BLUR SAAT SCROLL */
+            backdrop-filter: none !important; 
             -webkit-backdrop-filter: none !important;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.08); /* Shadow ringan */
-            contain: content; /* Browser skip render isi card jika di luar layar */
-            content-visibility: auto; /* Modern lazy rendering */
-            will-change: transform; /* Siapkan GPU untuk hover */
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08); 
+            contain: content; 
+            content-visibility: auto; 
+            will-change: transform;
             transition: transform 0.2s ease, box-shadow 0.2s ease;
         }
 
-        /* Hover effect tetap ada */
-        .card:hover { 
-            transform: translateY(-5px); 
-            border-top: 5px solid #3498db; 
-            box-shadow: 0 8px 20px rgba(0,0,0,0.15); 
+        /* Efek Sorotan Mouse (Flashlight Glow) */
+        .card::after {
+            content: "";
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: radial-gradient(600px circle at var(--x) var(--y), var(--glow-color), transparent 40%);
+            opacity: 0; 
+            transition: opacity 0.3s ease;
+            pointer-events: none; 
+            z-index: 2; /* Layer di atas background tapi di bawah konten */
         }
-        
+
+        .card:hover::after { opacity: 1; }
+        .card:hover { transform: translateY(-5px); border-top: 5px solid #3498db; box-shadow: 0 8px 20px rgba(0,0,0,0.15); }
         .card.hidden-card { display: none; } 
 
-        /* Warna Card Khusus (Tanpa Gradient Berat) */
-        .card.owner-card {
-            background: #059669; /* Solid color lebih cepat render */
-            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
-            color: white !important; border: 2px solid #ffd700;
+        /* --- Animasi Khusus Kartu Owner --- */
+        @keyframes ownerGlowLoop {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
         }
+
+        .card.owner-card {
+            background: linear-gradient(
+                45deg, 
+                #059669, #10b981, 
+                #a5f3fc, #e0f2fe, 
+                #10b981, #059669
+            );
+            background-size: 400% 400%;
+            animation: ownerGlowLoop 8s ease infinite; 
+            color: white !important; 
+            border: 2px solid #ffd700;
+            text-shadow: 0 1px 4px rgba(0,0,0,0.6); 
+        }
+
+        /* PERBAIKAN BUG: Pastikan konten di atas glow, tapi Badge TETAP absolute */
+        .card.owner-card .avatar, 
+        .card.owner-card h3, 
+        .card.owner-card .nim-badge {
+            position: relative;
+            z-index: 5;
+        }
+
+        .card.owner-card .owner-badge,
+        .card.owner-card .gender-tag {
+            z-index: 10; /* Badge paling atas */
+        }
+
+        /* --- STYLING CARD LAIN --- */
         .card.ketua-card {
-            background: #2980b9;
             background: linear-gradient(135deg, #2980b9 0%, #6dd5fa 100%);
             color: white !important; border: 2px solid #fff;
         }
         
-        /* Text shadow hanya pada card khusus */
-        .card.owner-card h3, .card.ketua-card h3 { color: white !important; text-shadow: 0 1px 2px rgba(0,0,0,0.2); }
-        .card.owner-card .nim-badge, .card.ketua-card .nim-badge { color: white; background: rgba(255,255,255,0.2); }
+        .card.owner-card h3, .card.ketua-card h3 { color: white !important; }
+        .card.ketua-card h3 { text-shadow: 0 1px 2px rgba(0,0,0,0.2); }
 
+        .card.owner-card .nim-badge, .card.ketua-card .nim-badge { 
+            color: white; 
+            background: rgba(255,255,255,0.25); 
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+
+        /* --- BADGES (Absolute Positioning) --- */
         .owner-badge, .ketua-badge {
             position: absolute; top: 10px; left: 10px;
             font-size: 10px; padding: 2px 8px; border-radius: 8px; font-weight: 800;
-            box-shadow: 0 2px 3px rgba(0,0,0,0.2); display: flex; align-items: center; gap: 4px; z-index: 5;
+            box-shadow: 0 2px 3px rgba(0,0,0,0.2); display: flex; align-items: center; gap: 4px; z-index: 10;
         }
-        .owner-badge { background: #ffd700; color: #b45309; }
+        .owner-badge { background: #ffd700; color: #b45309; text-shadow: none; }
         .ketua-badge { background: #fff; color: #2980b9; }
 
         .gender-tag {
             position: absolute; top: 10px; right: 10px; font-size: 12px;
-            padding: 2px 8px; border-radius: 10px; color: white; font-weight: bold;
+            padding: 2px 8px; border-radius: 10px; color: white; font-weight: bold; z-index: 10;
         }
         .gender-L { background: #3498db; }
         .gender-P { background: #e91e63; }
         
+        /* --- KONTEN DALAM KARTU --- */
         .avatar {
             width: 65px; height: 65px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center;
             font-size: 22px; font-weight: bold; margin: 0 auto 10px auto;
-            /* Optimisasi border radius */
+            position: relative; z-index: 5;
             -webkit-mask-image: -webkit-radial-gradient(white, black);
         }
         
-        .card h3 { font-size: 17px; font-weight: 600; color: var(--text-color); min-height: 50px; display: flex; align-items: center; justify-content: center; }
-        .nim-badge { background: var(--nim-bg); color: var(--nim-text); padding: 4px 12px; border-radius: 15px; font-size: 13px; font-weight: 500; }
+        .card h3 { 
+            font-size: 17px; font-weight: 600; color: var(--text-color); 
+            min-height: 50px; display: flex; align-items: center; justify-content: center; 
+            position: relative; z-index: 5;
+        }
+        .nim-badge { 
+            background: var(--nim-bg); color: var(--nim-text); padding: 4px 12px; 
+            border-radius: 15px; font-size: 13px; font-weight: 500; 
+            position: relative; z-index: 5; 
+        }
 
-        /* --- PROFIL (Full Screen Overlay - Boleh pakai efek berat dikit) --- */
+        /* --- PROFIL VIEW --- */
         #profile-view {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             z-index: 2000; display: none; opacity: 0;
@@ -251,9 +297,9 @@
         }
         
         .big-profile-card {
-            background: rgba(30, 30, 30, 0.8); /* Fallback */
+            background: rgba(30, 30, 30, 0.8);
             background: rgba(255, 255, 255, 0.1); 
-            backdrop-filter: blur(12px); /* Blur OK disini karena item statis (tidak di-scroll banyak) */
+            backdrop-filter: blur(12px);
             border: 1px solid rgba(255, 255, 255, 0.15);
             padding: 40px; border-radius: 30px; text-align: center; color: white;
             width: 100%; max-width: 500px; box-shadow: 0 25px 50px rgba(0,0,0,0.5); 
@@ -534,11 +580,11 @@
     const bgmPlaylist = [
         {title: "A Thousand Years", url: "https://od.lk/s/NjhfMTYyNzYyNDM2Xw/A%20Thousand%20Years%20%20Shania%20Yan%20Cover.mp3"},
         {title: "Ghost", url: "https://od.lk/s/NjhfMTYyNzYyNDUxXw/Ghost%20-%20Justin%20Bieber%20_%20%23coverbyfaithcns.mp3"},
-        {title: "Die With A Smile", url: "https://od.lk/s/NjhfMTYyNzYyNDM4Xw/NGGA%20DULU%20%20Akbar%20Chalay%20feat.%20Ciloqciliq%20_%20Zynakal%20%28Cover%20Akustik%20%20Lirik%20%20Viral%20TikTok%29.mp3"}, 
-        {title: "Engga Dulu", url: "https://od.lk/s/NjhfMTYyNzYyNDM4Xw/NGGA%20DULU%20%20Akbar%20Chalay%20feat.%20Ciloqciliq%20_%20Zynakal%20%28Cover%20Akustik%20%20Lirik%20%20Viral%20TikTok%29.mp3"},
+        {title: "Die With A Smile", url: "https://od.lk/s/NjhfMTYyNzYyNDM8Xw/NGGA%20DULU%20%20Akbar%20Chalay%20feat.%20Ciloqciliq%20_%20Zynakal%20%28Cover%20Akustik%20%20Lirik%20%20Viral%20TikTok%29.mp3"}, 
+        {title: "Engga Dulu", url: "https://od.lk/s/NjhfMTYyNzYyNDM8Xw/NGGA%20DULU%20%20Akbar%20Chalay%20feat.%20Ciloqciliq%20_%20Zynakal%20%28Cover%20Akustik%20%20Lirik%20%20Viral%20TikTok%29.mp3"},
         {title: "Night Changes", url: "https://od.lk/s/NjhfMTYyNzYyNDM3Xw/Night%20Changes%20-%20One%20Direction%20%20Shania%20Yan%20Cover.mp3"},
         {title: "Perfect", url: "https://od.lk/s/NjhfMTYyNzYyNDExXw/Perfect%20%20Shania%20Yan%20Cover.mp3"},
-        {title: "Rewrite The Stars", url: "https://od.lk/s/NjhfMTYyNzYyNDM1Xw/Rewrite%20The%20Stars%20-%20The%20Greatest%20Showman%20_%20Shania%20Yan%20Cover.mp3"},
+        {title: "Rewrite The Stars", url: "https://od.lk/s/NjhfMTYyNzYyNDM5Xw/Rewrite%20The%20Stars%20-%20The%20Greatest%20Showman%20_%20Shania%20Yan%20Cover.mp3"},
         {title: "Angel Baby", url: "https://od.lk/s/NjhfMTYyNzYyNDM5Xw/Troye%20Sivan-Angel%20Baby%20%28cover%29-Studio%20Version%20%20Gigi%20De%20Lana%20%20Jon%20%20Jake%20%20Romeo-Oyus.mp3"}
     ];
 
@@ -560,7 +606,6 @@
     window.onload = function() {
         document.getElementById('selectionModal').classList.add('active');
         
-        // Optimasi: Init visual dalam frame berikutnya untuk hindari lag awal
         requestAnimationFrame(() => {
             createStars(); 
             createFireflies(); 
@@ -569,7 +614,6 @@
         if(localStorage.getItem('theme')==='dark') { document.body.classList.add('dark-mode'); document.querySelector('#themeToggle i').classList.replace('fa-moon','fa-sun'); }
         if(localStorage.getItem('mobileLayout')==='grid') setMobileGrid();
         
-        // Optimasi: Defer audio loading
         if (window.requestIdleCallback) {
             requestIdleCallback(preloadAudio);
         } else {
@@ -663,7 +707,6 @@
         osc.connect(gain); gain.connect(audioCtx.destination); osc.start(); osc.stop(audioCtx.currentTime + 0.05);
     }
 
-    // Optimasi: Menggunakan DocumentFragment & Event Delegation
     function loadClassData(type) {
         const grid = document.getElementById('cardGrid');
         grid.innerHTML = "";
@@ -688,7 +731,6 @@
             }
             
             card.className = cardClass;
-            // Store index in data attribute for delegation
             card.dataset.index = index;
             
             card.innerHTML = `${roleBadge}<div class="gender-tag ${s.gender==='L'?'gender-L':'gender-P'}">${s.gender}</div><div class="avatar">${getInitials(s.name)}</div><h3>${s.name}</h3><span class="nim-badge">${s.nim}</span>`;
@@ -700,7 +742,19 @@
         if(bgmAudio.paused) playRandomBGM();
     }
 
-    // Event Delegation: One listener for all cards
+    // --- EVENT LISTENER UNTUK EFEK GLOW MOUSE ---
+    document.getElementById('cardGrid').addEventListener('mousemove', function(e) {
+        const card = e.target.closest('.card');
+        if (card) {
+            const rect = card.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            
+            card.style.setProperty('--x', `${x}px`);
+            card.style.setProperty('--y', `${y}px`);
+        }
+    });
+
     document.getElementById('cardGrid').addEventListener('click', function(e) {
         const card = e.target.closest('.card');
         if (card) {
@@ -868,11 +922,9 @@
     function toggleTheme() { document.body.classList.toggle('dark-mode'); localStorage.setItem('theme', document.body.classList.contains('dark-mode')?'dark':'light'); document.querySelector('#themeToggle i').className = document.body.classList.contains('dark-mode') ? 'fas fa-sun' : 'fas fa-moon'; }
     function getInitials(n) { let p=n.split(" "); return p.length>1?(p[0][0]+p[1][0]).toUpperCase():p[0].substring(0,2).toUpperCase(); }
     
-    // --- OPTIMISASI PARTIKEL ---
     function createFireflies() { 
         const c=document.getElementById('fireflies-container'); 
         const fragment = document.createDocumentFragment();
-        // Cukup 25 partikel untuk kesan hidup tanpa beban berat
         for(let i=0;i<25;i++){ 
             const d=document.createElement('div'); 
             d.className='firefly'; 
@@ -886,7 +938,7 @@
             d.style.width=s+'px'; 
             d.style.height=s+'px'; 
             d.style.animationName = 'drift';
-            d.style.animationDuration=`${Math.random()*15+15}s`; // Perlebar durasi agar lebih santai
+            d.style.animationDuration=`${Math.random()*15+15}s`; 
             d.style.animationDelay=`-${Math.random()*20}s`; 
             d.style.animationIterationCount = 'infinite';
             d.style.animationTimingFunction = 'ease-in-out';
@@ -898,12 +950,10 @@
     function createStars() { 
         const s=document.getElementById('stars'); 
         let b=""; 
-        // 150 Bintang cukup
         for(let i=0;i<150;i++) b+=`${Math.floor(Math.random()*2000)}px ${Math.floor(Math.random()*2000)}px #FFF, `; 
         s.style.boxShadow=b.slice(0,-2); 
     }
     
-    // Optimasi: Debounce search
     let searchTimeout;
     function filterNames() { 
         clearTimeout(searchTimeout);
