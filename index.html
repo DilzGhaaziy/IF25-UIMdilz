@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>IF25 Terkece Biodata</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Berkshire+Swash&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
@@ -121,7 +122,17 @@
         #main-view { position: relative; z-index: 10; transition: opacity 0.5s; min-height: 100vh; }
         .container { max-width: 1200px; margin: 0 auto; padding: 0 20px 40px 20px; padding-top: 100px; }
         header { text-align: center; margin-bottom: 30px; }
-        h1 { font-weight: 600; color: #fff; margin-bottom: 5px; font-size: 2.2rem; text-shadow: 0 2px 4px rgba(0,0,0,0.2); }
+        
+        /* JUDUL UTAMA DENGAN FONT MAGIC */
+        h1 { 
+            font-family: 'Berkshire Swash', cursive; /* Font Magic */
+            font-weight: 400; 
+            color: #ff0000; /* Warna Merah */
+            margin-bottom: 5px; 
+            font-size: 3rem; /* Ukuran Besar */
+            letter-spacing: 2px;
+        }
+
         p.subtitle { color: #ddd; margin-bottom: 25px; }
         
         .search-box { width: 100%; max-width: 500px; margin: 0 auto 30px auto; }
@@ -149,7 +160,7 @@
         .card.owner-card .nim-badge { background: rgba(255,255,255,0.2); }
         .card.owner-card:hover { border-top: 5px solid #ffd700; }
 
-        /* STYLE KHUSUS KETUA KELAS (BARU) */
+        /* STYLE KHUSUS KETUA KELAS */
         .card.ketua-card {
             background: linear-gradient(135deg, #2980b9 0%, #6dd5fa 100%); /* Biru Muda Gradient */
             color: white !important;
@@ -167,7 +178,7 @@
             display: flex; align-items: center; gap: 4px; z-index: 5;
         }
 
-        /* BADGE KETUA KELAS (BARU) */
+        /* BADGE KETUA KELAS */
         .ketua-badge {
             position: absolute; top: 10px; left: 10px;
             background: #fff; color: #2980b9; font-size: 10px;
@@ -226,7 +237,7 @@
             background: linear-gradient(135deg, rgba(16, 185, 129, 0.9) 0%, rgba(5, 150, 105, 0.9) 100%);
             border: 2px solid #ffd700;
         }
-        /* STYLE KHUSUS PROFILE KETUA (BARU) */
+        /* STYLE KHUSUS PROFILE KETUA */
         .big-profile-card.ketua-profile {
             background: linear-gradient(135deg, rgba(41, 128, 185, 0.9) 0%, rgba(109, 213, 250, 0.9) 100%);
             border: 2px solid #fff;
@@ -238,7 +249,7 @@
             text-transform: uppercase; letter-spacing: 1px;
         }
 
-        /* STYLE ROLE UNTUK KETUA (BARU) */
+        /* STYLE ROLE UNTUK KETUA */
         .owner-role.ketua-role-tag {
             background: #fff; color: #2980b9;
         }
@@ -367,7 +378,7 @@
 
     <div class="container">
         <header>
-            <h1><p style="color: red;">Daftar Mahasiswa</h1>
+            <h1>Daftar Mahasiswa</h1>
             <p class="subtitle"><span id="class-name">Kelas</span> &bull; Cihuyyy</p>
             <div class="search-box">
                 <input type="text" id="searchInput" onkeyup="filterNames()" placeholder="Cari nama atau NIM...">
@@ -522,7 +533,7 @@
         "https://od.lk/s/NjhfMTYyNzYyNDYxXw/Love%20Story%20CUT.mp3"
     ];
 
-    const S_MATI = "https://od.lk/s/NjhfMTYyNzYyNDE3Xw/Ingat%20Mati%20CUT.mp3";
+    const S_MATI = "https://od.lk/s/NjhfMTYyNzYyNDE7Xw/Ingat%20Mati%20CUT.mp3";
     const S_ISLAMI = "https://od.lk/s/NjhfMTYyNzYyNDE5Xw/Haaaaa%20Islami%20CUT.mp3";
     const S_FUNNY = "https://od.lk/s/NjhfMTYyNzYyNDIwXw/Alur%20Cerita%20FB%20CUT.mp3";
     const S_SAD = "https://od.lk/s/NjhfMTYyNzYyNDE4Xw/Sampai%20kini%20masih%20ku%20coba%20CUT.mp3";
