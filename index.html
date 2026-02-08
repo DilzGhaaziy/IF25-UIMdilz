@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Biodata Kece IF25</title>
+    <title>Biodata Mahasiswa IF</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
@@ -73,9 +73,9 @@
         .pos-theme i { color: #f1c40f; }
         body.dark-mode .pos-theme i { color: #f39c12; }
 
-        /* --- NOW PLAYING BOX (NEW) --- */
+        /* --- NOW PLAYING BOX --- */
         .now-playing-box {
-            position: fixed; bottom: 20px; right: -350px; /* Hidden initially */
+            position: fixed; bottom: 20px; right: -350px;
             z-index: 9999;
             background: var(--fixed-bg);
             backdrop-filter: blur(15px);
@@ -87,20 +87,16 @@
             transition: right 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             max-width: 300px;
         }
-        
         .now-playing-box.show { right: 20px; }
-
         .np-icon {
             width: 35px; height: 35px; background: #e91e63; color: white;
             border-radius: 50%; display: flex; align-items: center; justify-content: center;
             font-size: 14px; animation: spin 3s linear infinite;
         }
         @keyframes spin { 100% { transform: rotate(360deg); } }
-
         .np-info { display: flex; flex-direction: column; overflow: hidden; }
         .np-label { font-size: 10px; color: var(--text-color); opacity: 0.7; text-transform: uppercase; letter-spacing: 1px; }
         .np-title { font-size: 13px; font-weight: 700; color: var(--fixed-text); white-space: nowrap; }
-
         .np-mute {
             background: transparent; border: none; color: var(--fixed-text);
             cursor: pointer; font-size: 16px; transition: 0.3s;
@@ -142,6 +138,25 @@
             position: relative; overflow: hidden; backdrop-filter: blur(5px);
         }
         .card:hover { transform: translateY(-5px); border-top: 5px solid #3498db; box-shadow: 0 15px 30px rgba(0,0,0,0.15); }
+        
+        /* STYLE KHUSUS OWNER CARD */
+        .card.owner-card {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white !important;
+            border: 2px solid #ffd700;
+        }
+        .card.owner-card h3, .card.owner-card .nim-badge { color: white !important; text-shadow: 0 1px 3px rgba(0,0,0,0.3); }
+        .card.owner-card .nim-badge { background: rgba(255,255,255,0.2); }
+        .card.owner-card:hover { border-top: 5px solid #ffd700; }
+
+        .owner-badge {
+            position: absolute; top: 10px; left: 10px;
+            background: #ffd700; color: #b45309; font-size: 10px;
+            padding: 2px 8px; border-radius: 8px; font-weight: 800;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            display: flex; align-items: center; gap: 4px; z-index: 5;
+        }
+
         .gender-tag {
             position: absolute; top: 10px; right: 10px; font-size: 12px;
             padding: 2px 8px; border-radius: 10px; color: white; font-weight: bold;
@@ -184,7 +199,20 @@
             background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(15px); border: 1px solid rgba(255, 255, 255, 0.2);
             padding: 40px; border-radius: 30px; text-align: center; color: white;
             width: 100%; max-width: 500px; box-shadow: 0 25px 50px rgba(0,0,0,0.5); animation: zoomIn 0.4s ease;
+            position: relative; overflow: hidden;
         }
+
+        /* STYLE KHUSUS PROFILE OWNER */
+        .big-profile-card.owner-profile {
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.9) 0%, rgba(5, 150, 105, 0.9) 100%);
+            border: 2px solid #ffd700;
+        }
+        .owner-role {
+            font-size: 12px; background: #ffd700; color: #b45309; padding: 2px 10px;
+            border-radius: 10px; display: inline-block; font-weight: 800; margin-bottom: 10px;
+            text-transform: uppercase; letter-spacing: 1px;
+        }
+
         .big-avatar {
             width: 120px; height: 120px; border-radius: 50%; margin: 0 auto 20px auto;
             background: linear-gradient(45deg, #ff00cc, #333399); display: flex; align-items: center; justify-content: center;
@@ -200,6 +228,8 @@
         .info-row { display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid rgba(255,255,255,0.1); font-size: 14px; }
         .info-row:last-child { border-bottom: none; }
         .info-label { color: #aaa; text-align: left; }
+        /* Perbaikan warna label untuk owner profile agar terbaca di background hijau */
+        .big-profile-card.owner-profile .info-label { color: #e0f2fe; } 
         .info-val { font-weight: 600; text-align: right; }
         
         .jodoh-btn {
@@ -267,7 +297,6 @@
             .grid-container.mobile-grid-active .avatar { width: 45px; height: 45px; font-size: 16px; margin-bottom: 8px; }
             .grid-container.mobile-grid-active h3 { font-size: 13px; min-height: 40px; line-height: 1.2; margin-bottom: 5px; }
             .grid-container.mobile-grid-active .nim-badge { font-size: 10px; padding: 3px 8px; }
-            /* Adjust Now Playing for Mobile */
             .now-playing-box { bottom: 70px; max-width: 250px; }
         }
     </style>
@@ -326,6 +355,7 @@
         <div class="big-profile-card">
             <div class="big-avatar" id="p-avatar">GA</div>
             <h2 id="p-name" style="margin-bottom:5px;">Nama</h2>
+            <div id="p-role" class="owner-role" style="display:none;">Pembuat Web</div>
             <div style="display:flex; align-items:center; justify-content:center; margin-bottom:20px;">
                 <p id="p-nim" style="color:#ddd; margin:0;">NIM</p>
                 <button class="copy-btn" onclick="copyNIM()"><i class="fas fa-copy"></i></button>
@@ -335,6 +365,8 @@
             <div class="info-row"><span class="info-label">Jenis Kelamin</span><span class="info-val" id="p-gender">-</span></div>
             <div class="info-row"><span class="info-label">Tanggal Lahir</span><span class="info-val" id="p-dob">-</span></div>
             <div class="info-row"><span class="info-label">Dosen Pembimbing</span><span class="info-val" id="p-dospem">-</span></div>
+            
+            <div class="info-row" id="p-status-row" style="display: none;"><span class="info-label">Status Kuliah</span><span class="info-val" id="p-status-val">-</span></div>
 
             <button class="jodoh-btn" onclick="cekJodoh()">
                 <i class="fas fa-heart"></i> Siapa Jodohmu?
@@ -362,7 +394,7 @@
 
 <script>
     // --- DATABASE ---
-	    const dataIF1 = [
+    const dataIF1 = [
         {name: "Ahmad Afrizal", nim: "5520225011", gender: "L", dob: "20 April 2007", dospem: "Muawan Bisri, S.Kom., M.Kom"},
         {name: "Aisyah Nur Syifa", nim: "5520225021", gender: "P", dob: "27 Agustus 2007", dospem: "Eko Aziz Apriadi, S.T., M.Kom."},
         {name: "Alfian Febriansyah", nim: "5520225028", gender: "L", dob: "2 Januari 2007", dospem: "Fathoni Dwi Atmoko, S.Kom.,M.Kom."},
@@ -370,11 +402,13 @@
         {name: "Azizah Fastabila Putri", nim: "5520225030", gender: "P", dob: "15 November 2006", dospem: "Fathoni Dwi Atmoko, S.Kom.,M.Kom."},
         {name: "Bahtera Juliandi", nim: "5520225031", gender: "L", dob: "17 Januari 2005", dospem: "Fathoni Dwi Atmoko, S.Kom.,M.Kom."},
         {name: "Dela Nurcahyani", nim: "5520225003", gender: "P", dob: "15 Desember 2005", dospem: "Muawan Bisri, S.Kom., M.Kom"},
-        {name: "Deri Farhan Syah<br>Menghilang Dari Lane", nim: "5520225008", gender: "L", dob: "10 November 2006", dospem: "Muawan Bisri, S.Kom., M.Kom"},
+        // UDPATE DERI FARHAN SYAH
+        {name: "Deri Farhan Syah", nim: "5520225008", gender: "L", dob: "10 November 2006", dospem: "Muawan Bisri, S.Kom., M.Kom", status: "Menghilang Dari Lane"},
         {name: "Dian Parwati", nim: "5520225014", gender: "P", dob: "8 Maret 2006", dospem: "Muawan Bisri, S.Kom., M.Kom"},
         {name: "Dika Afriyogi", nim: "5520225018", gender: "L", dob: "30 September 2005", dospem: "Eko Aziz Apriadi, S.T., M.Kom."},
         {name: "Fikri Julianda Laksono", nim: "5520225009", gender: "L", dob: "21 Juli 2005", dospem: "Muawan Bisri, S.Kom., M.Kom"},
-        {name: "Gilang Aidil Pratama", nim: "5520225023", gender: "L", dob: "24 Oktober 2006", dospem: "Eko Aziz Apriadi, S.T., M.Kom."},
+        // UPDATE GILANG AIDIL PRATAMA (OWNER)
+        {name: "Gilang Aidil Pratama", nim: "5520225023", gender: "L", dob: "24 Oktober 2006", dospem: "Eko Aziz Apriadi, S.T., M.Kom.", isOwner: true, status: "Calon Ketua Himatika"},
         {name: "Hafizd Khoirul Azizah", nim: "5520225002", gender: "P", dob: "29 Juli 2006", dospem: "Muawan Bisri, S.Kom., M.Kom"},
         {name: "Hanysa Maryani", nim: "5520225006", gender: "P", dob: "20 Maret 2007", dospem: "Muawan Bisri, S.Kom., M.Kom"},
         {name: "Herliyanda", nim: "5520225020", gender: "L", dob: "26 Juli 2006", dospem: "Eko Aziz Apriadi, S.T., M.Kom."},
@@ -417,12 +451,12 @@
         {name: "Sendi Agustiansyah", nim: "5520225050", gender: "L", dob: "21 September 2005", dospem: "Ribut Julianto, S.Kom.,M.T.I."},
         {name: "Widia Lestari", nim: "5520225040", gender: "P", dob: "23 Mei 2007", dospem: "Ribut Julianto, S.Kom.,M.T.I."}
     ];
-    const allStudents = [...dataIF1.map(s=>({...s, class:'IF 1'})), ...dataIF2.map(s=>({...s, class:'IF 2'}))];
-    const quotes = ["Jadilah versi terbaik.", "Turu jalan ninjaku.", "Coding: 10% ngetik 90% error.", "Revisi tanda sayang.", "Jodoh gak kemana.", "Tetap santuy.", "Mimpi gratis.", "Error 404.", "Ngoding dulu.", "Cintailah ususmu.", "Hidup seperti array.", "PHP bukan pemberi harapan palsu.", "Kuliah Pulang Tidur.", "Uang habis.", "Teman sejati contekan.", "Bersakit dahulu wisuda kemudian.", "Fokus masa depan.", "Laptop panas.", "Kopi bahan bakar.", "Bersyukur.", "Bahagia sederhana.", "Nilai A mitos.", "Tetap bernafas.", "Sabar ujian.", "Jauh dimata.", "Cita-cita sukses.", "Masa depan cerah.", "Kesuksesan proses.", "Jangan takut.", "Belajar ibadah.", "Doa ibu.", "Fokus!", "Jaga kesehatan.", "Tugas kelar.", "Wifi kencang.", "Lowbat cobaan.", "Semangat pagi.", "Senyum.", "Hidup pilihan.", "Data jodoh not found.", "Syntax Error.", "Logika buntu.", "Algoritma cinta.", "Database hati.", "Looping sukses.", "Break malas.", "Continue perjuangan.", "If sukses bersyukur.", "Switch serius.", "Array of hope.", "Pointer masa depan.", "Class winners.", "Object feeling.", "Bug fitur.", "Ctrl+C Ctrl+V.", "Stack overflow.", "Queue tugas.", "Linked list kenangan.", "Binary tree.", "Graph teman.", "Hash rahasia.", "Sorting hidup.", "Searching makna.", "O(n) masalah.", "Recursion.", "Memory leak.", "Garbage collection.", "Compile error.", "Runtime exception.", "Debug hidup.", "Deploy bahagia.", "Version control.", "Git commit.", "Git push.", "Git pull.", "Merge conflict.", "Branch baru.", "Master skills.", "Main function happy.", "Include doa.", "Import sukses.", "Print Hello.", "Return 0.", "Void sedih.", "Public static.", "System out.", "Console log.", "Echo bisa.", "Select rejeki.", "Insert usaha.", "Update skill.", "Delete pikiran.", "Drop malas.", "Create view.", "Grant success.", "Revoke gagal.", "Commit.", "Rollback dosa.", "Savepoint.", "Connect God.", "Disconnect toxic."];
+     const allStudents = [...dataIF1.map(s=>({...s, class:'IF 1'})), ...dataIF2.map(s=>({...s, class:'IF 2'}))];
+    const quotes = ["Jadilah versi terbaik.", "Turu jalan ninjaku.", "10% ngetik 90% error.", "Aku belum cebok.", "Jodoh gak kemana.", "Tetap santuy.", "Kita akan mati kapan aja.", "Error 404 katanya.", "Ngoding dulu rawr.", "Cintailah otakmu, jangan ngoding tiap hari.", "Hidup seperti array.(Meme Spongebob)", "PHP tuh bukan pemberi harapan palsu.", "Kuliah Pulang Tidur.", "Uang habis.", "Oh Tuhan, ku sayang dia.", "Bersakit dahulu wisuda kemudian.", "Fokus masa depan.", "Joki hanya di Dilz Ghaaziy JOKI.", "Gak bosen tah ke Be Hots Mulu.", "Kamu udah mandi belum?", "Bahagia itu ketika bisa jajan terus.", "Nilai A buat Kalkulus itu MITOS.", "Masih hidup lu?", "Udah kuliah kok masih labil itu mindset.", "Kucing bawa motor pake helm", "Sayang, kok kamu gak ngabarin aku?", "Bismillah Umroh.", "Lu mah mending, lah gua...", "Jangan panggil aku anak kecil paman!", "Jual tanah demi gaji UMR, What? Total gaji seumur hidup gak sampe harga tanahnya", "Minta doa yang terbaik ke Ibu.", "Fokus, hiyak hiyak hiyak!", "Sebel ga sih nilai C?.", "Tugas kelar.", "Wifi kencang.", "Lowbat cobaan.", "Semangat pagi.", "Senyum.", "Hidup pilihan.", "Data jodoh not found.", "Syntax Error.", "Logika buntu.", "Algoritma cinta.", "Database hati.", "Looping sukses.", "Break malas.", "Continue perjuangan.", "If sukses bersyukur.", "Switch serius.", "Array of hope.", "Pointer masa depan.", "Class winners.", "Object feeling.", "Bug fitur.", "Ctrl+C Ctrl+V.", "Cihuyyyyy.", "Dibuat makalah minimal 15 lembar ya :).", "Kurang apa nih webnya?.", "Ga suka libur, gak ada jokian.", "Adalah pokoknya.", "Om jangan om", "Tolong jokiin hidupku.", "Searching makna.", "Nyari masalah?", "Recursion.", "Memory leak.", "Garbage collection.", "Compile error.", "Runtime exception.", "Debug hidup.", "Deploy bahagia.", "Version control.", "Git commit.", "Git push.", "Git pull.", "Merge conflict.", "Branch baru.", "Master skills.", "Main function happy.", "Include doa.", "Import sukses.", "Print Hello.", "Return 0.", "Void sedih.", "Public static.", "System out.", "Console log.", "Echo bisa.", "Select rejeki.", "Insert usaha.", "Update skill.", "Delete pikiran.", "Drop malas.", "Create view.", "Grant success.", "Revoke gagal.", "Commit.", "Rollback dosa.", "Savepoint.", "Connect God.", "Disconnect toxic."];
 
     const coupleVariations = [
-        { t: "Ciee, dunia serasa milik berdua nih.", type: "cute" }, { t: "Semoga langgeng sampai wisuda ya!", type: "cute" }, { t: "Aduh gemes banget liatnya.", type: "cute" }, { t: "Cocok banget, kayak kopi sama gula.", type: "cute" }, { t: "Udah jadian aja belum sih?", type: "cute" }, { t: "Definisi pasangan goals banget ini.", type: "cute" }, { t: "Jangan lupa undang-undang kalau nikah.", type: "cute" }, { t: "Liat kalian berdua bikin iri jomblo.", type: "cute" }, { t: "Chemistry-nya dapet banget!", type: "cute" }, { t: "Kawal sampai halal pokoknya!", type: "cute" }, { t: "Senyumnya mirip, jodoh beneran nih.", type: "cute" }, { t: "Semesta merestui hubungan ini.", type: "cute" }, { t: "Gak usah malu-malu, tembak aja langsung.", type: "cute" }, { t: "Pasangan ter-uwu di angkatan 2025.", type: "cute" }, { t: "Bahagia terus ya kalian berdua.", type: "cute" }, { t: "Kayak ada manis-manisnya gitu.", type: "cute" }, { t: "Fix, tahun depan nyebar undangan.", type: "cute" }, { t: "Cintaku bersemi di ruang kelas.", type: "cute" }, { t: "Jangan berantem terus ya, sayang kuota.", type: "cute" }, { t: "Semoga jodoh dunia akhirat.", type: "cute" }, { t: "Gandengan terus kayak truk gandeng, sweet!", type: "cute" }, { t: "Tatapan matanya itu lho, dalem banget.", type: "cute" }, { t: "Yang satu ganteng, yang satu cantik. Pas!", type: "cute" }, { t: "Jodoh emang gak kemana, ternyata di kelas sebelah.", type: "cute" }, { t: "Semoga kalian selalu bahagia bersama.", type: "cute" },
-        { t: "Hadeh, kasian banget jodohnya sama dia.", type: "mock" }, { t: "Yakin mau sama dia? Pikir lagi deh 7x24 jam.", type: "mock" }, { t: "Siap-siap makan ati ya tiap hari.", type: "mock" }, { t: "Jodoh sih, tapi kok kayak terpaksa gitu mukanya?", type: "mock" }, { t: "Awas, dia galak lho kalau lagi laper.", type: "mock" }, { t: "Kuat-kuatin iman ya ngadepin dia.", type: "mock" }, { t: "Yah, nasibmu kurang beruntung dapet dia.", type: "mock" }, { t: "Kok bisa sih jodohnya sama modelan begini?", type: "mock" }, { t: "Sabar ya, ini ujian hidup.", type: "mock" }, { t: "Dompet aman? Dia doyan jajan lho.", type: "mock" }, { t: "Mending pura-pura gak kenal aja deh.", type: "mock" }, { t: "Selamat menikmati penderitaan.", type: "mock" }, { t: "Dia tidurnya ngorok lho, yakin mau?", type: "mock" }, { t: "Jodoh sih, tapi boong (canda deng).", type: "mock" }, { t: "Aduh, turun standar banget dapet dia.", type: "mock" }, { t: "Semoga gak cepet bosen ya liat mukanya.", type: "mock" }, { t: "Dia kalau mandi lama banget lho, awas telat ngampus.", type: "mock" }, { t: "Chat dibalesnya 3 hari kerja, sabar ya.", type: "mock" }, { t: "Hati-hati, dia buaya/kucing garong berkedok mahasiswa.", type: "mock" }, { t: "Yakin mentalmu kuat? Dia drama queen/king lho.", type: "mock" }, { t: "Duh, sainganmu berat (sama hobi tidurnya).", type: "mock" }, { t: "Pasti dulu kamu banyak dosa makanya dapet dia.", type: "mock" }, { t: "Jangan kaget kalau dia tiba-tiba minjem duit.", type: "mock" }, { t: "Selamat menempuh hidup penuh huru-hara.", type: "mock" }, { t: "Cinta itu buta, makanya kamu mau sama dia.", type: "mock" }
+        { t: "Ciee, dunia serasa milik berdua nih.", type: "cute" }, { t: "Semoga langgeng sampai wisuda ya!", type: "cute" }, { t: "Aduh gemes banget liatnya.", type: "cute" }, { t: "Cocok banget, kayak kopi sama gula.", type: "cute" }, { t: "Udah jadian aja belum sih?", type: "cute" }, { t: "Kiw kiw cukurukuk ebew rawr well ungrr.", type: "cute" }, { t: "Jangan lupa undang-undang kalau nikah.", type: "cute" }, { t: "Liat kalian berdua bikin iri jomblo.", type: "cute" }, { t: "Chemistry-nya dapet banget!", type: "cute" }, { t: "Kawal sampai halal pokoknya!", type: "cute" }, { t: "Senyumnya mirip, jodoh beneran nih.", type: "cute" }, { t: "Semesta merestui hubungan ini.", type: "cute" }, { t: "Gak usah malu-malu, tembak aja langsung.", type: "cute" }, { t: "Pasangan ter-uwu di angkatan 2025.", type: "cute" }, { t: "Bahagia terus ya kalian berdua.", type: "cute" }, { t: "Kayak ada manis-manisnya gitu.", type: "cute" }, { t: "Fix, tahun depan nyebar undangan.", type: "cute" }, { t: "Cintaku bersemi di ruang C3.", type: "cute" }, { t: "Jangan berantem terus ya, sayang kuotanya.", type: "cute" }, { t: "Semoga jodoh dunia akhirat.", type: "cute" }, { t: "Lucu banget cii kalian.", type: "cute" }, { t: "Tatapan matanya itu lho, dalem banget.", type: "cute" }, { t: "Yang satu ganteng, yang satu cantik. Pas!", type: "cute" }, { t: "Jodoh emang gak kemana, ternyata seprodi.", type: "cute" }, { t: "Semoga kalian selalu bahagia bersama.", type: "cute" },
+        { t: "Hadeh, kasian banget jodohnya sama dia.", type: "mock" }, { t: "Yakin mau sama dia? Pikir lagi deh 7x24 jam.", type: "mock" }, { t: "Siap-siap makan ati ya tiap hari.", type: "mock" }, { t: "Jodoh sih, tapi kok kayak terpaksa gitu mukanya?", type: "mock" }, { t: "Awas, dia galak loh kalau lagi laper.", type: "mock" }, { t: "Kuat-kuatin iman ya ngadepin dia.", type: "mock" }, { t: "Yah, nasibmu kurang beruntung dapet dia.", type: "mock" }, { t: "Kok bisa sih jodohnya sama modelan begini?", type: "mock" }, { t: "Sabar ya, ini ujian hidup.", type: "mock" }, { t: "Dompet aman? Dia doyan jajan.", type: "mock" }, { t: "Mending pura-pura gak kenal aja deh.", type: "mock" }, { t: "Selamat menikmati penderitaan.", type: "mock" }, { t: "Dia tidurnya ngorok, yakin mau?", type: "mock" }, { t: "Jodoh sih, tapi boong (canda deng).", type: "mock" }, { t: "Aduh, turun standar banget dapet dia.", type: "mock" }, { t: "Dia suka nahan eeq.", type: "mock" }, { t: "Dia kalau mandi lama banget weee, awas telat ngampus.", type: "mock" }, { t: "Dia kalo bales chat bisa 3 hari, sabar ya.", type: "mock" }, { t: "Hati-hati, dia buaya/kucing garong berkedok mahasiswa.", type: "mock" }, { t: "Yakin mentalmu kuat? Dia drama queen/king.", type: "mock" }, { t: "Duh, sainganmu berat (sama hobi tidurnya).", type: "mock" }, { t: "Pasti kamu banyak dosa makanya dapet dia.", type: "mock" }, { t: "Jangan kaget kalau dia tiba-tiba minjem duit.", type: "mock" }, { t: "Selamat menempuh hidup penuh huru-hara.", type: "mock" }, { t: "Cinta itu buta, makanya kamu mau sama dia.", type: "mock" }
     ];
     const cuteGifs = ["https://media.tenor.com/36d8ovZxZsgAAAAi/bubu-bubu-dudu.gif", "https://media.tenor.com/qQmsOJoeMoMAAAAi/dudu-bubu.gif", "https://media.tenor.com/Eazcnx5O-bgAAAAM/dudu-dudu-cute.gif", "https://media.tenor.com/pN7xf12qQcwAAAAM/cuddle-cute.gif", "https://media.tenor.com/RDwCMZeZ7b8AAAAi/hugs.gif", "https://media.tenor.com/wA5xWw0tNBwAAAAi/h%C3%AAh.gif", "https://media.tenor.com/9Pnoc6MKDrEAAAAi/love-you-too.gif", "https://media.tenor.com/JcPATwwdUOQAAAAi/bubu-dudu-sseeyall.gif", "https://media.tenor.com/pdv5YIMB-hkAAAAi/cute.gif", "https://media1.tenor.com/m/z2TX5B4RD34AAAAC/your-so-cute-mini-seb.gif", "https://media1.tenor.com/m/pjBtpAFSnmgAAAAC/peach-goma-peach-and-goma.gif", "https://media1.tenor.com/m/FYrmLKoB1UIAAAAC/peach-and-goma-peach-loves-goma.gif", "https://media.tenor.com/Zrr4L_Wd4JkAAAAi/bubu-rub-bubu-love-dudu.gif", "https://media.tenor.com/vzkveVGDzmAAAAAi/dudu-hug-bubu-dudu-kiss.gif", "https://media1.tenor.com/m/hOmnC-qwGagAAAAC/peach-and-goma.gif", "https://media.tenor.com/KqqtGmNZ_vkAAAAi/bubu-dudu.gif", "https://media.tenor.com/rjnOQXkO-TEAAAAi/bubu-dudu-sseeyall.gif", "https://media.tenor.com/wKP-p_HtfOoAAAAi/bubu-dudu.gif", "https://media.tenor.com/cqGxLDiHeKoAAAAi/bubu-dudu-bubu-dudu-love.gif", "https://media.tenor.com/MkU0kjfQnngAAAAi/kiss-bubu.gif", "https://media.tenor.com/vEvRDC60wpoAAAAi/bubu-dudu-sseeyall.gif", "https://media.tenor.com/u7fyNJeFi44AAAAi/bubu-dudu-sseeyall.gif", "https://media.tenor.com/fQ0oZELv1y4AAAAi/bubu-dudu-sseeyall.gif", "https://media.tenor.com/UeanLw-I3B4AAAAi/tkthao219-bubududu.gif", "https://media.tenor.com/vJRHkcdlEQQAAAAi/casal-dudu.gif", "https://media.tenor.com/tnTcMaEkXzAAAAAi/tonibear-bubu.gif", "https://media.tenor.com/Zc42xR3zFWYAAAAi/bubu-dudu-sseeyall.gif", "https://media.tenor.com/NgAmTbY1aokAAAAi/dare-aggie-dare-aggie-bunny.gif", "https://media.tenor.com/S_lMGnbCMzYAAAAi/bubu-bubu-dudu.gif", "https://media.tenor.com/3BTNvUaCiGgAAAAi/bubu-dudu-sseeyall.gif", "https://media.tenor.com/wG7yYjwS7F8AAAAi/milk-and-mocha-sleeping.gif", "https://media1.tenor.com/m/2BrMVhEIsgIAAAAC/mocha-bear-kiss-bear-kiss.gif", "https://media1.tenor.com/m/1gf_Jz8WYH0AAAAC/sami-en-dina-sami-dina.gif", "https://media1.tenor.com/m/WAqsZeIoxnEAAAAC/milk-and-mocha-milk-and-mocha-kiss.gif"];
     const mockGifs = ["https://media.tenor.com/vu0bClH3OiUAAAAM/bubu-dudu-sseeyall.gif", "https://media.tenor.com/8Hs24bl0z94AAAAM/12.gif", "https://media.tenor.com/IFAObJVF4tEAAAAi/bubu-dudu.gif", "https://media.tenor.com/2L3bWLooqT8AAAAi/bubu-silly.gif", "https://media1.tenor.com/m/ddBFqmr_qp0AAAAC/laughing-bubu.gif", "https://media.tenor.com/eSMmyYMJXOcAAAAi/miss-you.gif", "https://media.tenor.com/KmIZbENMqx4AAAAi/bubu-dudu-sseeyall.gif", "https://media1.tenor.com/m/KUGbLzdDd9YAAAAC/bubu-dudu.gif", "https://media.tenor.com/7awxGekCrFoAAAAi/bubu-dudu-sseeyall.gif", "https://media.tenor.com/SzjZCjI1kZQAAAAi/bubu-bubu-dudu.gif", "https://media.tenor.com/RhdwDUpRXeMAAAAi/bubu-dudu-sseeyall.gif", "https://media.tenor.com/LC74nzQObQ0AAAAi/bubu-dudu.gif", "https://media.tenor.com/tJk6yhct0wMAAAAi/bubu-dudu-sseeyall.gif", "https://media.tenor.com/kTIu00Dc0WwAAAAi/hi.gif", "https://media.tenor.com/WZyHt5hOIKsAAAAi/bubu-bubu-dudu.gif", "https://media.tenor.com/wSjhsZknWUsAAAAi/bubu-dudu-sseeyall.gif", "https://media.tenor.com/9gBByPt6k4oAAAAi/bubu-dudu-twitter.gif"];
@@ -468,7 +502,31 @@
         createStars(); createFireflies(); 
         if(localStorage.getItem('theme')==='dark') { document.body.classList.add('dark-mode'); document.querySelector('#themeToggle i').classList.replace('fa-moon','fa-sun'); }
         if(localStorage.getItem('mobileLayout')==='grid') setMobileGrid();
+        
+        // --- PRELOAD AUDIO ---
+        preloadAudio();
     };
+
+    function preloadAudio() {
+        // Preload Jodoh Songs
+        jodohSongs.forEach(url => {
+            const tempAudio = new Audio();
+            tempAudio.src = url;
+            tempAudio.preload = 'auto';
+            tempAudio.load(); // Force browser to fetch/buffer
+        });
+        
+        // Preload SFX
+        const sfxUrls = [S_MATI, S_ISLAMI, S_FUNNY, S_SAD, S_YALILI];
+        sfxUrls.forEach(url => {
+            const tempAudio = new Audio();
+            tempAudio.src = url;
+            tempAudio.preload = 'auto';
+            tempAudio.load();
+        });
+        
+        console.log("Audio preloading started...");
+    }
 
     // --- BGM PLAYER LOGIC ---
     function playRandomBGM() {
@@ -555,9 +613,19 @@
         currentClassLabel = (type === 'IF1') ? "IF 1" : "IF 2";
         document.getElementById('class-name').innerText = currentClassLabel;
         currentClassData.forEach(s => {
-            const card = document.createElement('div'); card.className = 'card';
+            const card = document.createElement('div'); 
+            
+            // Check Owner Status for Card Styling
+            let cardClass = 'card';
+            let ownerBadge = '';
+            if (s.isOwner) {
+                cardClass += ' owner-card';
+                ownerBadge = `<div class="owner-badge"><i class="fas fa-crown"></i> Owner</div>`;
+            }
+            
+            card.className = cardClass;
             card.onclick = () => openProfile(s);
-            card.innerHTML = `<div class="gender-tag ${s.gender==='L'?'gender-L':'gender-P'}">${s.gender}</div><div class="avatar">${getInitials(s.name)}</div><h3>${s.name}</h3><span class="nim-badge">${s.nim}</span>`;
+            card.innerHTML = `${ownerBadge}<div class="gender-tag ${s.gender==='L'?'gender-L':'gender-P'}">${s.gender}</div><div class="avatar">${getInitials(s.name)}</div><h3>${s.name}</h3><span class="nim-badge">${s.nim}</span>`;
             document.getElementById('cardGrid').appendChild(card);
         });
         document.getElementById('selectionModal').classList.remove('active');
@@ -576,6 +644,28 @@
         document.getElementById('p-gender').innerText = s.gender==='L'?'Laki-Laki':'Perempuan';
         document.getElementById('p-dob').innerText = s.dob;
         document.getElementById('p-dospem').innerText = s.dospem;
+        
+        // LOGIC KHUSUS STATUS KULIAH
+        const statusRow = document.getElementById('p-status-row');
+        if(s.status) {
+            document.getElementById('p-status-val').innerText = s.status;
+            statusRow.style.display = 'flex';
+        } else {
+            statusRow.style.display = 'none';
+        }
+
+        // LOGIC KHUSUS OWNER
+        const profileCard = document.querySelector('.big-profile-card');
+        const roleDiv = document.getElementById('p-role');
+        
+        if (s.isOwner) {
+            profileCard.classList.add('owner-profile');
+            roleDiv.style.display = 'inline-block';
+        } else {
+            profileCard.classList.remove('owner-profile');
+            roleDiv.style.display = 'none';
+        }
+
         document.getElementById('daily-quote').innerText = `"${quotes[Math.floor(Math.random()*quotes.length)]}"`;
         document.getElementById('main-view').style.opacity = '0';
         setTimeout(() => { document.getElementById('main-view').style.display = 'none'; document.getElementById('profile-view').style.display = 'block'; setTimeout(() => document.getElementById('profile-view').style.opacity = '1', 50); }, 300);
@@ -704,6 +794,3 @@
 </script>
 </body>
 </html>
-
-
-
