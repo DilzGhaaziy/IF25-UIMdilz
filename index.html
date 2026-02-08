@@ -217,7 +217,7 @@
             z-index: 10;
         }
 
-        /* --- STYLING CARD KHUSUS (UPDATE TERBARU) --- */
+        /* --- STYLING CARD KHUSUS --- */
         
         /* 1. Ketua */
         .card.ketua-card {
@@ -391,6 +391,53 @@
             font-size: 13px; font-style: italic; color: #ddd; border-left: 4px solid #f1c40f; text-align: center;
         }
 
+        /* --- FITUR IPK --- */
+        .ipk-btn {
+            margin-top: 15px; width: 100%; padding: 12px; 
+            background: linear-gradient(135deg, #00b09b, #96c93d);
+            border: none; border-radius: 50px; color: white; 
+            font-size: 15px; font-weight: bold; cursor: pointer;
+            box-shadow: 0 5px 15px rgba(0, 176, 155, 0.4); 
+            transition: transform 0.2s; display: flex; align-items: center; justify-content: center; gap: 8px;
+        }
+        .ipk-btn:hover { transform: scale(1.02); }
+
+        /* Modal IPK */
+        .ipk-modal {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.85); z-index: 4000;
+            display: flex; align-items: center; justify-content: center;
+            opacity: 0; visibility: hidden; transition: 0.3s; backdrop-filter: blur(5px);
+        }
+        .ipk-modal.active { opacity: 1; visibility: visible; }
+        
+        .ipk-content {
+            background: var(--card-bg); width: 90%; max-width: 400px;
+            border-radius: 20px; padding: 30px; position: relative;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.2);
+            transform: translateY(20px); transition: 0.3s;
+        }
+        .ipk-modal.active .ipk-content { transform: translateY(0); }
+
+        .ipk-header { text-align: center; margin-bottom: 20px; color: var(--text-color); }
+        .ipk-header h2 { font-size: 24px; margin-bottom: 5px; }
+        .ipk-header p { font-size: 14px; opacity: 0.7; }
+
+        .semester-list { display: flex; flex-direction: column; gap: 10px; margin-bottom: 25px; }
+        .semester-row {
+            display: flex; justify-content: space-between; padding: 12px 15px;
+            background: rgba(0,0,0,0.05); border-radius: 10px;
+            font-size: 14px; font-weight: 500; color: var(--text-color);
+            border-left: 4px solid #ccc;
+        }
+        .semester-row.has-score { border-left: 4px solid #00b09b; background: rgba(0, 176, 155, 0.1); }
+
+        .close-ipk {
+            width: 100%; padding: 12px; background: #333; color: white; border: none;
+            border-radius: 15px; cursor: pointer; font-weight: bold; transition: 0.2s;
+        }
+        .close-ipk:hover { background: #555; }
+
         /* --- MODAL --- */
         .jodoh-modal, .modal-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
@@ -516,12 +563,30 @@
             <div class="info-row"><span class="info-label">Dosen Pembimbing</span><span class="info-val" id="p-dospem">-</span></div>
             
             <div class="info-row" id="p-status-row" style="display: none;"><span class="info-label">Status Kuliah</span><span class="info-val" id="p-status-val">-</span></div>
+            
+            <div class="info-row" id="p-ipk-row" style="display: none;"><span class="info-label">IPK</span><span class="info-val" id="p-ipk-val">-</span></div>
+
+            <button class="ipk-btn" onclick="openIPKModal()">
+                <i class="fas fa-chart-line"></i> Lihat Detail IPK
+            </button> 
 
             <button class="jodoh-btn" onclick="cekJodoh()">
                 <i class="fas fa-heart"></i> Siapa Jodohmu?
             </button>
             <div class="quote-box" id="daily-quote">"Memuat kata-kata..."</div>
         </div>
+    </div>
+</div>
+
+<div class="ipk-modal" id="ipkModal">
+    <div class="ipk-content">
+        <div class="ipk-header">
+            <h2>Riwayat IPK</h2>
+            <p id="ipk-nama-mhs">Nama Mahasiswa</p>
+        </div>
+        <div class="semester-list" id="semesterList">
+            </div>
+        <button class="close-ipk" onclick="closeIPKModal()">Tutup</button>
     </div>
 </div>
 
@@ -542,19 +607,24 @@
 </div>
 
 <script>
-    // --- DATABASE ---
+    // --- DATABASE (DIPERBARUI DENGAN IPK) ---
     const dataIF1 = [
         {name: "Ahmad Afrizal", nim: "5520225011", gender: "L", dob: "20 April 2007", dospem: "Muawan Bisri, S.Kom., M.Kom", role: "Keamanan IF1"},
-        {name: "Aisyah Nur Syifa", nim: "5520225021", gender: "P", dob: "27 Maret 2007", dospem: "Eko Aziz Apriadi, S.T., M.Kom."},
-        {name: "Alfian Febriansyah", nim: "5520225028", gender: "L", dob: "2 Januari 2007", dospem: "Fathoni Dwi Atmoko, S.Kom.,M.Kom."},
+        {name: "Aisyah Nur Syifa", nim: "5520225021", gender: "P", dob: "20 Maret 2007", dospem: "Eko Aziz Apriadi, S.T., M.Kom."},
+        {name: "Alfian Febriansyah", nim: "5520225028", gender: "L", dob: "13 Februari 2007", dospem: "Fathoni Dwi Atmoko, S.Kom.,M.Kom."},
         {name: "Amri Rahman", nim: "5520225005", gender: "L", dob: "27 April 2006", dospem: "Muawan Bisri, S.Kom., M.Kom"},
         {name: "Azizah Fastabila Putri", nim: "5520225030", gender: "P", dob: "15 November 2006", dospem: "Fathoni Dwi Atmoko, S.Kom.,M.Kom."},
         {name: "Bahtera Juliandi", nim: "5520225031", gender: "L", dob: "17 Januari 2005", dospem: "Fathoni Dwi Atmoko, S.Kom.,M.Kom.", role: "Keamanan IF1"},
         {name: "Dela Nurcahyani", nim: "5520225003", gender: "P", dob: "15 Desember 2005", dospem: "Muawan Bisri, S.Kom., M.Kom"},
         {name: "Deri Farhan Syah", nim: "5520225008", gender: "L", dob: "10 November 2006", dospem: "Muawan Bisri, S.Kom., M.Kom", status: "Menghilang Dari Lane"},
         {name: "Dian Parwati", nim: "5520225014", gender: "P", dob: "8 Maret 2006", dospem: "Muawan Bisri, S.Kom., M.Kom"},
-        {name: "Dika Afriyogi", nim: "5520225018", gender: "L", dob: "30 September 2005", dospem: "Eko Aziz Apriadi, S.T., M.Kom.", role: "Keamanan IF1"},
-        {name: "Fikri Julianda Laksono", nim: "5520225009", gender: "L", dob: "21 Juli 2005", dospem: "Muawan Bisri, S.Kom., M.Kom", role: "Ketua IF 1"},
+        
+        // DIKA
+        {name: "Dika Afriyogi", nim: "5520225018", gender: "L", dob: "30 September 2005", dospem: "Eko Aziz Apriadi, S.T., M.Kom.", role: "Keamanan IF1", ipk: "3.50", ipk1: "3.50"},
+        
+        // FIKRI
+        {name: "Fikri Julianda Laksono", nim: "5520225009", gender: "L", dob: "21 Juli 2005", dospem: "Muawan Bisri, S.Kom., M.Kom", role: "Ketua IF 1", ipk: "3.80", ipk1: "3.80"},
+        
         {name: "Gilang Aidil Pratama", nim: "5520225023", gender: "L", dob: "24 Oktober 2006", dospem: "Eko Aziz Apriadi, S.T., M.Kom.", isOwner: true, status: "Calon Ketua Himatika"},
         {name: "Hafizd Khoirul Azizah", nim: "5520225002", gender: "P", dob: "29 Juli 2006", dospem: "Muawan Bisri, S.Kom., M.Kom", role: "Wakil 1 IF1"},
         {name: "Hanysa Maryani", nim: "5520225006", gender: "P", dob: "20 Maret 2007", dospem: "Muawan Bisri, S.Kom., M.Kom"},
@@ -580,8 +650,11 @@
         {name: "Ade Ahmad Fahrizal", nim: "5520225043", gender: "L", dob: "Saya Gak Tau", dospem: "Ribut Julianto, S.Kom.,M.T.I."},
         {name: "Ade Rustam Ananta", nim: "5520225055", gender: "L", dob: "19 Januari 2007", dospem: "Agus Komarudin, S.Kom.,M.T.I."},
         {name: "Ayidil Putra Mahkoara", nim: "5520225046", gender: "L", dob: "6 Januari 2006", dospem: "Ribut Julianto, S.Kom.,M.T.I."},
-        {name: "Aziz Abdul Jabbar", nim: "5520225064", gender: "L", dob: "2 September 2006", dospem: "Agus Komarudin, S.Kom.,M.T.I."},
-        {name: "Cantyca Syahrani", nim: "5520225035", gender: "P", dob: "1 Juni 2007", dospem: "Fathoni Dwi Atmoko, S.Kom.,M.Kom."},
+        {name: "Aziz Abdul Jabbar", nim: "5520225064", gender: "L", dob: "9 Februari 2006", dospem: "Agus Komarudin, S.Kom.,M.T.I."},
+        
+        // CANTYCA
+        {name: "Cantyca Syahrani", nim: "5520225035", gender: "P", dob: "1 Juni 2007", dospem: "Fathoni Dwi Atmoko, S.Kom.,M.Kom.", ipk: "3.67", ipk1: "3.67"},
+        
         {name: "Cindy Naura Rafa Ayu", nim: "5520225053", gender: "P", dob: "4 Februari 2007", dospem: "Agus Komarudin, S.Kom.,M.T.I."},
         {name: "Dila Oktaviani", nim: "5520225036", gender: "P", dob: "29 Oktober 2005", dospem: "Fathoni Dwi Atmoko, S.Kom.,M.Kom."},
         {name: "Febri Diana Fitri", nim: "5520225042", gender: "P", dob: "1 Februari 2006", dospem: "Ribut Julianto, S.Kom.,M.T.I."},
@@ -590,15 +663,18 @@
         {name: "Kristia Anggraini", nim: "5520225058", gender: "P", dob: "8 Juli 2007", dospem: "Agus Komarudin, S.Kom.,M.T.I."},
         {name: "Lucky Cahya Khalima Usada", nim: "5520225059", gender: "L", dob: "12 September 2006", dospem: "Agus Komarudin, S.Kom.,M.T.I.", role: "Ketua IF 2"},
         {name: "M. Naufal Zaky Akmal", nim: "5520225045", gender: "L", dob: "15 Januari 2006", dospem: "Ribut Julianto, S.Kom.,M.T.I."},
-        {name: "Muhammad Salsabil", nim: "5520225039", gender: "L", dob: "8 Maret 2007", dospem: "Fathoni Dwi Atmoko, S.Kom.,M.Kom."},
-        {name: "Nadina", nim: "5520225063", gender: "P", dob: "12 September 2007", dospem: "Agus Komarudin, S.Kom.,M.T.I."},
-        {name: "Nana Santiya", nim: "5520225056", gender: "P", dob: "27 September 2007", dospem: "Agus Komarudin, S.Kom.,M.T.I."},
-        {name: "Reka Sabila", nim: "5520225060", gender: "P", dob: "22 September 2006", dospem: " Agus Komarudin, S.Kom.,M.T.I."},
-        {name: "Reyhan", nim: "5520225047", gender: "L", dob: "5 Juni 2007", dospem: "Ribut Julianto, S.Kom.,M.T.I."},
-        {name: "Rizki Agustin Maulana", nim: "5520225061", gender: "L", dob: "14 Mei 2007", dospem: "Agus Komarudin, S.Kom.,M.T.I."},
-        {name: "Sendi Agustiansyah", nim: "5520225050", gender: "L", dob: "21 September 2005", dospem: "Ribut Julianto, S.Kom.,M.T.I."},
-        {name: "Widia Lestari", nim: "5520225040", gender: "P", dob: "23 Mei 2007", dospem: "Ribut Julianto, S.Kom.,M.T.I."}
+        {name: "Muhammad Salsabil", nim: "5520225039", gender: "L", dob: "8 Maret 2007", dospem: "Fathoni Dwi Atmoko, S.Kom.,M.Kom.", ipk: ""},
+        {name: "Nadina", nim: "5520225063", gender: "P", dob: "12 September 2007", dospem: "Agus Komarudin, S.Kom.,M.T.I.", ipk: "0"},
+        {name: "Nana Santiya", nim: "5520225056", gender: "P", dob: "27 September 2007", dospem: "Agus Komarudin, S.Kom.,M.T.I.", ipk: "0"},
+        {name: "Reka Sabila", nim: "5520225060", gender: "P", dob: "22 September 2006", dospem: " Agus Komarudin, S.Kom.,M.T.I.", ipk: "0"},
+        {name: "Reyhan", nim: "5520225047", gender: "L", dob: "5 Juni 2007", dospem: "Ribut Julianto, S.Kom.,M.T.I.", ipk: "0"},
+        {name: "Rizki Agustin Maulana", nim: "5520225061", gender: "L", dob: "14 Mei 2007", dospem: "Agus Komarudin, S.Kom.,M.T.I.", ipk: "0"},
+        {name: "Sendi Agustiansyah", nim: "5520225050", gender: "L", dob: "21 September 2005", dospem: "Ribut Julianto, S.Kom.,M.T.I.", ipk: "0"},
+        
+        // WIDIA
+        {name: "Widia Lestari", nim: "5520225040", gender: "P", dob: "23 Mei 2007", dospem: "Ribut Julianto, S.Kom.,M.T.I.", ipk: "3.89", ipk1: "3.89"}
     ];
+
      const allStudents = [...dataIF1.map(s=>({...s, class:'IF 1'})), ...dataIF2.map(s=>({...s, class:'IF 2'}))];
     const quotes = ["Jadilah versi terbaik.", "Turu jalan ninjaku.", "10% ngetik 90% error.", "Aku belum cebok.", "Jodoh gak kemana.", "Tetap santuy.", "Kita akan mati kapan aja.", "Error 404 katanya.", "Ngoding dulu rawr.", "Cintailah otakmu, jangan ngoding tiap hari.", "Hidup seperti array.(Meme Spongebob)", "PHP tuh bukan pemberi harapan palsu.", "Kuliah Pulang Tidur.", "Uang habis.", "Oh Tuhan, ku sayang dia.", "Bersakit dahulu wisuda kemudian.", "Fokus masa depan.", "Joki hanya di Dilz Ghaaziy JOKI.", "Gak bosen tah ke Be Hots Mulu.", "Kamu udah mandi belum?", "Bahagia itu ketika bisa jajan terus.", "Nilai A buat Kalkulus itu MITOS.", "Masih hidup lu?", "Udah kuliah kok masih labil itu mindset.", "Kucing bawa motor pake helm", "Sayang, kok kamu gak ngabarin aku?", "Bismillah Umroh.", "Lu mah mending, lah gua...", "Jangan panggil aku anak kecil paman!", "Jual tanah demi gaji UMR, What? Total gaji seumur hidup gak sampe harga tanahnya", "Minta doa yang terbaik ke Ibu.", "Fokus, hiyak hiyak hiyak!", "Sebel ga sih nilai C?.", "Tugas kelar.", "Wifi kencang is anugerah.", "Kalo ada cobaan, ya cobain.", "Kalo kata aku, dia gak waras.", "Aku lagi nahan eeq.", "Calon Mahasiswa Cumlaude.", "Ijo Lumut - Ikatan Jomblo Lucu Imut.", "Informatika? Chat GPT!.", "Pergi ke warung beli kopi,(cakep) Ya abis itu pulang.", "Algoritma cinta.", "Ada ide? Chat pribadi ke Owner web ini ya.", "Kayaknya kalo makan mie sukses terus, bisa jadi orang sukses.", "Apa yang kamu harapin dari dia?.", "Aku tak pernah, untuk mencintai...", "Ego vs Ego = Hubungan gak sehat.", "Katamu, pacarmu cuma satu.", "Array of hope.", "Informatika?! Cihuyyyy!.", "Ganteng pendiem = Cool.<br>Jelek pendiem = Introvert", "Duel Game Naruto sama Owner, Menang dapet 100 ribu.", "Bug adalah fitur.", "Ctrl+C Ctrl+V.", "Cihuyyyyy.", "Dibuat makalah minimal 15 lembar ya :).", "Kurang apa nih webnya?.", "Ga suka libur, gak ada jokian.", "Adalah pokoknya.", "Om jangan om", "Tolong jokiin hidupku.", "Searching makna.", "Nyari masalah?", "Recursion.", "Memory leak.", "Garbage collection.", "Compile error.", "Runtime exception.", "Debug hidup.", "Deploy bahagia.", "Version control.", "Git commit.", "Git push.", "Git pull.", "Merge conflict.", "Branch baru.", "Master skills.", "Main function happy.", "Include doa.", "Import sukses.", "Print Hello.", "Return 0.", "Void sedih.", "Public static.", "System out.", "Console log.", "Echo bisa.", "Select rejeki.", "Insert usaha.", "Update skill.", "Delete pikiran.", "Drop malas.", "Create view.", "Grant success.", "Revoke gagal.", "Commit.", "Rollback dosa.", "Savepoint.", "Connect God.", "Disconnect toxic."];
 
@@ -848,6 +924,15 @@
         } else {
             statusRow.style.display = 'none';
         }
+        
+        // --- LOGIKA IPK ---
+        const ipkRow = document.getElementById('p-ipk-row');
+        if(s.ipk) {
+            document.getElementById('p-ipk-val').innerText = s.ipk;
+            ipkRow.style.display = 'flex';
+        } else {
+            ipkRow.style.display = 'none';
+        }
 
         const profileCard = document.querySelector('.big-profile-card');
         const roleDiv = document.getElementById('p-role');
@@ -904,6 +989,40 @@
         setTimeout(() => { document.getElementById('profile-view').style.display = 'none'; document.getElementById('main-view').style.display = 'block'; setTimeout(() => document.getElementById('main-view').style.opacity = '1', 50); }, 300);
     }
     
+    // --- FITUR IPK LOGIC (BARU) ---
+    function openIPKModal() {
+        if (!currentProfile) return;
+        
+        const modal = document.getElementById('ipkModal');
+        const listContainer = document.getElementById('semesterList');
+        document.getElementById('ipk-nama-mhs').innerText = currentProfile.name;
+        
+        listContainer.innerHTML = "";
+        
+        // Loop Semester 1 sampai 6
+        for (let i = 1; i <= 6; i++) {
+            let nilai = "0.00";
+            let hasScore = false;
+
+            // Logika khusus: Jika semester 1 dan user punya data ipk1
+            if (i === 1 && currentProfile.ipk1) {
+                nilai = currentProfile.ipk1;
+                hasScore = true;
+            }
+
+            const row = document.createElement('div');
+            row.className = `semester-row ${hasScore ? 'has-score' : ''}`;
+            row.innerHTML = `<span>Semester ${i}</span><span>${nilai}</span>`;
+            listContainer.appendChild(row);
+        }
+        
+        modal.classList.add('active');
+    }
+
+    function closeIPKModal() {
+        document.getElementById('ipkModal').classList.remove('active');
+    }
+
     let matchInterval;
     
     function cekJodoh() {
