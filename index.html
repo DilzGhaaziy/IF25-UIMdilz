@@ -149,9 +149,28 @@
         .card.owner-card .nim-badge { background: rgba(255,255,255,0.2); }
         .card.owner-card:hover { border-top: 5px solid #ffd700; }
 
+        /* STYLE KHUSUS KETUA KELAS (BARU) */
+        .card.ketua-card {
+            background: linear-gradient(135deg, #2980b9 0%, #6dd5fa 100%); /* Biru Muda Gradient */
+            color: white !important;
+            border: 2px solid #fff;
+        }
+        .card.ketua-card h3, .card.ketua-card .nim-badge { color: white !important; text-shadow: 0 1px 3px rgba(0,0,0,0.3); }
+        .card.ketua-card .nim-badge { background: rgba(255,255,255,0.2); }
+        .card.ketua-card:hover { border-top: 5px solid #fff; }
+
         .owner-badge {
             position: absolute; top: 10px; left: 10px;
             background: #ffd700; color: #b45309; font-size: 10px;
+            padding: 2px 8px; border-radius: 8px; font-weight: 800;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            display: flex; align-items: center; gap: 4px; z-index: 5;
+        }
+
+        /* BADGE KETUA KELAS (BARU) */
+        .ketua-badge {
+            position: absolute; top: 10px; left: 10px;
+            background: #fff; color: #2980b9; font-size: 10px;
             padding: 2px 8px; border-radius: 8px; font-weight: 800;
             box-shadow: 0 2px 5px rgba(0,0,0,0.2);
             display: flex; align-items: center; gap: 4px; z-index: 5;
@@ -207,10 +226,21 @@
             background: linear-gradient(135deg, rgba(16, 185, 129, 0.9) 0%, rgba(5, 150, 105, 0.9) 100%);
             border: 2px solid #ffd700;
         }
+        /* STYLE KHUSUS PROFILE KETUA (BARU) */
+        .big-profile-card.ketua-profile {
+            background: linear-gradient(135deg, rgba(41, 128, 185, 0.9) 0%, rgba(109, 213, 250, 0.9) 100%);
+            border: 2px solid #fff;
+        }
+
         .owner-role {
             font-size: 12px; background: #ffd700; color: #b45309; padding: 2px 10px;
             border-radius: 10px; display: inline-block; font-weight: 800; margin-bottom: 10px;
             text-transform: uppercase; letter-spacing: 1px;
+        }
+
+        /* STYLE ROLE UNTUK KETUA (BARU) */
+        .owner-role.ketua-role-tag {
+            background: #fff; color: #2980b9;
         }
 
         .big-avatar {
@@ -228,8 +258,8 @@
         .info-row { display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid rgba(255,255,255,0.1); font-size: 14px; }
         .info-row:last-child { border-bottom: none; }
         .info-label { color: #aaa; text-align: left; }
-        /* Perbaikan warna label untuk owner profile agar terbaca di background hijau */
-        .big-profile-card.owner-profile .info-label { color: #e0f2fe; } 
+        /* Perbaikan warna label agar terbaca di background hijau/biru */
+        .big-profile-card.owner-profile .info-label, .big-profile-card.ketua-profile .info-label { color: #e0f2fe; } 
         .info-val { font-weight: 600; text-align: right; }
         
         .jodoh-btn {
@@ -406,7 +436,8 @@
         {name: "Deri Farhan Syah", nim: "5520225008", gender: "L", dob: "10 November 2006", dospem: "Muawan Bisri, S.Kom., M.Kom", status: "Menghilang Dari Lane"},
         {name: "Dian Parwati", nim: "5520225014", gender: "P", dob: "8 Maret 2006", dospem: "Muawan Bisri, S.Kom., M.Kom"},
         {name: "Dika Afriyogi", nim: "5520225018", gender: "L", dob: "30 September 2005", dospem: "Eko Aziz Apriadi, S.T., M.Kom."},
-        {name: "Fikri Julianda Laksono", nim: "5520225009", gender: "L", dob: "21 Juli 2005", dospem: "Muawan Bisri, S.Kom., M.Kom"},
+        // UPDATE FIKRI JULIANDA LAKSONO (KETUA IF 1)
+        {name: "Fikri Julianda Laksono", nim: "5520225009", gender: "L", dob: "21 Juli 2005", dospem: "Muawan Bisri, S.Kom., M.Kom", role: "Ketua IF 1"},
         // UPDATE GILANG AIDIL PRATAMA (OWNER)
         {name: "Gilang Aidil Pratama", nim: "5520225023", gender: "L", dob: "24 Oktober 2006", dospem: "Eko Aziz Apriadi, S.T., M.Kom.", isOwner: true, status: "Calon Ketua Himatika"},
         {name: "Hafizd Khoirul Azizah", nim: "5520225002", gender: "P", dob: "29 Juli 2006", dospem: "Muawan Bisri, S.Kom., M.Kom"},
@@ -447,7 +478,8 @@
         {name: "Nana Santiya", nim: "5520225056", gender: "P", dob: "27 September 2007", dospem: "Agus Komarudin, S.Kom.,M.T.I."},
         {name: "Reka Sabila", nim: "5520225060", gender: "P", dob: "22 September 2006", dospem: " Agus Komarudin, S.Kom.,M.T.I."},
         {name: "Reyhan", nim: "5520225047", gender: "L", dob: "5 Juni 2007", dospem: "Ribut Julianto, S.Kom.,M.T.I."},
-        {name: "Rizki Agustin Maulana", nim: "5520225061", gender: "L", dob: "14 Mei 2007", dospem: "Agus Komarudin, S.Kom.,M.T.I."},
+        // UPDATE RIZKI AGUSTIN MAULANA (KETUA IF 2)
+        {name: "Rizki Agustin Maulana", nim: "5520225061", gender: "L", dob: "14 Mei 2007", dospem: "Agus Komarudin, S.Kom.,M.T.I.", role: "Ketua IF 2"},
         {name: "Sendi Agustiansyah", nim: "5520225050", gender: "L", dob: "21 September 2005", dospem: "Ribut Julianto, S.Kom.,M.T.I."},
         {name: "Widia Lestari", nim: "5520225040", gender: "P", dob: "23 Mei 2007", dospem: "Ribut Julianto, S.Kom.,M.T.I."}
     ];
@@ -615,17 +647,21 @@
         currentClassData.forEach(s => {
             const card = document.createElement('div'); 
             
-            // Check Owner Status for Card Styling
+            // LOGIKA STYLE CARD (OWNER & KETUA)
             let cardClass = 'card';
-            let ownerBadge = '';
+            let roleBadge = '';
+            
             if (s.isOwner) {
                 cardClass += ' owner-card';
-                ownerBadge = `<div class="owner-badge"><i class="fas fa-crown"></i> Owner</div>`;
+                roleBadge = `<div class="owner-badge"><i class="fas fa-crown"></i> Owner</div>`;
+            } else if (s.role && s.role.includes('Ketua')) {
+                cardClass += ' ketua-card';
+                roleBadge = `<div class="ketua-badge"><i class="fas fa-user-tie"></i> ${s.role}</div>`;
             }
             
             card.className = cardClass;
             card.onclick = () => openProfile(s);
-            card.innerHTML = `${ownerBadge}<div class="gender-tag ${s.gender==='L'?'gender-L':'gender-P'}">${s.gender}</div><div class="avatar">${getInitials(s.name)}</div><h3>${s.name}</h3><span class="nim-badge">${s.nim}</span>`;
+            card.innerHTML = `${roleBadge}<div class="gender-tag ${s.gender==='L'?'gender-L':'gender-P'}">${s.gender}</div><div class="avatar">${getInitials(s.name)}</div><h3>${s.name}</h3><span class="nim-badge">${s.nim}</span>`;
             document.getElementById('cardGrid').appendChild(card);
         });
         document.getElementById('selectionModal').classList.remove('active');
@@ -654,15 +690,24 @@
             statusRow.style.display = 'none';
         }
 
-        // LOGIC KHUSUS OWNER
+        // LOGIC KHUSUS OWNER & KETUA DI PROFILE DETAIL
         const profileCard = document.querySelector('.big-profile-card');
         const roleDiv = document.getElementById('p-role');
         
+        // Reset Classes
+        profileCard.classList.remove('owner-profile', 'ketua-profile');
+        roleDiv.classList.remove('ketua-role-tag');
+
         if (s.isOwner) {
             profileCard.classList.add('owner-profile');
+            roleDiv.innerText = "Pembuat Web";
+            roleDiv.style.display = 'inline-block';
+        } else if (s.role && s.role.includes('Ketua')) {
+            profileCard.classList.add('ketua-profile');
+            roleDiv.innerText = s.role;
+            roleDiv.classList.add('ketua-role-tag');
             roleDiv.style.display = 'inline-block';
         } else {
-            profileCard.classList.remove('owner-profile');
             roleDiv.style.display = 'none';
         }
 
